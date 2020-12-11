@@ -57,42 +57,42 @@ class _PractitionerRegisterScreenSecondState
             fontSize: 19,
           ),
         ),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _diagnosisController,
           label: 'What do you diagnose?',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _treatmentController,
           label: 'What treatments do you dispense?',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _specialitiesController,
           label: 'Particular Specialities?',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _teacherController,
           label: 'Are you a teacher?',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _sessionTimeController,
           label: 'How long does your session last?',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _ritualsController,
           label: 'Available for ceremonies/rituals?',
           isPassword: false,

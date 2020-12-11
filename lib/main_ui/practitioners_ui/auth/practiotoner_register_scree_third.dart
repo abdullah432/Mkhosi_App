@@ -50,21 +50,21 @@ class _PractitionerRegisterScreenThirdState
             fontSize: 19,
           ),
         ),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _onlineConsultationController,
           label: 'Do you consult online?',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _medicineSourceController,
           label: 'Where do you source your medicine (imithi)',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _ukuthwasaController,
           label: 'Ukuthwasa practice years',
           isPassword: false,
@@ -83,7 +83,7 @@ class _PractitionerRegisterScreenThirdState
           ),
         ),
         Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _criminalRecordController,
           label: 'Do you have criminal record?',
           isPassword: false,

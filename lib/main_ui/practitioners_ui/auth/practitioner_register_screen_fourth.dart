@@ -83,28 +83,28 @@ class _PractiotnerRegisterScreenFourthState
           ),
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _uGhobelaLocationController,
           label: 'Location of uGhobela/inyanga',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _initiationTypeController,
           label: 'Initiation type you have done',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _trainingENdDateController,
           label: 'Training end date',
           isPassword: false,
           isNumber: true,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _ceremonyLocation,
           label: 'Homecoming ceremony location',
           isPassword: false,

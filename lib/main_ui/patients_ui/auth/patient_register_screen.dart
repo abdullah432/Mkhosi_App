@@ -98,7 +98,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
           ),
         ),
         Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _nameController,
           label: 'Full Name',
           isPassword: false,
@@ -107,7 +107,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
         Others.getSizedBox(
             boxHeight: widget._snapshot == null ? 16 : 0, boxWidth: 0),
         widget._snapshot == null
-            ? AppTextFields.getRegisterField(
+            ? AppTextFields.getTextField(
                 controller: _emailController,
                 label: 'Email',
                 isPassword: false,
@@ -117,7 +117,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
         Others.getSizedBox(
             boxHeight: widget._snapshot == null ? 16 : 0, boxWidth: 0),
         widget._snapshot == null
-            ? AppTextFields.getRegisterField(
+            ? AppTextFields.getTextField(
                 controller: _passwordController,
                 label: 'Password',
                 isPassword: true,
@@ -125,14 +125,14 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
               )
             : Container(),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _phoneNumberController,
           label: 'Phone Number',
           isPassword: false,
           isNumber: true,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _addressController,
           label: 'Address',
           isPassword: false,

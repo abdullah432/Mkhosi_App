@@ -107,42 +107,42 @@ class _PractitionerRegisterScreenFirstState
             fontSize: 19,
           ),
         ),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _firstNameController,
           label: 'Legal First Name',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _lastNameController,
           label: 'Legal Last Name',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _emailController,
           label: 'Email',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _passwordController,
           label: 'Password',
           isPassword: true,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _idNumberController,
           label: 'ID Number/Passport Number',
           isPassword: false,
           isNumber: true,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _dloziNameController,
           label: 'Dlozi Name',
           isPassword: false,
@@ -155,28 +155,28 @@ class _PractitionerRegisterScreenFirstState
           _genderList,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _yearsPracticingController,
           label: 'Years Practicing',
           isPassword: false,
           isNumber: true,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _languagesController,
           label: 'Languages',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _locationController,
           label: 'Practice Location',
           isPassword: false,
           isNumber: false,
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        AppTextFields.getRegisterField(
+        AppTextFields.getTextField(
           controller: _associationController,
           label: 'Do you belong to an association?',
           isPassword: false,
