@@ -2,6 +2,8 @@ class StringConstants {
   static const SELECTED_GENDER = 'Select Gender';
   static const DATE_OF_BIRTH = 'Select Birth Day';
   static const REPORT_CLIENT = 'Report a Customer/Client';
+  static const PRIVACY_POLICY_LINK =
+      'https://drive.google.com/file/d/1n1hygtujTYPbx8lxc0k3PqyfLRUJ3Cef/view?usp=sharing';
   static const REPORT_CLIENT_INSTRUCTIONS =
       'To report a Customer/Client, please make sure all fields are filled in';
   static const REPORT_SERVER_PROVIDER = 'Report a Service Provider';

@@ -2,15 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
+  final link;
+  final title;
+  WebViewPage({
+    @required this.link,
+    @required this.title,
+  });
   @override
-  _WebViewPageState createState() => _WebViewPageState();
+  _WebViewPageState createState() => _WebViewPageState(
+        link: link,
+        title: title,
+      );
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  // String privacypolicylink =
-  //     'https://drive.google.com/file/d/1G8bGL_hnHjFSTSP0KMOCRwww7LX4axPG/view';
-  String privacypolicylink =
-      'https://drive.google.com/file/d/1n1hygtujTYPbx8lxc0k3PqyfLRUJ3Cef/view?usp=sharing';
+  String link;
+  String title;
+  _WebViewPageState({
+    this.link,
+    this.title,
+  });
   String errorMsg = '';
 
   @override
@@ -22,7 +33,7 @@ class _WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Term and Policies'),
+        title: Text(title),
       ),
       // We're using a Builder here so we have a context that is below the Scaffold
       // to allow calling Scaffold.of(context) so we can show a snackbar.
@@ -32,10 +43,10 @@ class _WebViewPageState extends State<WebViewPage> {
                 errorMsg,
                 style: TextStyle(color: Colors.black),
               )
-            : (privacypolicylink == ''
+            : (link == ''
                 ? Center(child: CircularProgressIndicator())
                 : WebView(
-                    initialUrl: privacypolicylink,
+                    initialUrl: link,
                     javascriptMode: JavascriptMode.unrestricted,
                   ));
       }),

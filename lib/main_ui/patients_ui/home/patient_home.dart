@@ -93,7 +93,7 @@ class _PatientHomeState extends State<PatientHome> {
                 child: Text('All'),
               ),
               Tab(
-                child: Text('Nearby Practitioners'),
+                child: Text('Nearby Businesses'),
               ),
               Tab(
                 child: Text('Favorites'),

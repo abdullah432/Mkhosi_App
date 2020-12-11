@@ -348,7 +348,13 @@ class _SettingPageState extends State<SettingPage>
         });
         break;
       case 7:
-        NavigationController.push(context, WebViewPage());
+        NavigationController.push(
+          context,
+          WebViewPage(
+            link: StringConstants.PRIVACY_POLICY_LINK,
+            title: 'Privacy Policy',
+          ),
+        );
         break;
       case 8:
         NavigationController.push(context, AboutPage());
