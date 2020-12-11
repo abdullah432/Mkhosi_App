@@ -44,8 +44,12 @@ class AppTextFields {
     @required TextEditingController controller,
     @required String label,
   }) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      validator: (value) {
+        if (value.length < 10) return "Please enter miniumum 10 characters";
+        return null;
+      },
       style: TextStyle(
         color: Colors.grey,
       ),
@@ -72,14 +76,18 @@ class AppTextFields {
     );
   }
 
-  static Widget getRegisterField({
+  static Widget getTextField({
     @required TextEditingController controller,
     @required String label,
     @required bool isPassword,
     @required bool isNumber,
   }) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      validator: (value) {
+        if (value.isEmpty) return "This field can't be empty";
+        return null;
+      },
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       obscureText: isPassword,
       style: TextStyle(

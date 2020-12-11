@@ -76,4 +76,30 @@ class AppButtons {
       ),
     );
   }
+
+  static Widget getButton({
+    @required BuildContext context,
+    @required VoidCallback onTap,
+    @required String label,
+  }) {
+    return Container(
+      width: ScreenDimensions.getScreenWidth(context),
+      height: 45,
+      child: RaisedButton(
+        color: AppColors.COLOR_PRIMARY,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        onPressed: onTap,
+      ),
+    );
+  }
 }
