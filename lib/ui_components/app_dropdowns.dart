@@ -4,9 +4,10 @@ import 'package:makhosi_app/utils/others.dart';
 
 class AppDropDowns {
   static Widget getBorderedStringDropDown(
-      IStringDropDownItemSelected iStringDropDownItemSelected,
-      String selectedItem,
-      List<String> itemsList) {
+    IStringDropDownItemSelected iStringDropDownItemSelected,
+    String selectedItem,
+    List<String> itemsList,
+  ) {
     return Container(
       padding: EdgeInsets.only(left: 12, right: 12),
       decoration: BoxDecoration(

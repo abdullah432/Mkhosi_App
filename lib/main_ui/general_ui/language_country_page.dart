@@ -7,6 +7,7 @@ import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dar
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/utils/string_constants.dart';
 
 class LanguageCountrySelect extends StatefulWidget {
   @override
@@ -101,15 +102,7 @@ class _LanguageCountrySelectState extends State<LanguageCountrySelect> {
 }
 
 class SelectLanguage extends StatelessWidget {
-  final list = [
-    "English",
-    "Swahili",
-    "Zulu",
-    "Sesotho",
-    "Venda",
-    "Xhosa",
-    "Tsonga"
-  ];
+  final list = StringConstants.LISTOFLANGUAGES;
 
   static Route route() =>
       MaterialPageRoute<void>(builder: (_) => SelectLanguage());

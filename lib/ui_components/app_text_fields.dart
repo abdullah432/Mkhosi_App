@@ -10,8 +10,12 @@ class AppTextFields {
     @required bool isPassword,
     @required bool isNumber,
   }) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      validator: (value) {
+        if (value.isEmpty) return "This field can't be empty";
+        return null;
+      },
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       obscureText: isPassword,
       style: TextStyle(

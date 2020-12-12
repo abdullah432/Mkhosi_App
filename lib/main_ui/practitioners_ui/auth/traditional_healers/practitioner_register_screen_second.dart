@@ -3,7 +3,7 @@ import 'package:makhosi_app/contracts/i_clickable_clicked.dart';
 import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/enums/field_type.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/auth/practiotoner_register_scree_third.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers/practiotoner_register_scree_third.dart';
 import 'package:makhosi_app/models/TimingModel.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/ui_components/app_clickable_fields.dart';
@@ -192,7 +192,7 @@ class _PractitionerRegisterScreenSecondState
         AppKeys.SESSION_DURATION: sessionDuration,
         AppKeys.RITUAL_AVAILABILITY: ritualAvailability,
         AppKeys.HERBAL_PRODUCTS: herbalProducts,
-        AppKeys.RULES: rules,
+        AppKeys.RULES_FOR_PATIENT: rules,
         AppKeys.TIMINGS: {
           AppKeys.SUNDAY_OPEN: _timingModel.sundayStart,
           AppKeys.SUNDAY_CLOSE: _timingModel.sundayEnd,
