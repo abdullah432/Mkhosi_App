@@ -38,7 +38,8 @@ class _LanguageCountrySelectState extends State<LanguageCountrySelect> {
                       var country =
                           await Navigator.push(context, SelectCountry.route());
                       setState(() {
-                        selectedCountry = country.toString();
+                        selectedCountry =
+                            country != null ? country.toString() : '';
                       });
                     },
                   ),
@@ -50,7 +51,7 @@ class _LanguageCountrySelectState extends State<LanguageCountrySelect> {
                       var lang =
                           await Navigator.push(context, SelectLanguage.route());
                       setState(() {
-                        selectedLanguage = lang.toString();
+                        selectedLanguage = lang != null ? lang.toString() : '';
                       });
                     },
                   )
