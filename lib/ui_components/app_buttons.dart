@@ -26,7 +26,7 @@ class AppButtons {
           style: TextStyle(
             color: Colors.white,
             fontSize: 15,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         onPressed: () {
@@ -57,10 +57,10 @@ class AppButtons {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon == null ? Icons.gradient : icon,
-            color: AppColors.COLOR_PRIMARY,
-          ),
+          // Icon(
+          //   icon == null ? Icons.gradient : icon,
+          //   color: AppColors.COLOR_PRIMARY,
+          // ),
           Others.getSizedBox(boxHeight: 0, boxWidth: 8),
           Flexible(
             fit: FlexFit.loose,
@@ -68,9 +68,17 @@ class AppButtons {
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontSize: 10,
                 color: AppColors.COLOR_PRIMARY,
               ),
             ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Icon(
+            Icons.keyboard_arrow_right,
+            color: AppColors.COLOR_PRIMARY,
           ),
         ],
       ),

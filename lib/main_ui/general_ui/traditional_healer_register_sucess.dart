@@ -6,18 +6,18 @@ import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dar
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/traditional_healers_screenone.dart';
 
-class RegisterSuccessScreen extends StatefulWidget {
+class TraditionalHealerRegisterSuccessScreen extends StatefulWidget {
   ClickType _clickType;
-  String serviceType;
-  RegisterSuccessScreen(this._clickType, {this.serviceType});
+  TraditionalHealerRegisterSuccessScreen(this._clickType);
 
   @override
-  _RegisterSuccessScreenState createState() => _RegisterSuccessScreenState();
+  _TraditionalHealerRegisterSuccessScreenState createState() =>
+      _TraditionalHealerRegisterSuccessScreenState();
 }
 
-class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
+class _TraditionalHealerRegisterSuccessScreenState
+    extends State<TraditionalHealerRegisterSuccessScreen>
     implements IRoundedButtonClicked {
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,15 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
           children: [
             Image.asset('images/done.png'),
             Text(
-              'Registration Successful!',
+              'You have successfully onboarded',
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.black54,
+              ),
+            ),
+            Others.getSizedBox(boxHeight: 32, boxWidth: 0),
+            Text(
+              'AS A TRADITIONAL HEALER',
               style: TextStyle(
                 fontSize: 21,
                 color: Colors.black54,
@@ -65,10 +73,7 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
       case ClickType.DUMMY:
         break;
     }
-    if (widget.serviceType != null && widget.serviceType == 'Abelaphi')
-      NavigationController.pushReplacement(
-          context, TraditionalHealersScreenFirst());
-    else
-      NavigationController.pushReplacement(context, targetScreen);
+
+    NavigationController.pushReplacement(context, targetScreen);
   }
 }

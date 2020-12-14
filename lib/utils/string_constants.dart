@@ -1,9 +1,17 @@
 class StringConstants {
   static const SELECTED_GENDER = 'Select Gender';
   static const DATE_OF_BIRTH = 'Select Birth Day';
+  static const SELECTED_LOCATION = "Home";
+  static const SELECTED_SEVICE = 'Abelaphi';
+  static const SELECTED_LANGUAGE = 'English';
+  static const SELECTED_COUNTRY = 'Pakistan';
   static const REPORT_CLIENT = 'Report a Customer/Client';
   static const PRIVACY_POLICY_LINK =
       'https://drive.google.com/file/d/1n1hygtujTYPbx8lxc0k3PqyfLRUJ3Cef/view?usp=sharing';
+  static const EULA_LINK =
+      'https://drive.google.com/file/d/19cHdBNd88B3rF1s9J8gbCpsBn5eJtbRz/view';
+  static const COMMUNITY_GUIDLINES =
+      'https://drive.google.com/file/d/1ce8LjJZpCZH0y7m0SxeXBVFIeM1mt9Zl/view';
   static const REPORT_CLIENT_INSTRUCTIONS =
       'To report a Customer/Client, please make sure all fields are filled in';
   static const REPORT_SERVER_PROVIDER = 'Report a Service Provider';
@@ -53,4 +61,46 @@ E.	Ability to get sick notes and invoices from trusted service providers
 ●	Access to an information and knowledge hub
 ●	App comes in 7 languages
 ''';
+
+  static const List<String> SERVICES_LIST = [
+    'Abelaphi',
+    "Spaza Shop Owners",
+    'Online Shop',
+    'Hairdresser & Makeup Artist',
+    'Baking Services',
+    'Mechanic',
+    'Events & Catering',
+    'Creative arts',
+    'Interior Designer',
+    'Repair services: Electrical and/or Mechanical',
+    'Educational Services',
+    'Delivery Services: Medicine, Groceries and other',
+    'Home and Business Outdoor Landscaping',
+    'Marketing',
+    'Consulting',
+    'Lifestyle, Fitness and Health',
+    'Media and Marketing',
+    'Direct Sales',
+    'Life Coaching',
+    'Laundry Services',
+    "Au Pair and Baby sitting services",
+    'Caregiving for Elderly',
+    'Daycare Services',
+    'Bridal Concierge',
+    'Business Consulting',
+    'Real Estate and Propoerty Development',
+    'Business Street Vendors',
+    'Legal',
+    'Freelance Content Creation',
+  ];
+
+  static const List<String> LISTOFLANGUAGES = [
+    "English",
+    "Swahili",
+    "Zulu",
+    "Sesotho",
+    "Venda",
+    "Xhosa",
+    "Tsonga"
+  ];
 }

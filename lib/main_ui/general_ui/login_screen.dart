@@ -10,6 +10,7 @@ import 'package:makhosi_app/main_ui/general_ui/user_types_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/auth/patient_register_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/home/patient_home.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/practitioner_register_screen_first.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/serviceproviders/serviceprovider_first_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/ui_components/app_labels.dart';
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen>
                         break;
                       case ClickType.PRACTITIONER:
                         targetScreen =
-                            PractitionerRegisterScreenFirst(widget._userType);
+                            ServiceProviderRegisterScreenOne(widget._userType);
                         break;
                     }
                     NavigationController.pushReplacement(context, targetScreen);

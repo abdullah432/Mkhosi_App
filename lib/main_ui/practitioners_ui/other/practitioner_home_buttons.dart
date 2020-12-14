@@ -6,10 +6,15 @@ import 'package:makhosi_app/contracts/i_outlined_button_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
 import 'package:makhosi_app/main_ui/general_ui/login_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/other/consultations.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_bookings_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/other/consultations.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
+
+import '../../../enums/click_type.dart';
+import '../../../utils/navigation_controller.dart';
 
 class PractitionerHomeButtons extends StatefulWidget {
   @override
@@ -24,14 +29,83 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
     return Column(
       children: [
         Container(
+          width: MediaQuery.of(context).size.width / 1.8,
+          height: 40,
+          margin: EdgeInsets.only(left: 70, right: 55, top: 8),
+          child: AppButtons.getOutlineButton(
+            context: context,
+            iOutlinedButtonClicked: this,
+            // label: 'BOOKINGS',
+            label: 'mkhosi knowledge hub',
+            clickType: ClickType.DUMMY,
+            icon: Icons.book,
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.8,
+          height: 40,
           margin: EdgeInsets.only(left: 70, right: 70, top: 8),
           child: AppButtons.getOutlineButton(
             context: context,
             iOutlinedButtonClicked: this,
-            label: 'BOOKINGS',
-            clickType: ClickType.DUMMY,
+            label: 'CONSULTATIONS',
+            clickType: ClickType.CONSULTATIONS,
             icon: Icons.book,
           ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.8,
+          height: 40,
+          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
+          child: AppButtons.getOutlineButton(
+            context: context,
+            iOutlinedButtonClicked: this,
+            // label: 'BOOKINGS',
+            label: 'APPOINTMENTS',
+            clickType: ClickType.APPOINTMENTS,
+            icon: Icons.book,
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.8,
+          height: 40,
+          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
+          child: AppButtons.getOutlineButton(
+            context: context,
+            iOutlinedButtonClicked: this,
+            // label: 'BOOKINGS',
+            label: 'ADMINSTRATION',
+            clickType: ClickType.ADMINSTRATION,
+            icon: Icons.book,
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.8,
+          height: 40,
+          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
+          child: AppButtons.getOutlineButton(
+            context: context,
+            iOutlinedButtonClicked: this,
+            // label: 'BOOKINGS',
+            label: 'BUSINESS INFO',
+            clickType: ClickType.BUSINESS_INFO,
+            icon: Icons.book,
+          ),
+        ),
+        SizedBox(
+          height: 5,
         ),
         // Container(
         //   margin: EdgeInsets.only(left: 70, right: 70, top: 8),
@@ -43,12 +117,14 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
         //   ),
         // ),
         Container(
+          width: MediaQuery.of(context).size.width / 1.8,
+          height: 40,
           margin: EdgeInsets.only(left: 70, right: 70, top: 8),
           child: AppButtons.getOutlineButton(
             context: context,
             iOutlinedButtonClicked: this,
-            label: 'LOG OUT',
-            clickType: ClickType.LOGOUT,
+            label: 'Consultation fees',
+            clickType: ClickType.CONSULTATION_FEES,
           ),
         ),
       ],
@@ -57,10 +133,15 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
 
   @override
   void onOutlineButtonClicked(ClickType clickType) {
-    if (clickType == ClickType.DUMMY) {
+    if (clickType == ClickType.APPOINTMENTS) {
       NavigationController.push(
         context,
         PractitionerBookingsScreen(),
+      );
+    } else if (clickType == ClickType.CONSULTATIONS) {
+      NavigationController.push(
+        context,
+        Consultations(),
       );
     } else if (clickType == ClickType.LOGOUT) {
       Others.showInfoDialog(

@@ -7,6 +7,7 @@ import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dar
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/utils/string_constants.dart';
 
 class LanguageCountrySelect extends StatefulWidget {
   @override
@@ -38,8 +39,7 @@ class _LanguageCountrySelectState extends State<LanguageCountrySelect> {
                       var country =
                           await Navigator.push(context, SelectCountry.route());
                       setState(() {
-                        selectedCountry =
-                            country != null ? country.toString() : '';
+                        selectedCountry = country.toString();
                       });
                     },
                   ),
@@ -51,7 +51,7 @@ class _LanguageCountrySelectState extends State<LanguageCountrySelect> {
                       var lang =
                           await Navigator.push(context, SelectLanguage.route());
                       setState(() {
-                        selectedLanguage = lang != null ? lang.toString() : '';
+                        selectedLanguage = lang.toString();
                       });
                     },
                   )
@@ -102,15 +102,7 @@ class _LanguageCountrySelectState extends State<LanguageCountrySelect> {
 }
 
 class SelectLanguage extends StatelessWidget {
-  final list = [
-    "English",
-    "Swahili",
-    "Zulu",
-    "Sesotho",
-    "Venda",
-    "Xhosa",
-    "Tsonga"
-  ];
+  final list = StringConstants.LISTOFLANGUAGES;
 
   static Route route() =>
       MaterialPageRoute<void>(builder: (_) => SelectLanguage());
@@ -203,7 +195,10 @@ class CustomButtion extends StatelessWidget {
         child: Center(
           child: Text(
             buttonText,
-            style: TextStyle(color: AppColors.COLOR_WHITE, fontSize: 16),
+            style: TextStyle(
+                color: AppColors.COLOR_WHITE,
+                fontWeight: FontWeight.bold,
+                fontSize: 16),
           ),
         ),
       ),

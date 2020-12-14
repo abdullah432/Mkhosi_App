@@ -3,7 +3,7 @@ description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -25,36 +25,43 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  agora_rtc_engine: ^3.1.3
-  bubble_tab_indicator: ^0.1.4
-  cloud_firestore: ^0.14.0+2
-  cupertino_icons: ^0.1.3
-  firebase_auth: ^0.18.0+1
-  firebase_dynamic_links: ^0.6.3
-  firebase_storage: ^4.0.0
-  flutter_mailer: ^1.0.0
   fluttertoast: ^7.1.1
-  font_awesome: ^5.10.1
-  geocoder: ^0.2.1
-  google_maps_flutter: ^0.5.33
-  google_sign_in: ^4.5.4
-  image_picker: ^0.6.7+10
-  intl: ^0.16.1
-  language_pickers: ^0.2.0+1
-  location: ^3.0.0
-  permission_handler: null
-  rating_bar: ^0.2.0
   shared_preferences: ^0.5.10
+  image_picker: ^0.6.7+10
+  cloud_firestore: ^0.14.0+2
+  firebase_storage: ^4.0.0
+  firebase_auth: ^0.18.0+1
+  google_maps_flutter: ^0.5.33
+  location: ^3.0.0
+  geocoder: ^0.2.1
+  google_sign_in: ^4.5.4
+  bubble_tab_indicator: ^0.1.4
+  rating_bar: ^0.2.0
   table_calendar: ^2.2.3
-  weather: ^1.2.4
+  agora_rtc_engine: ^3.1.3
   webview_flutter: ^1.0.7
+  language_pickers: ^0.2.0+1
+  firebase_dynamic_links: ^0.6.3
+  flutter_mailer: ^1.0.0
+  flutter_launcher_icons: ^0.8.1
+  flutter_country_picker: ^0.1.6
+  permission_handler:
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/iconlauncher.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
 # The following section is specific to Flutter.
 flutter:
   assets:
@@ -70,10 +77,13 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
+
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -82,11 +92,11 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: fonts/Poppins-light.ttf
+        - asset: fonts/poppins_light.ttf
         - asset: fonts/Poppins-Medium.ttf
-          weight: 600
+          weight: 400
         - asset: fonts/Poppins-Bold.ttf
-          weight: 900
+          weight: 700
   # fonts:
   #   - family: Schyler
   #     fonts:

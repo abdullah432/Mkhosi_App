@@ -5,7 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
+import 'package:makhosi_app/contracts/i_info_dialog_clicked.dart';
+import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
+import 'package:makhosi_app/main_ui/general_ui/login_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patients_booking_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/chat/practitioner_inbox_screen.dart';
@@ -29,8 +33,8 @@ class PractitionersProfileScreen extends StatefulWidget {
       _PractitionersProfileScreenState();
 }
 
-class _PractitionersProfileScreenState
-    extends State<PractitionersProfileScreen> {
+class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
+    implements IInfoDialogClicked {
   DocumentSnapshot _snapshot;
   bool _isLoading = false, _isFavorite = false;
   String _userId;
@@ -65,6 +69,27 @@ class _PractitionersProfileScreenState
   }
 
   @override
+  void onNegativeClicked() {
+    Navigator.pop(context);
+  }
+
+  @override
+  void onPositiveClicked() async {
+    Navigator.pop(context);
+    await FirebaseFirestore.instance
+        .collection('practitioners')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .set({
+      'online': false,
+    }, SetOptions(merge: true));
+    await Others.signOut();
+    NavigationController.pushReplacement(
+      context,
+      LoginScreen(ClickType.PRACTITIONER),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _isLoading
@@ -91,10 +116,41 @@ class _PractitionersProfileScreenState
                         Expanded(
                           child: _getBody(),
                         ),
+                        // SizedBox(
+                        //   height: 20,
+                        // ),
+                        // Expanded(
+                        //   child:
+                        // widget._isViewer
+                        //     ? Container()
+                        //     : PractitionerHomeButtons(),
+                        // ),
+
+                        // SizedBox(
+                        //   height: 16,
+                        // ),
                       ],
                     ),
                   ],
                 ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Others.showInfoDialog(
+              context: context,
+              title: 'Log Out?',
+              message: 'Are youn sure you want to log out of the app?',
+              positiveButtonLabel: 'LOG OUT',
+              negativeButtonLabel: 'CANCEL',
+              iInfoDialogClicked: this,
+              isInfo: false);
+        },
+        child: Icon(
+          Icons.exit_to_app,
+          color: Colors.white,
+        ),
+        mini: true,
+        backgroundColor: AppColors.EDIT_PROFILE,
+      ),
     );
   }
 
@@ -105,8 +161,26 @@ class _PractitionersProfileScreenState
       padding: EdgeInsets.all(16),
       child: Stack(
         children: [
-          _getContentSection(),
-          _getImageSection(),
+          Positioned(
+            top: 130.0,
+            right: 20,
+            child: _getContentSection(),
+          ),
+          Positioned(
+            top: 80,
+            right: MediaQuery.of(context).size.width / 3,
+            // child: Center(
+            child: _getImageSection(),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height / 2,
+            // right: MediaQuery.of(context).size.width / 12,
+            child: Center(
+              child: widget._isViewer ? Container() : PractitionerHomeButtons(),
+            ),
+          ),
+
+          // )
         ],
       ),
     );
@@ -114,194 +188,288 @@ class _PractitionersProfileScreenState
 
   Widget _getContentSection() {
     bool isOnline = _snapshot.get(AppKeys.ONLINE);
-    return Card(
-      elevation: 5,
-      margin: EdgeInsets.only(top: 50),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(12),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 32,
-                  ),
-                  Text(
-                    '${_snapshot.get(AppKeys.FIRST_NAME)} ${_snapshot.get(AppKeys.SECOND_NAME)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 21,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+    return Container(
+      height: MediaQuery.of(context).size.height / 3,
+      width: MediaQuery.of(context).size.width / 1.2,
+      child: Card(
+        elevation: 5,
+
+        // margin: EdgeInsets.only(top: 100, bottom: 100),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(12),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 32,
                     ),
-                  ),
-                  Text(
-                    _snapshot.get(AppKeys.PRACTICE_LOCATION),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      '${_snapshot.get(AppKeys.FIRST_NAME)} ${_snapshot.get(AppKeys.SECOND_NAME)}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: AppColors.PROFILE_NAME,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
-                  ),
-                  Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.brightness_1,
-                        color: isOnline ? Colors.green : Colors.red,
-                        size: 12,
+                    Text(
+                      _snapshot.get(AppKeys.PRACTICE_LOCATION),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.PROFILE_LOCATION,
+                        fontWeight: FontWeight.w300,
                       ),
-                      Others.getSizedBox(boxHeight: 0, boxWidth: 4),
-                      Text(isOnline ? 'Online' : 'Offline'),
-                    ],
-                  ),
-                  Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-                  _getRattingBar(),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            '2',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Total\nSessions',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 16, right: 16),
-                        height: 45,
-                        width: 2,
-                        color: Colors.black38,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '900',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Total\nReviews',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  _getNamesSection(),
-                  widget._isViewer ? Container() : PractitionerHomeButtons(),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  // Text(
-                  //   'Timing',
-                  //   style: TextStyle(
-                  //     fontWeight: FontWeight.bold,
-                  //     fontSize: 15,
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 4,
-                  // ),
-                  // _getTimingSection(),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  _getButtonsSection(),
-                ],
-              ),
-            ),
-          ),
-          widget._isViewer
-              ? Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.favorite,
-                      color: _isFavorite ? Colors.red : Colors.grey,
                     ),
-                    onPressed: () {
-                      _saveFavorite();
-                    },
-                  ),
-                )
-              : Container(),
-          !widget._isViewer
-              ? Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 45,
-                    height: 45,
-                    margin: EdgeInsets.all(8),
-                    child: Stack(
+                    Others.getSizedBox(boxHeight: 8, boxWidth: 0),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Icon(
+                    //       Icons.brightness_1,
+                    //       color: isOnline ? Colors.green : Colors.red,
+                    //       size: 12,
+                    //     ),
+                    //     Others.getSizedBox(boxHeight: 0, boxWidth: 4),
+                    //     Text(isOnline ? 'Online' : 'Offline'),
+                    //   ],
+                    // ),
+                    Others.getSizedBox(boxHeight: 8, boxWidth: 0),
+                    // _getRattingBar(),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            child: Icon(
-                              Icons.mail_outline,
-                              color: AppColors.COLOR_PRIMARY,
-                              size: 32,
+                        Column(
+                          children: [
+                            Text(
+                              '0',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: AppColors.PROFILE_VALUE_TEXT,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                            onTap: () {
-                              NavigationController.push(
-                                context,
-                                PractitionerInboxScreen(),
-                              );
-                            },
-                          ),
+                            Text(
+                              'CLIENTS',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.PROFILE_SMALL_TEXT,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Icon(
-                            Icons.brightness_1,
-                            size: 12,
-                            color: Colors.red,
-                          ),
+                        Container(
+                          margin: EdgeInsets.only(left: 16, right: 16),
+                          height: 45,
+                          width: 2,
+                          color: AppColors.PROFILE_SEPARATOR,
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '2/5',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: AppColors.PROFILE_VALUE_TEXT,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'RATINGS',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.PROFILE_SMALL_TEXT,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 16, right: 16),
+                          height: 45,
+                          width: 2,
+                          color: AppColors.PROFILE_SEPARATOR,
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '2,000',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: AppColors.PROFILE_VALUE_TEXT,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'EARNINGS (ZAR)',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.PROFILE_SMALL_TEXT,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                )
-              : Container(),
-        ],
+                    // SizedBox(
+                    //   height: 12,
+                    // ),
+                    // _getNamesSection(),
+                    // widget._isViewer ? Container() : PractitionerHomeButtons(),
+                    // SizedBox(
+                    //   height: 16,
+                    // ),
+                    // // Text(
+                    // //   'Timing',
+                    // //   style: TextStyle(
+                    // //     fontWeight: FontWeight.bold,
+                    // //     fontSize: 15,
+                    // //   ),
+                    // // ),
+                    // // SizedBox(
+                    // //   height: 4,
+                    // // ),
+                    // // _getTimingSection(),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    _getEditProfileButton(),
+                    _getButtonsSection(),
+                  ],
+                ),
+              ),
+            ),
+            widget._isViewer
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.favorite,
+                        color: _isFavorite ? Colors.red : Colors.grey,
+                      ),
+                      onPressed: () {
+                        _saveFavorite();
+                      },
+                    ),
+                  )
+                : Container(),
+            !widget._isViewer
+                ? Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      margin: EdgeInsets.all(8),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: GestureDetector(
+                              child: Icon(
+                                Icons.notifications_none,
+                                color: AppColors.COLOR_PRIMARY,
+                                size: 39,
+                              ),
+                              onTap: () {
+                                NavigationController.push(
+                                  context,
+                                  PractitionerInboxScreen(),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(),
+            !widget._isViewer
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      width: 45,
+                      height: 45,
+                      margin: EdgeInsets.all(8),
+                      child: Stack(
+                        children: [
+                          // Align(
+                          //   alignment: Alignment.topRight,
+                          //   child: GestureDetector(
+                          //     child: Icon(
+                          //       Icons.mail_outline,
+                          //       color: AppColors.COLOR_PRIMARY,
+                          //       size: 32,
+                          //     ),
+                          //     onTap: () {
+                          //       NavigationController.push(
+                          //         context,
+                          //         PractitionerInboxScreen(),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+                          // Align(
+                          //   alignment: Alignment.topRight,
+                          //   child: Icon(
+                          //     Icons.brightness_1,
+                          //     size: 12,
+                          //     color: Colors.red,
+                          //   ),
+                          // ),
+
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              child: Icon(
+                                Icons.settings,
+                                color: AppColors.COLOR_PRIMARY,
+                                size: 39,
+                              ),
+                              onTap: () {
+                                NavigationController.push(
+                                  context,
+                                  PractitionerInboxScreen(),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _getEditProfileButton() {
+    return RaisedButton(
+      onPressed: null,
+      color: AppColors.EDIT_PROFILE,
+      child: Text('EDIT PROFILE',
+          style: TextStyle(
+              fontSize: 22, color: Colors.white, fontWeight: FontWeight.w400)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+          side: BorderSide(color: AppColors.EDIT_PROFILE)),
     );
   }
 
@@ -322,6 +490,10 @@ class _PractitionersProfileScreenState
                   );
                 },
               ),
+              SizedBox(
+                width: 8,
+              ),
+              _getBookingButton(),
               SizedBox(
                 width: 8,
               ),
@@ -617,7 +789,7 @@ class _PractitionersProfileScreenState
             borderRadius: BorderRadius.circular(100),
             border: Border.all(
               color: Colors.white,
-              width: 12,
+              width: 5,
             ),
           ),
           child: _snapshot == null
