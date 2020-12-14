@@ -1,4 +1,4 @@
-# makhosi_app
+# mkhosi_app
 
 A new Flutter application.
 
