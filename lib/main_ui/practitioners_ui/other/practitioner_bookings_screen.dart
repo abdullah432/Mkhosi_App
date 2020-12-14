@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:makhosi_app/main_ui/patients_ui/other/add_meeting.dart';
 import 'package:makhosi_app/main_ui/patients_ui/profile_screens/patient_profile_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/weather_ui/weather_page.dart';
 import 'package:makhosi_app/models/bookings_model.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
@@ -26,6 +28,7 @@ class _PractitionerBookingsScreenState
   String _uid;
   int _currentYear, _currentMonth, _currentDay, _currentHour;
   Map<DateTime, List<dynamic>> _events = Map();
+  bool _isBookingTabSelected = true;
 
   @override
   void initState() {
@@ -140,7 +143,7 @@ class _PractitionerBookingsScreenState
           eventList.add(DateTime.now().millisecond.toString());
         }
       }
-      if(eventList.isNotEmpty) {
+      if (eventList.isNotEmpty) {
         _events[eventKeyDateTime] = eventList;
       }
     }
@@ -149,11 +152,17 @@ class _PractitionerBookingsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppToolbars.toolbar(
-        context: context,
-        title: 'Bookings',
-        isLeading: false,
-        targetScreen: null,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        shadowColor: Colors.transparent,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
       body: _isLoading
           ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
@@ -163,20 +172,117 @@ class _PractitionerBookingsScreenState
     );
   }
 
-  Widget _getBody() {
-    return Column(
-      children: [
-        TableCalendar(
-          calendarController: _calendarController,
-          events: _events,
-        ),
-        Expanded(
-          child: ListView(
-            children: _finalList.map((booking) => _rowDesign(booking)).toList(),
+  Widget _tabs() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.grey[200],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isBookingTabSelected = true;
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: _isBookingTabSelected
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.COLOR_PRIMARY,
+                      )
+                    : null,
+                child: Text(
+                  'Bookings & Appoinments',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12),
+                ),
+              ),
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isBookingTabSelected = false;
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: !_isBookingTabSelected
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.COLOR_PRIMARY,
+                      )
+                    : null,
+                child: Text(
+                  'Weather Forecast',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
+  }
+
+  List<Widget> bookingsBody() {
+    return [
+      TableCalendar(
+        calendarController: _calendarController,
+        events: _events,
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            backgroundColor: AppColors.COLOR_PRIMARY,
+            onPressed: () {
+              NavigationController.push(context, AddCalanderEvent());
+            },
+          ),
+          SizedBox(
+            width: 15,
+          )
+        ],
+      ),
+      Expanded(
+        child: ListView(
+          children: _finalList.map((booking) => _rowDesign(booking)).toList(),
+        ),
+      ),
+    ];
+  }
+
+  Widget _getBody() {
+    var body = bookingsBody();
+    return Container(
+        color: Colors.white,
+        child: _isBookingTabSelected
+            ? Column(
+                children: [_tabs(), ...body],
+              )
+            : ListView(
+                children: [
+                  _tabs(),
+                  WeatherPage(),
+                ],
+              ));
   }
 
   Widget _rowDesign(BookingsModel model) {

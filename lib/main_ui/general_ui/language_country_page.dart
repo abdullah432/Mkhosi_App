@@ -203,10 +203,7 @@ class CustomButtion extends StatelessWidget {
         child: Center(
           child: Text(
             buttonText,
-            style: TextStyle(
-                color: AppColors.COLOR_WHITE,
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
+            style: TextStyle(color: AppColors.COLOR_WHITE, fontSize: 16),
           ),
         ),
       ),
