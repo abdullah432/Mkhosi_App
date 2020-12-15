@@ -26,18 +26,34 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
       body: Container(
         padding: EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset('images/done.png'),
+            SizedBox(
+              height: 120,
+            ),
+            Image.asset('images/done.png', height: 180, width: 180,),
+            SizedBox(
+              height: 50,
+            ),
             Text(
-              'Registration Successful!',
+              'You have successfully Registered',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black45,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'AS A SERVICE PROVIDER',
               style: TextStyle(
                 fontSize: 21,
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Others.getSizedBox(boxHeight: 32, boxWidth: 0),
+            Others.getSizedBox(boxHeight: 80, boxWidth: 0),
             AppButtons.getRoundedButton(
               context: context,
               iRoundedButtonClicked: this,
