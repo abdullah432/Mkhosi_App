@@ -7,11 +7,11 @@ class StringConstants {
   static const SELECTED_COUNTRY = 'Pakistan';
   static const REPORT_CLIENT = 'Report a Customer/Client';
   static const PRIVACY_POLICY_LINK =
-      'https://drive.google.com/file/d/1n1hygtujTYPbx8lxc0k3PqyfLRUJ3Cef/view?usp=sharing';
+      'https://drive.google.com/file/d/1Ls983lD6SdaNYn7F1OxS0YGFS6EIJYqb';
   static const EULA_LINK =
-      'https://drive.google.com/file/d/19cHdBNd88B3rF1s9J8gbCpsBn5eJtbRz/view';
+      'https://drive.google.com/file/d/19cHdBNd88B3rF1s9J8gbCpsBn5eJtbRz';
   static const COMMUNITY_GUIDLINES =
-      'https://drive.google.com/file/d/1ce8LjJZpCZH0y7m0SxeXBVFIeM1mt9Zl/view';
+      'https://drive.google.com/file/d/1ce8LjJZpCZH0y7m0SxeXBVFIeM1mt9Zl';
   static const REPORT_CLIENT_INSTRUCTIONS =
       'To report a Customer/Client, please make sure all fields are filled in';
   static const REPORT_SERVER_PROVIDER = 'Report a Service Provider';
