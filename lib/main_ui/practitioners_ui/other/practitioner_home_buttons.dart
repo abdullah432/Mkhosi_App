@@ -11,7 +11,7 @@ import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
-
+import 'package:makhosi_app/secondMain.dart';
 
 class PractitionerHomeButtons extends StatefulWidget {
   @override
@@ -30,7 +30,12 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
             child: FlatButton(
               height: 45,
               //minWidth: 50,
-              onPressed: null,
+              onPressed:(){
+                NavigationController.push(
+                context,
+                app(),
+                );
+              },
               child: Row(
                 children: [
                   Text('MKHOSI KNOWLEDGE HUB', style: TextStyle(

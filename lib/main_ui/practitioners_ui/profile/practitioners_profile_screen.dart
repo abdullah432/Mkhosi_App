@@ -17,6 +17,7 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:rating_bar/rating_bar.dart';
+import 'package:makhosi_app/secondMain.dart';
 
 class PractitionersProfileScreen extends StatefulWidget {
   bool _isViewer;

@@ -21,6 +21,7 @@ import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
+import 'package:makhosi_app/secondMain.dart';
 
 class PatientProfileScreen extends StatefulWidget {
   DocumentSnapshot _snapshot;
@@ -258,7 +259,12 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     child: FlatButton(
     height: 45,
     //minWidth: 50,
-    onPressed: null,
+      onPressed:(){
+        NavigationController.push(
+          context,
+          app(),
+        );
+      },
     child: Row(
     children: [
     Text('MKHOSI KNOWLEDGE HUB', style: TextStyle(
