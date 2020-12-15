@@ -76,9 +76,9 @@ class _PractitionersProfileScreenState
                     Align(
                       alignment: Alignment.topCenter,
                       child: Image.asset(
-                        'images/profile_background.png',
+                        'images/Gradientbg.png',
                         width: ScreenDimensions.getScreenWidth(context),
-                        height: ScreenDimensions.getScreenWidth(context) / 1.25,
+                        height: ScreenDimensions.getScreenWidth(context) / 1.85,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -86,7 +86,7 @@ class _PractitionersProfileScreenState
                       children: [
                         SizedBox(
                           width: 0,
-                          height: ScreenDimensions.getScreenWidth(context) / 5,
+                          height: ScreenDimensions.getScreenWidth(context) / 10,
                         ),
                         Expanded(
                           child: _getBody(),
@@ -99,9 +99,8 @@ class _PractitionersProfileScreenState
   }
 
   Widget _getBody() {
-    return Container(
-      width: ScreenDimensions.getScreenWidth(context),
-      height: ScreenDimensions.getScreenHeight(context),
+    return SingleChildScrollView(
+
       padding: EdgeInsets.all(16),
       child: Stack(
         children: [
@@ -114,7 +113,9 @@ class _PractitionersProfileScreenState
 
   Widget _getContentSection() {
     bool isOnline = _snapshot.get(AppKeys.ONLINE);
-    return Card(
+    return Column(
+      children: [
+      Card(
       elevation: 5,
       margin: EdgeInsets.only(top: 50),
       shape: RoundedRectangleBorder(
@@ -129,63 +130,62 @@ class _PractitionersProfileScreenState
                 children: [
                   SizedBox(
                     height: 32,
+
                   ),
-                  Text(
-                    '${_snapshot.get(AppKeys.FIRST_NAME)} ${_snapshot.get(AppKeys.SECOND_NAME)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 21,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 74,
+                      ),
+
+                      Text(
+                        '${_snapshot.get(AppKeys.FIRST_NAME)} ${_snapshot.get(AppKeys.SECOND_NAME)}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 21,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        height: 15,
+                        width: 18,
+                        child: Image.asset("images/Vector.png", height: 12,width: 12,),
+                      ),
+                    ],
+
                   ),
                   Text(
                     _snapshot.get(AppKeys.PRACTICE_LOCATION),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
                   Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.brightness_1,
-                        color: isOnline ? Colors.green : Colors.red,
-                        size: 12,
-                      ),
-                      Others.getSizedBox(boxHeight: 0, boxWidth: 4),
-                      Text(isOnline ? 'Online' : 'Offline'),
-                    ],
-                  ),
-                  Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-                  _getRattingBar(),
-                  SizedBox(
-                    height: 8,
-                  ),
+//                  _getRattingBar(),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
                         children: [
                           Text(
-                            '2',
+                            '0',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 21,
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              // fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            'Total\nSessions',
+                            'CLIENTS',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.black54,
+                              color: Colors.black45,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -200,20 +200,48 @@ class _PractitionersProfileScreenState
                       Column(
                         children: [
                           Text(
-                            '900',
+                            '2/3',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 21,
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              //  fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            'Total\nReviews',
+                            'RATINGS',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.black54,
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        height: 45,
+                        width: 2,
+                        color: Colors.black38,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            '2000',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 21,
+                              color: Colors.black,
+                              //fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'EARNINGS (ZAR)',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black45,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -222,13 +250,36 @@ class _PractitionersProfileScreenState
                     ],
                   ),
                   SizedBox(
-                    height: 12,
-                  ),
-                  _getNamesSection(),
-                  widget._isViewer ? Container() : PractitionerHomeButtons(),
-                  SizedBox(
                     height: 16,
                   ),
+                  FlatButton(
+                    height: 60,
+                    minWidth:210,
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                    color: AppColors.COLOR_PRIMARY,
+                    onPressed: () {
+                      //NavigationController.push(
+                      //context,
+                      //BLogHomeScreen(_snapshot.id, true),
+                      //);
+                    },
+                    child: Text(
+                      'EDIT PROFILE',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22
+                      ),
+                    ),
+                  ),
+
+                  // _getNamesSection(),
+                  // widget._isViewer ? Container() : PractitionerHomeButtons(),
+                  // SizedBox(
+                  // height: 16,
+                  //),
                   // Text(
                   //   'Timing',
                   //   style: TextStyle(
@@ -236,19 +287,19 @@ class _PractitionersProfileScreenState
                   //     fontSize: 15,
                   //   ),
                   // ),
-                  // SizedBox(
-                  //   height: 4,
-                  // ),
-                  // _getTimingSection(),
                   SizedBox(
-                    height: 16,
+                    height: 7,
                   ),
-                  _getButtonsSection(),
+                  // _getTimingSection(),
+                  // SizedBox(
+                  // height: 16,
+                  //),
+                  // _getButtonsSection(),
                 ],
               ),
             ),
           ),
-          widget._isViewer
+           widget._isViewer
               ? Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
@@ -275,7 +326,7 @@ class _PractitionersProfileScreenState
                           alignment: Alignment.topRight,
                           child: GestureDetector(
                             child: Icon(
-                              Icons.mail_outline,
+                              Icons.settings,
                               color: AppColors.COLOR_PRIMARY,
                               size: 32,
                             ),
@@ -287,22 +338,48 @@ class _PractitionersProfileScreenState
                             },
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Icon(
-                            Icons.brightness_1,
-                            size: 12,
-                            color: Colors.red,
-                          ),
-                        ),
+
                       ],
                     ),
                   ),
                 )
               : Container(),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              width: 45,
+              height: 45,
+              margin: EdgeInsets.all(8),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.notifications,
+                        color: AppColors.COLOR_PRIMARY,
+                        size: 32,
+                      ),
+                      onTap: () {
+                        NavigationController.push(
+                          context,
+                          PractitionerInboxScreen(),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
+    ),
+         widget._isViewer ? Container() : PractitionerHomeButtons(),
+
+      ],
     );
+
   }
 
   Widget _getButtonsSection() {
