@@ -497,11 +497,11 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
               SizedBox(
                 width: 8,
               ),
-              _getBookingButton(),
-              SizedBox(
-                width: 8,
-              ),
-              widget._isViewer ? _getBlogButton() : Container(),
+              // _getBookingButton(),
+              // SizedBox(
+              //   width: 8,
+              // ),
+              // widget._isViewer ? _getBlogButton() : Container(),
             ],
           )
         : Container();

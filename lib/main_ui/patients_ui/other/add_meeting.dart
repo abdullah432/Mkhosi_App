@@ -1,19 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_bookings_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
+import 'package:makhosi_app/utils/app_toast.dart';
+import 'package:makhosi_app/utils/navigation_controller.dart';
 
 class AddCalanderEvent extends StatefulWidget {
+  final dateTime;
+  AddCalanderEvent({this.dateTime});
   @override
   _AddCalanderEventState createState() => _AddCalanderEventState();
 }
 
 class _AddCalanderEventState extends State<AddCalanderEvent>
     implements IRoundedButtonClicked {
-  TextEditingController _noteText = TextEditingController(text: 'Note');
-  TextEditingController _invitesText = TextEditingController(text: 'Invites');
+  TextEditingController _noteText = TextEditingController(text: '');
+  TextEditingController _invitesText = TextEditingController(text: '');
+  List category = [
+    TaskLabel(isSelected: false, text: 'Admin'),
+    TaskLabel(isSelected: false, text: 'Orders'),
+    TaskLabel(isSelected: false, text: 'Inventory'),
+    TaskLabel(isSelected: false, text: 'Consultation'),
+    TaskLabel(isSelected: false, text: 'Bussiness Meeting'),
+  ];
 
   Widget _getHeadingText(label) {
     return Text(
@@ -40,7 +56,7 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
 
   Widget _getDate() {
     return Text(
-      DateFormat('EE d, MMMMM, YYYY').format(DateTime.now()),
+      DateFormat('EE d, MMMMM, YYYY').format(widget.dateTime),
       style: TextStyle(
         fontSize: 16,
         color: Colors.black,
@@ -51,7 +67,7 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
 
   Widget _getTime() {
     return Text(
-      DateFormat('h:m a').format(DateTime.now()),
+      DateFormat('h:m a').format(widget.dateTime),
       style: TextStyle(
         fontSize: 16,
         color: Colors.black,
@@ -60,19 +76,42 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
     );
   }
 
-  Widget _coloredButton(String label, Color color) {
-    return Container(
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
+  Widget _coloredButton({int index, Color color, Function onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
         ),
+        child: category[index].isSelected
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.done,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                    category[index].text,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              )
+            : Text(
+                category[index].text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
       ),
     );
   }
@@ -84,6 +123,7 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
         controller: _noteText,
         decoration: InputDecoration(
           fillColor: AppColors.COLOR_LIGHTSKY,
+          hintText: 'Notes',
           border: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.COLOR_SKYBORDER),
             borderRadius: BorderRadius.circular(20),
@@ -99,6 +139,7 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
       child: TextField(
         controller: _invitesText,
         decoration: InputDecoration(
+          hintText: 'Invites',
           fillColor: AppColors.COLOR_LIGHTSKY,
           prefixIcon: Icon(Icons.contact_mail_outlined),
           border: OutlineInputBorder(
@@ -117,9 +158,33 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _coloredButton('Admin', Color(0xFF49B583)),
-            _coloredButton('Orders', Color(0xFFFF4171)),
-            _coloredButton('Inventory', Color(0xFFE85EC0))
+            _coloredButton(
+                index: 0,
+                color: Color(0xFF49B583),
+                onTap: () {
+                  setState(() {
+                    category.forEach((cat) => cat.isSelected = false);
+                    category[0].isSelected = !category[0].isSelected;
+                  });
+                }),
+            _coloredButton(
+                index: 1,
+                color: Color(0xFFFF4171),
+                onTap: () {
+                  setState(() {
+                    category.forEach((cat) => cat.isSelected = false);
+                    category[1].isSelected = !category[1].isSelected;
+                  });
+                }),
+            _coloredButton(
+                index: 2,
+                color: Color(0xFFE85EC0),
+                onTap: () {
+                  setState(() {
+                    category.forEach((cat) => cat.isSelected = false);
+                    category[2].isSelected = !category[2].isSelected;
+                  });
+                })
           ],
         ),
         SizedBox(
@@ -128,8 +193,24 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _coloredButton('Consultation', Color(0xFFFFBD69)),
-            _coloredButton('Business Meeting', Color(0xFF7F86FF))
+            _coloredButton(
+                index: 3,
+                color: Color(0xFFFFBD69),
+                onTap: () {
+                  setState(() {
+                    category.forEach((cat) => cat.isSelected = false);
+                    category[3].isSelected = !category[3].isSelected;
+                  });
+                }),
+            _coloredButton(
+                index: 4,
+                color: Color(0xFF7F86FF),
+                onTap: () {
+                  setState(() {
+                    category.forEach((cat) => cat.isSelected = false);
+                    category[4].isSelected = !category[4].isSelected;
+                  });
+                })
           ],
         )
       ],
@@ -248,7 +329,32 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
   }
 
   @override
-  onClick(ClickType clickType) {
-    Navigator.pop(context);
+  onClick(ClickType clickType) async {
+    try {
+      var selectedCat =
+          category.where((element) => element.isSelected).toList();
+      var data = {
+        'invites': _invitesText.text,
+        'note': _noteText.text,
+        'category': selectedCat[0].text,
+        'event_timestamp': widget.dateTime,
+        'event_created_by': FirebaseAuth.instance.currentUser.uid,
+      };
+      await FirebaseFirestore.instance.collection('calendar_events').add(data);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => PractitionersHome()),
+          (route) => false);
+
+      AppToast.showToast(message: 'Event successfully added');
+    } catch (exc) {
+      AppToast.showToast(message: 'Something Went Wrong');
+    }
   }
+}
+
+class TaskLabel {
+  bool isSelected = false;
+  String text = '';
+  TaskLabel({this.isSelected, this.text});
 }

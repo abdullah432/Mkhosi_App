@@ -237,45 +237,48 @@ class _PractitionerBookingsScreenState
     );
   }
 
-  List<Widget> bookingsBody() {
-    return [
-      TableCalendar(
-        calendarController: _calendarController,
-        events: _events,
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            backgroundColor: AppColors.COLOR_PRIMARY,
-            onPressed: () {
-              NavigationController.push(context, AddCalanderEvent());
-            },
-          ),
-          SizedBox(
-            width: 15,
-          )
-        ],
-      ),
-      Expanded(
-        child: ListView(
-          children: _finalList.map((booking) => _rowDesign(booking)).toList(),
-        ),
-      ),
-    ];
-  }
-
   Widget _getBody() {
-    var body = bookingsBody();
     return Container(
         color: Colors.white,
         child: _isBookingTabSelected
             ? Column(
-                children: [_tabs(), ...body],
+                children: [
+                  _tabs(),
+                  TableCalendar(
+                    calendarController: _calendarController,
+                    events: _events,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FloatingActionButton(
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                        backgroundColor: AppColors.COLOR_PRIMARY,
+                        onPressed: () {
+                          NavigationController.push(
+                            context,
+                            AddCalanderEvent(
+                              dateTime: DateTime.now(),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        width: 15,
+                      )
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView(
+                      children: _finalList
+                          .map((booking) => _rowDesign(booking))
+                          .toList(),
+                    ),
+                  ),
+                ],
               )
             : ListView(
                 children: [

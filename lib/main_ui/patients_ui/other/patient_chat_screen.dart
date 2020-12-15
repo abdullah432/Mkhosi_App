@@ -30,6 +30,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
   var _messageController = TextEditingController();
   ScrollController _controller = ScrollController();
   int _selectedPosition;
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -72,11 +73,32 @@ class _PatientChatScreenState extends State<PatientChatScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppToolbars.toolbar(
-        context: context,
-        title: 'Messages',
-        isLeading: false,
-        targetScreen: null,
+      key: scaffoldKey,
+      appBar: AppBar(
+        leading: new IconButton(
+          iconSize: 41.0,
+          icon: new Icon(Icons.keyboard_arrow_left,
+              color: AppColors.REVERSE_ARROW),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.transparent,
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.more_vert,
+                color: AppColors.EDIT_PROFILE,
+              ),
+              onPressed: () {
+                scaffoldKey.currentState.openEndDrawer();
+              })
+        ],
+        // context: context,
+        // title: 'Messages',
+        // isLeading: false,
+        // targetScreen: null,
       ),
       endDrawer: Container(
         // padding: EdgeInsets.only(bottom: 30),
@@ -263,7 +285,9 @@ class _PatientChatScreenState extends State<PatientChatScreen>
             itemCount: _chatList.length,
             itemBuilder: (context, position) => _chatRow(position),
           ),
-          _getSendMessageSection(),
+          Align(
+              alignment: Alignment.bottomRight,
+              child: _getSendMessageSection()),
         ],
       ),
     );
@@ -311,126 +335,130 @@ class _PatientChatScreenState extends State<PatientChatScreen>
   }
 
   Widget _getSendMessageSection() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(12),
-        height: 80,
-        child: Stack(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _messageController,
-                decoration: InputDecoration(
-                  hintText: 'Type your message...',
-                  hintStyle: TextStyle(
-                    fontSize: 13,
-                  ),
-                  contentPadding: EdgeInsets.all(12),
-                  enabledBorder: OutlineInputBorder(
-                    // borderRadius: BorderRadius.circular(32),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    borderSide: BorderSide(color: Colors.black26),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    // borderRadius: BorderRadius.circular(32),
-                    borderSide: BorderSide(color: Colors.black38),
-                  ),
+    return
+        // Align(
+        // alignment: Alignment.bottomRight,
+        // child:
+        Container(
+      // color: Colors.white,
+      padding: EdgeInsets.only(left: 12, right: 12, bottom: 12),
+      height: 80,
+      child: Stack(
+        children: [
+          Container(
+            child: TextField(
+              controller: _messageController,
+              decoration: InputDecoration(
+                hintText: 'Type your message...',
+                hintStyle: TextStyle(
+                  fontSize: 13,
+                ),
+                contentPadding: EdgeInsets.all(12),
+                enabledBorder: OutlineInputBorder(
+                  // borderRadius: BorderRadius.circular(32),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(color: Colors.black26),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  // borderRadius: BorderRadius.circular(32),
+                  borderSide: BorderSide(color: Colors.black38),
                 ),
               ),
             ),
-            // SizedBox(
-            //   width: 8,
-            // ),
-            Positioned(
-              // padding: EdgeInsets.only(
-              //     top: 10,
-              //     left: MediaQuery.of(context).size.width / 1.6,
-              //     right: 20),
-
-              top: 10,
-              left: 90,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      String message = _messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        _sendMessage(message);
-                      }
-                    },
-                    child: Icon(
-                      Icons.add,
-                      color: AppColors.EDIT_PROFILE,
-                      size: 30,
-                    ),
+          ),
+          // SizedBox(
+          //   width: 8,
+          // ),
+          Positioned(
+            top: 9,
+            right: 15,
+            // alignment: Alignment.bottomRight,
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    String message = _messageController.text.trim();
+                    if (message.isNotEmpty) {
+                      _sendMessage(message);
+                    }
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: AppColors.EDIT_PROFILE,
+                    size: 30,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      String message = _messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        _sendMessage(message);
-                      }
-                    },
-                    child: Icon(
-                      Icons.mood,
-                      color: AppColors.EDIT_PROFILE,
-                      size: 30,
-                    ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    String message = _messageController.text.trim();
+                    if (message.isNotEmpty) {
+                      _sendMessage(message);
+                    }
+                  },
+                  child: Icon(
+                    Icons.mood,
+                    color: AppColors.EDIT_PROFILE,
+                    size: 30,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      String message = _messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        _sendMessage(message);
-                      }
-                    },
-                    child: Icon(
-                      Icons.add,
-                      color: AppColors.EDIT_PROFILE,
-                      size: 30,
-                    ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    String message = _messageController.text.trim();
+                    if (message.isNotEmpty) {
+                      _sendMessage(message);
+                    }
+                  },
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: AppColors.EDIT_PROFILE,
+                    size: 30,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            // GestureDetector(
-            //   onTap: () {
-            //     String message = _messageController.text.trim();
-            //     if (message.isNotEmpty) {
-            //       _sendMessage(message);
-            //     }
-            //   },
-            //   child: Icon(
-            //     Icons.send,
-            //     color: AppColors.COLOR_PRIMARY,
-            //     size: 40,
-            //   ),
-            // ),
-            // SizedBox(
-            //   width: 8,
-            // ),
-            // GestureDetector(
-            //   onTap: () async {
-            //     await [Permission.camera, Permission.microphone].request();
-            //     NavigationController.push(
-            //       context,
-            //       CallPage(widget._practitionerUid, ClientRole.Broadcaster),
-            //     );
-            //   },
-            //   child: Icon(
-            //     Icons.video_call,
-            //     color: AppColors.COLOR_PRIMARY,
-            //     size: 40,
-            //   ),
-            // ),
-          ],
-        ),
+          // GestureDetector(
+          //   onTap: () {
+          //     String message = _messageController.text.trim();
+          //     if (message.isNotEmpty) {
+          //       _sendMessage(message);
+          //     }
+          //   },
+          //   child: Icon(
+          //     Icons.send,
+          //     color: AppColors.COLOR_PRIMARY,
+          //     size: 40,
+          //   ),
+          // ),
+          // SizedBox(
+          //   width: 8,
+          // ),
+          // GestureDetector(
+          //   onTap: () async {
+          //     await [Permission.camera, Permission.microphone].request();
+          //     NavigationController.push(
+          //       context,
+          //       CallPage(widget._practitionerUid, ClientRole.Broadcaster),
+          //     );
+          //   },
+          //   child: Icon(
+          //     Icons.video_call,
+          //     color: AppColors.COLOR_PRIMARY,
+          //     size: 40,
+          //   ),
+          // ),
+        ],
       ),
+      // ),
     );
   }
 
