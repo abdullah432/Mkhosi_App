@@ -43,6 +43,7 @@ class _PractitionerRegisterScreenSecondState
   var _buisnessAddressController = TextEditingController();
   var _briefDescriptionController = TextEditingController();
   var _rulesController = TextEditingController();
+  var _seub_service=TextEditingController();
   //dropdown
   var _locationList = ['Home', 'Formal business premises'];
   String _selectedLocation;
@@ -195,6 +196,14 @@ class _PractitionerRegisterScreenSecondState
                 });
               },
             ),
+          ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+
+          AppTextFields.getTextField(
+            controller: _seub_service,
+            label: 'Sub Service',
+            isPassword: false,
+            isNumber: false,
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppTextFields.getMultiLineRegisterField(
