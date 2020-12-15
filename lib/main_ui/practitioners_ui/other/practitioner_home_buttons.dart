@@ -12,8 +12,6 @@ import 'package:makhosi_app/main_ui/practitioners_ui/other/consultations.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
-import 'package:makhosi_app/utils/app_colors.dart';
-
 
 import '../../../enums/click_type.dart';
 import '../../../utils/navigation_controller.dart';
@@ -26,89 +24,66 @@ class PractitionerHomeButtons extends StatefulWidget {
 
 class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
     implements IOutlinedButtonClicked, IInfoDialogClicked {
+  Widget getButton(String label, ClickType clickType, IconData icon) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 130,
+      height: 40,
+      child: AppButtons.getOutlineButton(
+        context: context,
+        iOutlinedButtonClicked: this,
+        // label: 'BOOKINGS',
+        label: label.toUpperCase(),
+        clickType: clickType,
+        icon: icon,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          width: MediaQuery.of(context).size.width / 1.8,
-          height: 40,
-          margin: EdgeInsets.only(left: 70, right: 55, top: 8),
-          child: AppButtons.getOutlineButton(
-            context: context,
-            iOutlinedButtonClicked: this,
-            // label: 'BOOKINGS',
-            label: 'mkhosi knowledge hub',
-            clickType: ClickType.DUMMY,
-            icon: Icons.book,
-          ),
+        getButton(
+          'mkhosi knowledge hub',
+          ClickType.DUMMY,
+          Icons.book,
         ),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
-        Container(
-          width: MediaQuery.of(context).size.width / 1.8,
-          height: 40,
-          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
-          child: AppButtons.getOutlineButton(
-            context: context,
-            iOutlinedButtonClicked: this,
-            label: 'CONSULTATIONS',
-            clickType: ClickType.CONSULTATIONS,
-            icon: Icons.book,
-          ),
+        getButton(
+          'CONSULTATIONS',
+          ClickType.CONSULTATIONS,
+          Icons.book,
         ),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
-        Container(
-          width: MediaQuery.of(context).size.width / 1.8,
-          height: 40,
-          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
-          child: AppButtons.getOutlineButton(
-            context: context,
-            iOutlinedButtonClicked: this,
-            // label: 'BOOKINGS',
-            label: 'APPOINTMENTS',
-            clickType: ClickType.APPOINTMENTS,
-            icon: Icons.book,
-          ),
+        getButton(
+          'APPOINTMENTS',
+          ClickType.APPOINTMENTS,
+          Icons.book,
         ),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
-        Container(
-          width: MediaQuery.of(context).size.width / 1.8,
-          height: 40,
-          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
-          child: AppButtons.getOutlineButton(
-            context: context,
-            iOutlinedButtonClicked: this,
-            // label: 'BOOKINGS',
-            label: 'ADMINSTRATION',
-            clickType: ClickType.ADMINSTRATION,
-            icon: Icons.book,
-          ),
+        getButton(
+          'ADMINSTRATION',
+          ClickType.ADMINSTRATION,
+          Icons.book,
         ),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
-        Container(
-          width: MediaQuery.of(context).size.width / 1.8,
-          height: 40,
-          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
-          child: AppButtons.getOutlineButton(
-            context: context,
-            iOutlinedButtonClicked: this,
-            // label: 'BOOKINGS',
-            label: 'BUSINESS INFO',
-            clickType: ClickType.BUSINESS_INFO,
-            icon: Icons.book,
-          ),
+        getButton(
+          'BUSINESS INFO',
+          ClickType.BUSINESS_INFO,
+          Icons.book,
         ),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
         // Container(
         //   margin: EdgeInsets.only(left: 70, right: 70, top: 8),
@@ -119,151 +94,17 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
         //     clickType: ClickType.BLOG,
         //   ),
         // ),
-        Container(
-          width: MediaQuery.of(context).size.width / 1.8,
-          height: 40,
-          margin: EdgeInsets.only(left: 70, right: 70, top: 8),
-          child: AppButtons.getOutlineButton(
-            context: context,
-            iOutlinedButtonClicked: this,
-            label: 'Consultation fees',
-            clickType: ClickType.CONSULTATION_FEES,
-          ),
 
-          Container(
-            margin: EdgeInsets.only(left: 35, right: 35, top: 8),
-            child: FlatButton(
-              height: 45,
-              //minWidth: 50,
-              onPressed: null,
-              child: Row(
-                children: [
-                  Text('APPOINTMENTS', style: TextStyle(
-                    color: AppColors.COLOR_PRIMARY,
-
-                  )
-                  ),
-
-                  SizedBox(
-                    width: 101,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    size: 20 ,
-
-
-                  )
-
-                ],
-              ),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(side: BorderSide(
-                color: AppColors.COLOR_PRIMARY,
-                width: 1,
-                style: BorderStyle.solid,
-              ), borderRadius: BorderRadius.circular(50)),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 35, right: 35, top: 8),
-            child: FlatButton(
-              height: 45,
-              //minWidth: 50,
-              onPressed: null,
-              child: Row(
-                children: [
-                  Text('ADMINSTRATION', style: TextStyle(
-                      color: AppColors.COLOR_PRIMARY
-                  )
-                  ),
-                  SizedBox(
-                    width: 82,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    size: 20 ,
-
-
-                  )
-
-                ],
-              ),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(side: BorderSide(
-                  color: AppColors.COLOR_PRIMARY,
-                  width: 1,
-                  style: BorderStyle.solid
-              ), borderRadius: BorderRadius.circular(50)),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 35, right: 35, top: 8),
-            child: FlatButton(
-              height: 45,
-              //minWidth: 50,
-              onPressed: null,
-              child: Row(
-                children: [
-                  Text('BUSINESS INFO', style: TextStyle(
-                      color: AppColors.COLOR_PRIMARY
-                  )
-                  ),
-                  SizedBox(
-                    width: 96,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    size: 20 ,
-
-
-                  )
-
-                ],
-              ),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(side: BorderSide(
-                  color: AppColors.COLOR_PRIMARY,
-                  width: 1,
-                  style: BorderStyle.solid
-              ), borderRadius: BorderRadius.circular(50)),
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(left: 35, right: 35, top: 8),
-            child: FlatButton(
-              height: 45,
-
-              //minWidth: 50,
-              onPressed: null,
-              child: Row(
-                children: [
-                  Text('CONSULTATION FEES', style: TextStyle(
-                      color: AppColors.COLOR_PRIMARY
-                  )
-                  ),
-                  SizedBox(
-                    width: 56,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    size: 20 ,
-
-
-                  )
-
-                ],
-              ),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(side: BorderSide(
-                  color: AppColors.COLOR_PRIMARY,
-                  width: 1,
-                  style: BorderStyle.solid
-              ), borderRadius: BorderRadius.circular(50)),
-            ),
-          ),
-        ],
-      );
+        getButton(
+          'Consultation fees',
+          ClickType.CONSULTATION_FEES,
+          Icons.book,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
   }
 
   @override

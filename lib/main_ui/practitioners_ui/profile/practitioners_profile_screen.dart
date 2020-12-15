@@ -105,7 +105,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                           'images/profile_background.png',
                           width: ScreenDimensions.getScreenWidth(context),
                           height:
-                              ScreenDimensions.getScreenWidth(context) / 1.25,
+                              ScreenDimensions.getScreenWidth(context) / 1.5,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -115,7 +115,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                           SizedBox(
                             width: 0,
                             height:
-                                ScreenDimensions.getScreenWidth(context) / 5,
+                                ScreenDimensions.getScreenWidth(context) / 5.9,
                           ),
                           _getBody(),
                           // SizedBox(
@@ -158,29 +158,27 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
   }
 
   Widget _getBody() {
-    return SingleChildScrollView(
-
-      padding: EdgeInsets.all(16),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: ScreenDimensions.getScreenHeight(context),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Stack(
         children: [
           Positioned(
-            top: 130.0,
+            top: 50,
             right: 20,
             child: _getContentSection(),
           ),
           Positioned(
-            top: 80,
+            top: 0,
             right: MediaQuery.of(context).size.width / 3,
             // child: Center(
             child: _getImageSection(),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height / 1.85,
-
-            // right: MediaQuery.of(context).size.width / 12,
-            child: Center(
-              child: widget._isViewer ? Container() : PractitionerHomeButtons(),
-            ),
+            top: 340,
+            left: 50,
+            child: widget._isViewer ? Container() : PractitionerHomeButtons(),
           ),
 
           // )
@@ -192,7 +190,6 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
   Widget _getContentSection() {
     bool isOnline = _snapshot.get(AppKeys.ONLINE);
     return Container(
-      height: MediaQuery.of(context).size.height / 3,
       width: MediaQuery.of(context).size.width / 1.2,
       child: Card(
         elevation: 5,
@@ -460,12 +457,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
           ],
         ),
       ),
-    ),
-         widget._isViewer ? Container() : PractitionerHomeButtons(),
-
-      ],
     );
-
   }
 
   Widget _getEditProfileButton() {
