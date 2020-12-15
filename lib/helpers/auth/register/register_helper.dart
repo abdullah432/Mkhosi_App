@@ -9,10 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
+import 'package:makhosi_app/utils/global_data.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
 
 class RegisterHelper {
-  String _uid;
+  String _uid = GlobalData.useruid;
 
   Future<bool> uploadImage({
     @required PickedFile pickedFile,
@@ -42,8 +43,24 @@ class RegisterHelper {
         {AppKeys.ID_PICTURE: downloadUrl},
         SetOptions(merge: true),
       );
+      print('image uploaded');
       return true;
     } catch (exc) {
+      return false;
+    }
+  }
+
+  Future<bool> updateTraditionalHealerDataToFirestore({
+    @required Map<String, Object> userInfoMap,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(AppKeys.PRACTITIONERS)
+          .doc(_uid)
+          .set(userInfoMap);
+      return true;
+    } catch (exc) {
+      AppToast.showToast(message: exc.toString());
       return false;
     }
   }
@@ -78,6 +95,7 @@ class RegisterHelper {
       var authResult = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       _uid = authResult.user.uid;
+      GlobalData.useruid = _uid;
       return true;
     } catch (exc) {
       AppToast.showToast(message: exc.message);

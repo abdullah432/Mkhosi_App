@@ -45,15 +45,30 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     return Scaffold(
       body: Stack(
         children: [
+
+
           Align(
             alignment: Alignment.topCenter,
             child: Image.asset(
-              'images/profile_background.png',
+              'images/Gradient.png',
               width: ScreenDimensions.getScreenWidth(context),
               height: ScreenDimensions.getScreenWidth(context) / 1.25,
               fit: BoxFit.cover,
             ),
           ),
+          new Positioned(
+            top: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: AppBar(
+              title: Text(''),// You can add title here
+              leading: new IconButton(
+                icon: new Icon(Icons.arrow_back_rounded, color: AppColors.COLOR_PRIMARY, size: 40,),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              backgroundColor: Colors.blue.withOpacity(0.1), //You can make this transparent
+              elevation: 0.0, //No shadow
+            ),),
           SingleChildScrollView(
             child: Column(
               children: [
@@ -73,7 +88,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
   Widget _getContentSection() {
     return Container(
       width: ScreenDimensions.getScreenWidth(context),
-      margin: EdgeInsets.only(left: 32, right: 32),
+      margin: EdgeInsets.only(left: 15, right: 15),
       child: Stack(
         children: [
           Column(
@@ -88,7 +103,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                   margin: EdgeInsets.only(top: 50),
                   child: Padding(
                     padding: EdgeInsets.all(16),
-                    child: Column(
+                    child: SingleChildScrollView(
+                      child:
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
@@ -112,15 +129,6 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
-                          widget._snapshot.get(AppKeys.PHONE_NUMBER),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                         SizedBox(
                           height: 8,
                         ),
@@ -130,20 +138,20 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                             Column(
                               children: [
                                 Text(
-                                  '2',
+                                  '0',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 21,
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                    // fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
-                                  'Total\nSessions',
+                                  'SERVICES\n LIKED',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.black54,
+                                    color: Colors.black45,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -158,20 +166,48 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                             Column(
                               children: [
                                 Text(
-                                  '2',
+                                  '2/5',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 21,
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                    //  fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
-                                  'Pending\nSessions',
+                                  'CUSTOMER\n RATING',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.black54,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 16, right: 16),
+                              height: 45,
+                              width: 2,
+                              color: Colors.black38,
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  '0',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 21,
+                                    color: Colors.black,
+                                    //fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'POINTS',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -183,37 +219,202 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                           height: 16,
                         ),
                         !widget._isViewer
-                            ? Container(
-                                margin: EdgeInsets.only(left: 16, right: 16),
-                                child: AppButtons.getRoundedButton(
-                                  context: context,
-                                  iRoundedButtonClicked: this,
-                                  label: 'Edit Profile',
-                                  clickType: ClickType.EDIT_PROFILE,
-                                ),
-                              )
+                            ? FlatButton(
+                          height: 60,
+                          minWidth:210,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          color: AppColors.COLOR_PRIMARY,
+                          onPressed: () {
+                            //NavigationController.push(
+                            //context,
+                            //BLogHomeScreen(_snapshot.id, true),
+                            //);
+                          },
+                          child: Text(
+                            'EDIT PROFILE',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22
+                            ),
+                          ),
+                        )
                             : Container(),
                       ],
                     ),
                   ),
                 ),
+                  ),
               ),
               SizedBox(
                 height: 16,
               ),
-              !widget._isViewer ? Container(
-                margin: EdgeInsets.only(left: 32, right: 32),
-                child: AppButtons.getOutlineButton(
-                  context: context,
-                  iOutlinedButtonClicked: this,
-                  label: 'LOG OUT',
-                  clickType: ClickType.LOGOUT,
-                  icon: Icons.exit_to_app,
-                ),
-              ) : Container(),
+              !widget._isViewer ? Column(
+    children: [
+    Container(
+    margin: EdgeInsets.only(left: 35, right: 35, top: 15),
+    child: FlatButton(
+    height: 45,
+    //minWidth: 50,
+    onPressed: null,
+    child: Row(
+    children: [
+    Text('MKHOSI KNOWLEDGE HUB', style: TextStyle(
+    color: AppColors.COLOR_PRIMARY
+    )
+    ),
+    SizedBox(
+    width: 20,
+    ),
+    Icon(
+    Icons.arrow_forward_ios_outlined,
+    size: 20 ,
+
+
+    )
+
+    ],
+    ),
+    textColor: Colors.white,
+    shape: RoundedRectangleBorder(side: BorderSide(
+    color: AppColors.COLOR_PRIMARY,
+    width: 1,
+    style: BorderStyle.solid
+    ), borderRadius: BorderRadius.circular(50)),
+    ),
+    ),
+
+
+    Container(
+    margin: EdgeInsets.only(left: 35, right: 35, top: 8),
+    child: FlatButton(
+    height: 45,
+    //minWidth: 50,
+    onPressed: null,
+    child: Row(
+    children: [
+    Text('FIND A SERVICE', style: TextStyle(
+    color: AppColors.COLOR_PRIMARY,
+
+    )
+    ),
+
+    SizedBox(
+    width: 82,
+    ),
+    Icon(
+    Icons.arrow_forward_ios_outlined,
+    size: 20 ,
+
+
+    )
+
+    ],
+    ),
+    textColor: Colors.white,
+    shape: RoundedRectangleBorder(side: BorderSide(
+    color: AppColors.COLOR_PRIMARY,
+    width: 1,
+    style: BorderStyle.solid,
+    ), borderRadius: BorderRadius.circular(50)),
+    ),
+    ),
+
+    Container(
+    margin: EdgeInsets.only(left: 35, right: 35, top: 8),
+    child: FlatButton(
+    height: 45,
+    //minWidth: 50,
+    onPressed: null,
+    child: Row(
+    children: [
+    Text('MESSAGES', style: TextStyle(
+    color: AppColors.COLOR_PRIMARY,
+
+    )
+    ),
+
+    SizedBox(
+    width: 101,
+    ),
+    Icon(
+    Icons.arrow_forward_ios_outlined,
+    size: 20 ,
+
+
+    )
+
+    ],
+    ),
+    textColor: Colors.white,
+    shape: RoundedRectangleBorder(side: BorderSide(
+    color: AppColors.COLOR_PRIMARY,
+    width: 1,
+    style: BorderStyle.solid,
+    ), borderRadius: BorderRadius.circular(50)),
+    ),
+    ),
+    ],
+    ) : Container(),
             ],
           ),
+          !widget._isViewer
+              ? Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              width: 45,
+              height: 45,
+              margin: EdgeInsets.only(right: 15, top: 50),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.settings,
+                        color: AppColors.COLOR_PRIMARY,
+                        size: 32,
+                      ),
+                      onTap: () {
+
+                      },
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          )
+              : Container(),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              width: 45,
+              height: 45,
+              margin: EdgeInsets.only(left: 15, top: 50),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.notifications,
+                        color: AppColors.COLOR_PRIMARY,
+                        size: 32,
+                      ),
+                      onTap: () {
+
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           _getImageSection(),
+
         ],
       ),
     );
@@ -225,6 +426,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
       child: Container(
         width: 100,
         height: 100,
+        margin: EdgeInsets.only(bottom: 600) ,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
           border: Border.all(

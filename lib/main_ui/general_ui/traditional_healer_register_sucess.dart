@@ -6,18 +6,18 @@ import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dar
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/traditional_healers_screenone.dart';
 
-class RegisterSuccessScreen extends StatefulWidget {
+class TraditionalHealerRegisterSuccessScreen extends StatefulWidget {
   ClickType _clickType;
-  String serviceType;
-  RegisterSuccessScreen(this._clickType, {this.serviceType});
+  TraditionalHealerRegisterSuccessScreen(this._clickType);
 
   @override
-  _RegisterSuccessScreenState createState() => _RegisterSuccessScreenState();
+  _TraditionalHealerRegisterSuccessScreenState createState() =>
+      _TraditionalHealerRegisterSuccessScreenState();
 }
 
-class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
+class _TraditionalHealerRegisterSuccessScreenState
+    extends State<TraditionalHealerRegisterSuccessScreen>
     implements IRoundedButtonClicked {
   @override
   Widget build(BuildContext context) {
@@ -26,34 +26,26 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
       body: Container(
         padding: EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 120,
-            ),
-            Image.asset('images/done.png', height: 180, width: 180,),
-            SizedBox(
-              height: 50,
-            ),
+            Image.asset('images/done.png'),
             Text(
-              'You have successfully Registered',
+              'You have successfully onboarded',
               style: TextStyle(
-                fontSize: 12,
-                color: Colors.black45,
+                fontSize: 17,
+                color: Colors.black54,
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            Others.getSizedBox(boxHeight: 32, boxWidth: 0),
             Text(
-              'AS A SERVICE PROVIDER',
+              'AS A TRADITIONAL HEALER',
               style: TextStyle(
                 fontSize: 21,
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Others.getSizedBox(boxHeight: 80, boxWidth: 0),
+            Others.getSizedBox(boxHeight: 32, boxWidth: 0),
             AppButtons.getRoundedButton(
               context: context,
               iRoundedButtonClicked: this,
@@ -81,10 +73,7 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
       case ClickType.DUMMY:
         break;
     }
-    if (widget.serviceType != null && widget.serviceType == 'Abelaphi')
-      NavigationController.pushReplacement(
-          context, TraditionalHealersScreenFirst());
-    else
-      NavigationController.pushReplacement(context, targetScreen);
+
+    NavigationController.pushReplacement(context, targetScreen);
   }
 }

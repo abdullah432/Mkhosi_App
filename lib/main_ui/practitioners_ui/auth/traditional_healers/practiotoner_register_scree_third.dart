@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/auth/practitioner_register_screen_fourth.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/auth/practitioner_register_screen_second.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers/practitioner_register_screen_fourth.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers/practitioner_register_screen_second.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/ui_components/app_labels.dart';
 import 'package:makhosi_app/ui_components/app_text_fields.dart';

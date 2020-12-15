@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
@@ -10,16 +11,19 @@ import 'package:makhosi_app/main_ui/general_ui/user_types_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/auth/patient_register_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/home/patient_home.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/practitioner_register_screen_first.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/serviceproviders/serviceprovider_first_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/ui_components/app_labels.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/ui_components/app_text_fields.dart';
+import 'package:makhosi_app/ui_components/settings/terms_policy.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
+import 'package:makhosi_app/utils/string_constants.dart';
 
 class LoginScreen extends StatefulWidget {
   ClickType _userType;
@@ -146,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen>
                         break;
                       case ClickType.PRACTITIONER:
                         targetScreen =
-                            PractitionerRegisterScreenFirst(widget._userType);
+                            ServiceProviderRegisterScreenOne(widget._userType);
                         break;
                     }
                     NavigationController.pushReplacement(context, targetScreen);
@@ -163,14 +167,50 @@ class _LoginScreenState extends State<LoginScreen>
               ],
             ),
             Others.getSizedBox(boxHeight: 32, boxWidth: 0),
-            AppLabels.getLabel(
-              labelText: 'Ts&Cs, Privacy Policy',
-              size: 15,
-              labelColor: Colors.white,
-              isBold: false,
-              isUnderlined: false,
-              alignment: TextAlign.center,
+            RichText(
+              textAlign: TextAlign.center,
+              text: new TextSpan(
+                text: '',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Colors.white,
+                  fontSize: 15.0,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Ts&Cs, ',
+                    recognizer: new TapGestureRecognizer()
+                      ..onTap = () => NavigationController.push(
+                            context,
+                            WebViewPage(
+                              link: StringConstants.EULA_LINK,
+                              title: 'Ts&Cs',
+                            ),
+                          ),
+                  ),
+                  TextSpan(
+                    text: 'Data Privacy and Protection ',
+                    recognizer: new TapGestureRecognizer()
+                      ..onTap = () => NavigationController.push(
+                            context,
+                            WebViewPage(
+                              link: StringConstants.PRIVACY_POLICY_LINK,
+                              title: 'Data Privacy and Protection',
+                            ),
+                          ),
+                  ),
+                ],
+              ),
             ),
+
+            // AppLabels.getLabel(
+            //   labelText: 'Ts&Cs, Privacy Policy',
+            //   size: 15,
+            //   labelColor: Colors.white,
+            //   isBold: false,
+            //   isUnderlined: false,
+            //   alignment: TextAlign.center,
+            // ),
           ],
         ),
       ),

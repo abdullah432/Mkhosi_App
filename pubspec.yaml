@@ -43,6 +43,8 @@ dependencies:
   language_pickers: ^0.2.0+1
   firebase_dynamic_links: ^0.6.3
   flutter_mailer: ^1.0.0
+  flutter_launcher_icons: ^0.8.1
+  flutter_country_picker: ^0.1.6
   permission_handler:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,6 +53,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/iconlauncher.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

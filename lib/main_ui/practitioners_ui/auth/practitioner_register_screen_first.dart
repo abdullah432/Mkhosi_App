@@ -5,7 +5,7 @@ import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
 import 'package:makhosi_app/contracts/i_string_drop_down_item_selected.dart';
 import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/main_ui/general_ui/login_screen.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/auth/practitioner_register_screen_second.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers/practitioner_register_screen_second.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/ui_components/app_dropdowns.dart';
 import 'package:makhosi_app/ui_components/app_labels.dart';

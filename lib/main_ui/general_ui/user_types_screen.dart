@@ -72,7 +72,7 @@ class _UserTypeScreenState extends State<UserTypeScreen>
                             ..onTap = () => NavigationController.push(
                                   context,
                                   WebViewPage(
-                                    link: StringConstants.PRIVACY_POLICY_LINK,
+                                    link: StringConstants.COMMUNITY_GUIDLINES,
                                     title: 'Community Guidelines',
                                   ),
                                 ),
@@ -90,13 +90,13 @@ class _UserTypeScreenState extends State<UserTypeScreen>
                                 ),
                         ),
                         TextSpan(
-                          text: 'and EULA',
+                          text: ', and EULA',
                           style: new TextStyle(fontWeight: FontWeight.bold),
                           recognizer: new TapGestureRecognizer()
                             ..onTap = () => NavigationController.push(
                                   context,
                                   WebViewPage(
-                                    link: StringConstants.PRIVACY_POLICY_LINK,
+                                    link: StringConstants.EULA_LINK,
                                     title: 'EULA',
                                   ),
                                 ),
