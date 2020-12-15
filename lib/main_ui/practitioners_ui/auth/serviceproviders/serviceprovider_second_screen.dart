@@ -192,13 +192,7 @@ class _PractitionerRegisterScreenSecondState
               isNumber: true,
             ),
           ),
-          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-          AppTextFields.getTextField(
-            controller: _consultationFeeController,
-            label: 'Consultation Fee per session (ZAR)',
-            isPassword: false,
-            isNumber: true,
-          ),
+
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppClickableFields.getBorderedClickableField(
             _timingModel == null
@@ -207,6 +201,13 @@ class _PractitionerRegisterScreenSecondState
             FieldType.TIME,
             this,
             Icons.watch,
+          ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          AppTextFields.getTextField(
+            controller: _consultationFeeController,
+            label: 'Consultation Fee per session (ZAR)',
+            isPassword: false,
+            isNumber: true,
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           //Payment Accepted dropdown
