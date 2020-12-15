@@ -36,7 +36,7 @@ class _PractitionerRegisterScreenFirstState
   var _idNumberController = TextEditingController();
   Country _selectedCountry = Country.ZA;
   //dropdown
-  var _identificationTypeList = ['Password', 'ID'];
+  var _identificationTypeList = ['Passport', 'ID'];
   String _selectedIdentificationType;
   //verification document
   bool _isLoading = false, _verificationAllowed = true;
