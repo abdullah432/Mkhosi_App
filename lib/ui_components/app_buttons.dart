@@ -26,7 +26,7 @@ class AppButtons {
           style: TextStyle(
             color: Colors.white,
             fontSize: 15,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
           ),
         ),
         onPressed: () {

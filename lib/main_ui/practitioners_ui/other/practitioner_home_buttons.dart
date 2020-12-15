@@ -27,6 +27,7 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: MediaQuery.of(context).size.width / 1.8,

@@ -96,42 +96,45 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
           ? AppStatusComponents.loadingContainer(Colors.white)
           : _snapshot == null
               ? AppStatusComponents.errorBody(message: 'No profile data')
-              : Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Image.asset(
-                        'images/profile_background.png',
-                        width: ScreenDimensions.getScreenWidth(context),
-                        height: ScreenDimensions.getScreenWidth(context) / 1.25,
-                        fit: BoxFit.cover,
+              : SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Image.asset(
+                          'images/profile_background.png',
+                          width: ScreenDimensions.getScreenWidth(context),
+                          height:
+                              ScreenDimensions.getScreenWidth(context) / 1.25,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          width: 0,
-                          height: ScreenDimensions.getScreenWidth(context) / 5,
-                        ),
-                        Expanded(
-                          child: _getBody(),
-                        ),
-                        // SizedBox(
-                        //   height: 20,
-                        // ),
-                        // Expanded(
-                        //   child:
-                        // widget._isViewer
-                        //     ? Container()
-                        //     : PractitionerHomeButtons(),
-                        // ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 0,
+                            height:
+                                ScreenDimensions.getScreenWidth(context) / 5,
+                          ),
+                          _getBody(),
+                          // SizedBox(
+                          //   height: 20,
+                          // ),
+                          // Expanded(
+                          //   child:
+                          // widget._isViewer
+                          //     ? Container()
+                          //     : PractitionerHomeButtons(),
+                          // ),
 
-                        // SizedBox(
-                        //   height: 16,
-                        // ),
-                      ],
-                    ),
-                  ],
+                          // SizedBox(
+                          //   height: 16,
+                          // ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -173,7 +176,8 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
             child: _getImageSection(),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height / 2,
+            top: MediaQuery.of(context).size.height / 1.85,
+
             // right: MediaQuery.of(context).size.width / 12,
             child: Center(
               child: widget._isViewer ? Container() : PractitionerHomeButtons(),
