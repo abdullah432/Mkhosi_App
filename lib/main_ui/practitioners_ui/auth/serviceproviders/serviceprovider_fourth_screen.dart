@@ -105,6 +105,36 @@ class _PractiotnerRegisterScreenFourthState
               ListTileControlAffinity.trailing, //  <-- leading Checkbox
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+        //warning
+        RichText(
+          // textAlign: TextAlign.right,
+          text: new TextSpan(
+            text: 'By selecting yes you are required to act according to the ',
+            // style: DefaultTextStyle.of(context).style,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Colors.black87,
+            ),
+            children: <TextSpan>[
+              new TextSpan(
+                text: 'Mkhosi Community Guidelines.',
+                style: new TextStyle(fontWeight: FontWeight.bold),
+                recognizer: new TapGestureRecognizer()
+                  ..onTap = () => NavigationController.push(
+                    context,
+                    WebViewPage(
+                      link: StringConstants.COMMUNITY_GUIDLINES,
+                      title: 'Community Guidelines',
+                    ),
+                  ),
+              ),
+              new TextSpan(
+                  text:
+                  ' Failure to do so will result in the deactivation of your account and possible criminal charges'),
+            ],
+          ),
+        ),
+        Others.getSizedBox(boxHeight: 16, boxWidth: 0),
         //do you have delivery service check boxes
         CheckboxListTile(
           title: Text(
@@ -122,7 +152,7 @@ class _PractiotnerRegisterScreenFourthState
         ),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
         Visibility(
-          visible: ownBuisness,
+          visible: true,
           child: AppTextFields.getTextField(
             controller: _additionalServiceController,
             label: 'Choose additional service...',
@@ -130,36 +160,7 @@ class _PractiotnerRegisterScreenFourthState
             isNumber: true,
           ),
         ),
-        Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-        //warning
-        RichText(
-          // textAlign: TextAlign.right,
-          text: new TextSpan(
-            text: 'By selecting yes you are required to act according to the ',
-            // style: DefaultTextStyle.of(context).style,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.black87,
-            ),
-            children: <TextSpan>[
-              new TextSpan(
-                text: 'Mkhosi Community Guidelines.',
-                style: new TextStyle(fontWeight: FontWeight.bold),
-                recognizer: new TapGestureRecognizer()
-                  ..onTap = () => NavigationController.push(
-                        context,
-                        WebViewPage(
-                          link: StringConstants.COMMUNITY_GUIDLINES,
-                          title: 'Community Guidelines',
-                        ),
-                      ),
-              ),
-              new TextSpan(
-                  text:
-                      ' Failure to do so will result in the deactivation of your account and possible criminal charges'),
-            ],
-          ),
-        ),
+
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
         AppButtons.getRoundedButton(
           context: context,
