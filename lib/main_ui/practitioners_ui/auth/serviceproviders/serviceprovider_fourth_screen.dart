@@ -160,7 +160,6 @@ class _PractiotnerRegisterScreenFourthState
             isNumber: true,
           ),
         ),
-
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
         AppButtons.getRoundedButton(
           context: context,

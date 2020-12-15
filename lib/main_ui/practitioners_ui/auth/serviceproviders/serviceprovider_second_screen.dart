@@ -192,7 +192,6 @@ class _PractitionerRegisterScreenSecondState
               isNumber: true,
             ),
           ),
-
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppClickableFields.getBorderedClickableField(
             _timingModel == null

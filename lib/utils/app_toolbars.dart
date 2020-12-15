@@ -11,15 +11,28 @@ class AppToolbars {
     @required dynamic targetScreen,
   }) {
     return AppBar(
-      title: Text(title),
+      backgroundColor: Colors.white,
+      shadowColor: Colors.transparent,
+      // title: Text(title),
       leading: isLeading
           ? IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                color: AppColors.REVERSE_ARROW,
+              ),
               onPressed: () {
                 NavigationController.pushReplacement(context, targetScreen);
               },
             )
-          : null,
+          : IconButton(
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                color: AppColors.REVERSE_ARROW,
+              ),
+              // onPressed: () {
+              //   NavigationController.pushReplacement(context, targetScreen);
+              // },
+            ),
     );
   }
 
