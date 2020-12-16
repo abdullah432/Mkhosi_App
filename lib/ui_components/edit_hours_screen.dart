@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:makhosi_app/contracts/i_trailing_clicked.dart';
 import 'package:makhosi_app/models/ClosedDaysModel.dart';
 import 'package:makhosi_app/models/DayTimeModel.dart';
@@ -6,6 +9,7 @@ import 'package:makhosi_app/models/TimingModel.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/app_toolbars.dart';
 import 'package:makhosi_app/utils/others.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 class EditHoursScreen extends StatefulWidget {
   EditHoursScreen({Key key}) : super(key: key);
@@ -32,7 +36,8 @@ class _EditHoursScreenState extends State<EditHoursScreen>
   var _thursdayEndTimingController = TextEditingController();
   var _fridayEndTimingController = TextEditingController();
   var _saturdayEndTimingController = TextEditingController();
-
+  Color circle_color = Colors.teal[300];
+  final GlobalKey<SlideActionState> _key = GlobalKey();
   @override
   void initState() {
     for (var i = 0; i < 7; i++) {
@@ -84,85 +89,282 @@ class _EditHoursScreenState extends State<EditHoursScreen>
   }
 
   Widget _getBody() {
-    return Container(
-      padding: EdgeInsets.all(24),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Container(
+        color: Color(0xFF111747),
+       
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Set your business hours below\nPress - icon to mark as closed',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-                color: Colors.black87,
+        
+          children: [
+          
+           
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(80),
+                  bottomRight: Radius.circular(80),
+                ),
+              ),
+              height: MediaQuery.of(context).size.height*1.1,
+              child: Stack(
+                children: [
+                
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * .26,
+                    child: Container(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      color: Color(0xFF111747),
+                    ),
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * .26,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(100),
+                          bottomLeft: Radius.circular(80),
+                          bottomRight: Radius.circular(80),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          // Container(
+                          //   height:MediaQuery.of(context).size.height*.24,
+                          // ),
+                          Center(
+                            child: Text(
+                              "Business Operating Hours",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                         
+                          Text(
+                            "Configure availibility",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 22,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 32,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Select Date"),
+                              Text("Select Start and End Time")
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _getRow(
+                            0,
+                            'Sunday',
+                            _sundayStartTimingController,
+                            _sundayEndTimingController,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          _getRow(
+                            1,
+                            'Monday',
+                            _mondayStartTimingController,
+                            _mondayEndTimingController,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          _getRow(
+                            2,
+                            'Tuesday',
+                            _tuesdayStartTimingController,
+                            _tuesdayEndTimingController,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          _getRow(
+                            3,
+                            'Wednesday',
+                            _wednesdayStartTimingController,
+                            _wednesdayEndTimingController,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          _getRow(
+                            4,
+                            'Thursday',
+                            _thursdayStartTimingController,
+                            _thursdayEndTimingController,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          _getRow(
+                            5,
+                            'Friday',
+                            _fridayStartTimingController,
+                            _fridayEndTimingController,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          _getRow(
+                            6,
+                            'Saturday',
+                            _saturdayStartTimingController,
+                            _saturdayEndTimingController,
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            "Additional Information",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 45),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {});
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Container(
+                                          height: 50,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: circle_color,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        width: 130,
+                                        child: Text(
+                                          "Availiable on Public Holidays ",
+                                          maxLines: 2,
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {});
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Container(
+                                          height: 50,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.grey[200],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 130,
+                                      child: Center(
+                                        child: Text(
+                                          "Availiable for Emergency Consuitations",
+                                          maxLines: 2,
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(100),
+                      ),
+                      child: SvgPicture.asset(
+                        "images/timingHeader.svg",
+                        semanticsLabel: 'Header',
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(
-              height: 32,
-            ),
-            _getRow(
-              0,
-              'Sunday',
-              _sundayStartTimingController,
-              _sundayEndTimingController,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            _getRow(
-              1,
-              'Monday',
-              _mondayStartTimingController,
-              _mondayEndTimingController,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            _getRow(
-              2,
-              'Tuesday',
-              _tuesdayStartTimingController,
-              _tuesdayEndTimingController,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            _getRow(
-              3,
-              'Wednesday',
-              _wednesdayStartTimingController,
-              _wednesdayEndTimingController,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            _getRow(
-              4,
-              'Thursday',
-              _thursdayStartTimingController,
-              _thursdayEndTimingController,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            _getRow(
-              5,
-              'Friday',
-              _fridayStartTimingController,
-              _fridayEndTimingController,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            _getRow(
-              6,
-              'Saturday',
-              _saturdayStartTimingController,
-              _saturdayEndTimingController,
-            ),
-            SizedBox(
-              height: 16,
+            SizedBox(height: 20,),
+            Container(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: SlideAction(
+                  height: 60,
+                  outerColor: Colors.teal[300],
+                  key: _key,
+                  onSubmit: () {
+                    Future.delayed(
+                      Duration(seconds: 1),
+                      () => _key.currentState.reset(),
+                    );
+                  },
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Swipe to continue',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  sliderButtonIcon: Icon(
+                    Icons.more_horiz_outlined,
+                    color: Colors.teal[300],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -178,16 +380,26 @@ class _EditHoursScreenState extends State<EditHoursScreen>
   ) {
     return Row(
       children: <Widget>[
-        Expanded(
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+          decoration: BoxDecoration(
+              color: startTime.text == '00' || endTime.text == '00'
+                  ? Colors.teal[300]
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(20)),
           child: Text(
             label,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: startTime.text == '00' || endTime.text == '00'
-                  ? Colors.red
+                  ? Colors.white
                   : Colors.black38,
             ),
           ),
+        ),
+        Spacer(),
+        VerticalDivider(
+          thickness: 2,
         ),
         GestureDetector(
           onTap: () {
@@ -195,76 +407,145 @@ class _EditHoursScreenState extends State<EditHoursScreen>
             endTime.text = '00';
             setState(() {});
           },
-          child: Icon(Icons.remove_circle),
+          child: Icon(
+            Icons.remove,
+            color: Colors.black,
+          ),
         ),
         SizedBox(
-          width: 8,
+          width: 4,
         ),
         GestureDetector(
-          onTap: () async {
-            TimeOfDay startTimeOfDay = await showTimePicker(
-              context: context,
-              initialTime: TimeOfDay(hour: 00, minute: 00),
-            );
-            _list[index].startHours = startTimeOfDay.hour;
-            _list[index].startMinutes = startTimeOfDay.minute;
-            var hours;
-            if (startTimeOfDay.hour < 10) {
-              hours = '0${startTimeOfDay.hour}';
-            } else {
-              hours = startTimeOfDay.hour;
-            }
-            if (_list[index].startHours < _list[index].endHours) {
-              AppToast.showToast(
-                  message: 'Start time must be earlier than end time');
-            } else {
-              setState(() {
-                startTime.text = '$hours';
-              });
-            }
-          },
-          child: Others.timingBox(label: startTime.text),
-        ),
+            onTap: () async {
+              TimeOfDay startTimeOfDay = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay(hour: 00, minute: 00),
+              );
+              _list[index].startHours = startTimeOfDay.hour;
+              _list[index].startMinutes = startTimeOfDay.minute;
+              var hours;
+              if (startTimeOfDay.hour < 10) {
+                hours = '0${startTimeOfDay.hour}';
+              } else {
+                hours = startTimeOfDay.hour;
+              }
+              if (_list[index].startHours < _list[index].endHours) {
+                AppToast.showToast(
+                    message: 'Start time must be earlier than end time');
+              } else {
+                setState(() {
+                  startTime.text = '$hours';
+                });
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+              height: 25,
+              width: 80,
+              decoration: BoxDecoration(
+                color: startTime.text == '00' || endTime.text == '00'
+                    ? Colors.teal[300]
+                    : Colors.white,
+                // border: Border.all(
+                //   width: 1,
+                //   color: Colors.black,
+                // ),
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    startTime.text,
+                    style: TextStyle(
+                      color: startTime.text == '00' || endTime.text == '00'
+                          ? Colors.white
+                          : Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(Icons.watch_later_outlined,
+                      color: startTime.text == '00' || endTime.text == '00'
+                          ? Colors.white
+                          : Colors.black,
+                      size: 19)
+                ],
+              ),
+            )
+           
+            ),
         SizedBox(
-          width: 8,
+          width: 4,
         ),
-        Icon(
-          Icons.remove,
-          color: Colors.black54,
-        ),
+        
         SizedBox(
-          width: 8,
+          width: 6,
         ),
         GestureDetector(
-          onTap: () async {
-            TimeOfDay endTimeOfDay = await showTimePicker(
-              context: context,
-              initialTime: TimeOfDay(hour: 00, minute: 00),
-            );
-            _list[index].endHours = endTimeOfDay.hour;
-            _list[index].endMinutes = endTimeOfDay.minute;
-            var hours, minutes;
-            if (endTimeOfDay.hour < 10) {
-              hours = '0${endTimeOfDay.hour}';
-            } else {
-              hours = endTimeOfDay.hour;
-            }
-            if (endTimeOfDay.minute < 10) {
-              minutes = '0${endTimeOfDay.minute}';
-            } else {
-              minutes = endTimeOfDay.minute;
-            }
-            if (_list[index].startHours > _list[index].endHours) {
-              AppToast.showToast(
-                  message: 'End time cannot be earlier than start time');
-            } else {
-              setState(() {
-                endTime.text = '$hours:$minutes';
-              });
-            }
-          },
-          child: Others.timingBox(label: endTime.text),
-        ),
+            onTap: () async {
+              TimeOfDay endTimeOfDay = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay(hour: 00, minute: 00),
+              );
+              _list[index].endHours = endTimeOfDay.hour;
+              _list[index].endMinutes = endTimeOfDay.minute;
+              var hours, minutes;
+              if (endTimeOfDay.hour < 10) {
+                hours = '0${endTimeOfDay.hour}';
+              } else {
+                hours = endTimeOfDay.hour;
+              }
+              if (endTimeOfDay.minute < 10) {
+                minutes = '0${endTimeOfDay.minute}';
+              } else {
+                minutes = endTimeOfDay.minute;
+              }
+              if (_list[index].startHours > _list[index].endHours) {
+                AppToast.showToast(
+                    message: 'End time cannot be earlier than start time');
+              } else {
+                setState(() {
+                  endTime.text = '$hours:$minutes';
+                });
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+              height: 25,
+              width: 80,
+              decoration: BoxDecoration(
+                color: startTime.text == '00' || endTime.text == '00'
+                    ? Colors.teal[300]
+                    : Colors.white,
+                // border: Border.all(
+                //   width: 1,
+                //   color: Colors.black,
+                // ),
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    endTime.text,
+                    style: TextStyle(
+                      color: startTime.text == '00' || endTime.text == '00'
+                          ? Colors.white
+                          : Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(Icons.watch_later_outlined,
+                      color: startTime.text == '00' || endTime.text == '00'
+                          ? Colors.white
+                          : Colors.black,
+                      size: 19)
+                ],
+              ),
+            )
+            //  Others.timingBox(label: endTime.text),
+            ),
       ],
     );
   }
@@ -363,4 +644,22 @@ class _EditHoursScreenState extends State<EditHoursScreen>
       Navigator.pop(context, timingModel);
     }
   }
+}
+
+class CustomClipPath extends CustomClipper<Path> {
+  var radius = 10.0;
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height - 100);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 100);
+    path.lineTo(size.width, 0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
