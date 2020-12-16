@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 
@@ -11,12 +13,66 @@ class Consultations extends StatefulWidget {
 class _ConsultationsState extends State<Consultations>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  var _newClientSnapshot;
+  var _oldClientSnapshot;
+  var _onlineSnapshot;
+  List<DocumentSnapshot> _newClientList = [];
+  List<DocumentSnapshot> _oldClientList = [];
+  List<DocumentSnapshot> _onlineList = [];
+  bool isNewClient = false;
+  bool isOldClient = false;
+  bool isOnline = false;
 
   @override
   void initState() {
     super.initState();
+    _getConsultationsNewClientData();
+    _getConsultationsOldClientData();
+    _getConsultationsOnlineData();
+
     _controller = AnimationController(vsync: this);
   }
+
+  Future<void> _getConsultationsNewClientData() async {
+    // _uid = FirebaseAuth.instance.currentUser.uid;
+    _newClientSnapshot = await FirebaseFirestore.instance
+        .collection("consultations")
+        .orderBy("creation_date", descending: true)
+        .get();
+    _newClientSnapshot.docs.forEach((doc) {
+      _newClientList.add(doc);
+      print(doc.get("name"));
+    });
+    setState(() {});
+  }
+
+  Future<void> _getConsultationsOldClientData() async {
+    // _uid = FirebaseAuth.instance.currentUser.uid;
+    _oldClientSnapshot = await FirebaseFirestore.instance
+        .collection("consultations")
+        .orderBy("creation_date", descending: false)
+        .get();
+    _oldClientSnapshot.docs.forEach((doc) {
+      _oldClientList.add(doc);
+      print(doc.get("name"));
+    });
+    setState(() {});
+  }
+
+  Future<void> _getConsultationsOnlineData() async {
+    // _uid = FirebaseAuth.instance.currentUser.uid;
+    _onlineSnapshot = await FirebaseFirestore.instance
+        .collection("consultations")
+        .where("online", isEqualTo: true)
+        .get();
+    _onlineSnapshot.docs.forEach((doc) {
+      _onlineList.add(doc);
+      print(doc.get("name"));
+    });
+    setState(() {});
+  }
+
+  // }
 
   @override
   void dispose() {
@@ -79,12 +135,13 @@ class _ConsultationsState extends State<Consultations>
                       ),
                     ),
                     leading: Radio(
-                        // onChanged: () {
-                        //   setState(() {
-                        //     // _character = value;
-                        //   });
-                        // },
-                        ),
+                      value: isNewClient,
+                      onChanged: (newCli) {
+                        setState(() {
+                          isNewClient = !newCli;
+                        });
+                      },
+                    ),
                   ),
                   ListTile(
                     title: const Text(
@@ -97,12 +154,13 @@ class _ConsultationsState extends State<Consultations>
                       ),
                     ),
                     leading: Radio(
-                        // onChanged: () {
-                        //   setState(() {
-                        //     // _character = value;
-                        //   });
-                        // },
-                        ),
+                      value: isOldClient,
+                      onChanged: (old) {
+                        setState(() {
+                          isOldClient = !old;
+                        });
+                      },
+                    ),
                   ),
                   ListTile(
                     title: const Text(
@@ -115,12 +173,13 @@ class _ConsultationsState extends State<Consultations>
                       ),
                     ),
                     leading: Radio(
-                        // onChanged: () {
-                        //   setState(() {
-                        //     // _character = value;
-                        //   });
-                        // },
-                        ),
+                      value: isOnline,
+                      onChanged: (onli) {
+                        setState(() {
+                          isOnline = !onli;
+                        });
+                      },
+                    ),
                   ),
                   SizedBox(height: 20),
                   Container(
