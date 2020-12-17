@@ -30,6 +30,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   var _messageController = TextEditingController();
   ScrollController _controller = ScrollController();
   int _selectedPosition;
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -72,27 +73,275 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppToolbars.toolbar(
-        context: context,
-        title: 'Messages',
-        isLeading: false,
-        targetScreen: null,
+      key: scaffoldKey,
+      appBar: AppBar(
+        leading: new IconButton(
+          iconSize: 41.0,
+          icon: new Icon(Icons.keyboard_arrow_left,
+              color: AppColors.REVERSE_ARROW),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.transparent,
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.more_vert,
+                color: AppColors.EDIT_PROFILE,
+                size: 32,
+              ),
+              onPressed: () {
+                scaffoldKey.currentState.openEndDrawer();
+              })
+        ],
+        // context: context,
+        // title: 'Messages',
+        // isLeading: false,
+        // targetScreen: null,
+      ),
+      //  AppToolbars.toolbar(
+      //   context: context,
+      //   title: 'Messages',
+      //   isLeading: false,
+      //   targetScreen: null,
+      // ),
+      endDrawer: Align(
+        alignment: Alignment.topRight,
+        child: Container(
+          margin: EdgeInsets.only(top: 48),
+          // padding: EdgeInsets.only(bottom: 30),
+          width: MediaQuery.of(context).size.width / 1.3,
+          height: MediaQuery.of(context).size.height / 1.3,
+          child: ClipRRect(
+            borderRadius: BorderRadius.vertical(
+                top: Radius.circular(25.0), bottom: Radius.circular(25.0)),
+            child: Drawer(
+              child: Container(
+                color: AppColors.EDIT_PROFILE,
+                child: ListView(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ],
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.call_end,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Voice Call',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.videocam,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Video Call',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Delete chat history',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.notifications_none,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Mute notification',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Search',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.description,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Save Data',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.mode_comment,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Send Review',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.confirmation_number,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Send Invoice',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.insert_drive_file,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Send Sick Note',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.keyboard_voice,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Voicenotes',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.note_add,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Add Session Notes',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.monetization_on,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Payment Request',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.report,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Report Customer',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Share Location',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    // ListTile(
+                    //   leading: Icon(
+                    //     Icons.block,
+                    //     color: Colors.white,
+                    //   ),
+                    //   title: Text(
+                    //     'Report as Spam',
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: _getBody(),
     );
   }
 
   Widget _getBody() {
-    return Stack(
-      children: [
-        ListView.builder(
-          controller: _controller,
-          padding: EdgeInsets.only(bottom: 80, left: 8, right: 8, top: 8),
-          itemCount: _chatList.length,
-          itemBuilder: (context, position) => _chatRow(position),
-        ),
-        _getSendMessageSection(),
-      ],
+    return Container(
+      color: Colors.white,
+      child: Stack(
+        children: [
+          ListView.builder(
+            controller: _controller,
+            padding: EdgeInsets.only(bottom: 80, left: 8, right: 8, top: 8),
+            itemCount: _chatList.length,
+            itemBuilder: (context, position) => _chatRow(position),
+          ),
+          _getSendMessageSection(),
+        ],
+      ),
     );
   }
 
@@ -142,65 +391,150 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
       alignment: Alignment.bottomCenter,
       child: Container(
         color: Colors.white,
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.only(left: 12, right: 12, bottom: 12),
         height: 80,
-        child: Row(
+        child: Stack(
           children: [
-            Expanded(
+            Container(
               child: TextField(
                 controller: _messageController,
                 decoration: InputDecoration(
-                  hintText: 'Message...',
+                  hintText: 'Type your message...',
                   hintStyle: TextStyle(
                     fontSize: 13,
                   ),
                   contentPadding: EdgeInsets.all(12),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32),
+                    // borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
                     borderSide: BorderSide(color: Colors.black26),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    // borderRadius: BorderRadius.circular(32),
                     borderSide: BorderSide(color: Colors.black38),
                   ),
                 ),
               ),
             ),
-            SizedBox(
-              width: 8,
-            ),
-            GestureDetector(
-              onTap: () {
-                String message = _messageController.text.trim();
-                if (message.isNotEmpty) {
-                  _sendMessage(message);
-                }
-              },
-              child: Icon(
-                Icons.send,
-                color: AppColors.COLOR_PRIMARY,
-                size: 40,
-              ),
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            GestureDetector(
-              onTap: () async {
-                await [Permission.camera, Permission.microphone].request();
-                NavigationController.push(
-                  context,
-                  CallPage(widget._myUid, ClientRole.Broadcaster),
-                );
-              },
-              child: Icon(
-                Icons.video_call,
-                color: AppColors.COLOR_PRIMARY,
-                size: 40,
+            // SizedBox(
+            //   width: 8,
+            // ),
+            Positioned(
+              top: 9,
+              right: 15,
+              // alignment: Alignment.bottomRight,
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      String message = _messageController.text.trim();
+                      if (message.isNotEmpty) {
+                        _sendMessage(message);
+                      }
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: AppColors.EDIT_PROFILE,
+                      size: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      String message = _messageController.text.trim();
+                      if (message.isNotEmpty) {
+                        _sendMessage(message);
+                      }
+                    },
+                    child: Icon(
+                      Icons.mood,
+                      color: AppColors.EDIT_PROFILE,
+                      size: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      String message = _messageController.text.trim();
+                      if (message.isNotEmpty) {
+                        _sendMessage(message);
+                      }
+                    },
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: AppColors.EDIT_PROFILE,
+                      size: 30,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
+        // child: Row(
+        //   children: [
+        //     Expanded(
+        //       child: TextField(
+        //         controller: _messageController,
+        //         decoration: InputDecoration(
+        //           hintText: 'Message...',
+        //           hintStyle: TextStyle(
+        //             fontSize: 13,
+        //           ),
+        //           contentPadding: EdgeInsets.all(12),
+        //           enabledBorder: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(32),
+        //             borderSide: BorderSide(color: Colors.black26),
+        //           ),
+        //           focusedBorder: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(32),
+        //             borderSide: BorderSide(color: Colors.black38),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //     SizedBox(
+        //       width: 8,
+        //     ),
+        //     GestureDetector(
+        //       onTap: () {
+        //         String message = _messageController.text.trim();
+        //         if (message.isNotEmpty) {
+        //           _sendMessage(message);
+        //         }
+        //       },
+        //       child: Icon(
+        //         Icons.send,
+        //         color: AppColors.COLOR_PRIMARY,
+        //         size: 40,
+        //       ),
+        //     ),
+        //     SizedBox(
+        //       width: 8,
+        //     ),
+        //     GestureDetector(
+        //       onTap: () async {
+        //         await [Permission.camera, Permission.microphone].request();
+        //         NavigationController.push(
+        //           context,
+        //           CallPage(widget._myUid, ClientRole.Broadcaster),
+        //         );
+        //       },
+        //       child: Icon(
+        //         Icons.video_call,
+        //         color: AppColors.COLOR_PRIMARY,
+        //         size: 40,
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        //   ),
       ),
     );
   }
