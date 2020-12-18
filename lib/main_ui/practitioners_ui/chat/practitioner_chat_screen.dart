@@ -32,6 +32,8 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   int _selectedPosition;
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  bool isAbelapi = false;
+
   @override
   void initState() {
     widget._myUid = FirebaseAuth.instance.currentUser.uid;
@@ -42,6 +44,8 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
       });
       _scrollToEnd();
       _markAsRead();
+      _getServiceType();
+
       setState(() {});
     });
     super.initState();
@@ -59,6 +63,20 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
       },
       SetOptions(merge: true),
     );
+  }
+
+  Future<void> _getServiceType() async {
+    var serviceProvider = await FirebaseFirestore.instance
+        .collection("practitioners")
+        .doc(widget._myUid)
+        .get();
+    var type = serviceProvider.get("service_type");
+
+    if (type.toLowerCase() == "Abelaphi".toLowerCase()) {
+      setState(() {
+        isAbelapi = true;
+      });
+    }
   }
 
   Future<void> _scrollToEnd() async {
@@ -233,18 +251,20 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                         ),
                       ),
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.insert_drive_file,
-                        color: Colors.white,
-                      ),
-                      title: Text(
-                        'Send Sick Note',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                    (isAbelapi)
+                        ? ListTile(
+                            leading: Icon(
+                              Icons.insert_drive_file,
+                              color: Colors.white,
+                            ),
+                            title: Text(
+                              'Send Sick Note',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Container(),
                     ListTile(
                       leading: Icon(
                         Icons.keyboard_voice,
