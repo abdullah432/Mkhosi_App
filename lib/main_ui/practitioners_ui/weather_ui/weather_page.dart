@@ -39,7 +39,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
   Widget getTime() {
     var time =
-        '${DateTime.now().hour}.${DateTime.now().minute} ${DateTime.now().timeZoneName}';
+        '${DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().timeZoneName}';
     return Container(
       margin: EdgeInsets.only(left: 60),
       child: Text(

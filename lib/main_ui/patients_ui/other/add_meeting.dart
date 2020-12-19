@@ -56,7 +56,7 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
 
   Widget _getDate() {
     return Text(
-      DateFormat('EE d, MMMMM, YYYY').format(widget.dateTime),
+      DateFormat('EE d, MMMM, yyyy').format(widget.dateTime),
       style: TextStyle(
         fontSize: 16,
         color: Colors.black,
@@ -67,7 +67,7 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
 
   Widget _getTime() {
     return Text(
-      DateFormat('h:m a').format(widget.dateTime),
+      DateFormat('h:mm a').format(widget.dateTime),
       style: TextStyle(
         fontSize: 16,
         color: Colors.black,

@@ -9,6 +9,7 @@ import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/app_toolbars.dart';
+import 'package:makhosi_app/utils/holidays.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -23,7 +24,11 @@ class _PractitionerBookingsScreenState
     extends State<PractitionerBookingsScreen> {
   CalendarController _calendarController = CalendarController();
   List<DocumentSnapshot> _bookingsList = [];
+  List<DocumentSnapshot> _eventsList = [];
   List<BookingsModel> _finalList = [];
+  List<Map> _eventList = [];
+
+  Map<DateTime, List<dynamic>> _holidays = Holidays.list;
   bool _isLoading = true;
   String _uid;
   int _currentYear, _currentMonth, _currentDay, _currentHour;
@@ -46,6 +51,20 @@ class _PractitionerBookingsScreenState
       bookingsSnapshot.docs.forEach((booking) {
         _bookingsList.add(booking);
       });
+      _finaliseList();
+    }).catchError((error) {
+      setState(() {
+        _isLoading = false;
+        AppToast.showToast(message: error.toString());
+      });
+    });
+
+    FirebaseFirestore.instance
+        .collection('calendar_events')
+        .where('event_created_by', isEqualTo: _uid)
+        .get()
+        .then((eventsSnapshot) {
+      _eventsList = eventsSnapshot.docs.map((doc) => doc).toList();
       _finaliseList();
     }).catchError((error) {
       setState(() {
@@ -102,6 +121,27 @@ class _PractitionerBookingsScreenState
           model.patientUid = i.get('appointment_by');
           _finalList.add(model);
         }
+      }
+    }
+
+    for (var event in _eventsList) {
+      Timestamp eventsDate = event.get('event_timestamp');
+
+      _events[eventsDate.toDate()] = [
+        {
+          'category': event.get('category'),
+          'invites': event.get('invites'),
+          'note': event.get('note')
+        }
+      ];
+
+      if (eventsDate.millisecondsSinceEpoch >=
+          DateTime.now().millisecondsSinceEpoch) {
+        _eventList.add({
+          'category': event.get('category'),
+          'invites': event.get('invites'),
+          'note': event.get('note')
+        });
       }
     }
     _filterEvents();
@@ -247,6 +287,14 @@ class _PractitionerBookingsScreenState
                   TableCalendar(
                     calendarController: _calendarController,
                     events: _events,
+                    holidays: _holidays,
+                    calendarStyle: CalendarStyle(
+                      outsideDaysVisible: false,
+                      holidayStyle: TextStyle().copyWith(color: Colors.red),
+                    ),
+                    onDaySelected: (day, x, e) {
+                      if (e.isNotEmpty) AppToast.showToast(message: e[0]);
+                    },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -261,7 +309,7 @@ class _PractitionerBookingsScreenState
                           NavigationController.push(
                             context,
                             AddCalanderEvent(
-                              dateTime: DateTime.now(),
+                              dateTime: _calendarController.selectedDay,
                             ),
                           );
                         },
@@ -275,7 +323,10 @@ class _PractitionerBookingsScreenState
                     child: ListView(
                       children: _finalList
                           .map((booking) => _rowDesign(booking))
-                          .toList(),
+                          .toList()
+                            ..addAll(_eventList.map<Widget>((e) =>
+                                _rowEventsDesign(
+                                    e['category'], e['note'], e['invites']))),
                     ),
                   ),
                 ],
@@ -286,6 +337,71 @@ class _PractitionerBookingsScreenState
                   WeatherPage(),
                 ],
               ));
+  }
+
+  Widget _rowEventsDesign(String category, String note, String invites) {
+    return GestureDetector(
+      onTap: () {
+        // if (model.profileSnapshot != null) {
+        //   NavigationController.push(
+        //     context,
+        //     PatientProfileScreen(model.profileSnapshot, true),
+        //   );
+        // }
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+        child: Card(
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Row(
+              children: [
+                Icon(Icons.calendar_today),
+                SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        category == null ? '' : category,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Note: ',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: note != null ? note : '',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _rowDesign(BookingsModel model) {
