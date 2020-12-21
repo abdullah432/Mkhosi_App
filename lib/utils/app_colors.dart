@@ -9,4 +9,26 @@ class AppColors {
   static const LIGHT_GREY = Color.fromRGBO(61, 69, 72, 1);
   static const GREYISH_RED = Color.fromRGBO(116, 47, 53, 1);
   static const LIGHT_GREYISH_RED = Color.fromRGBO(179, 142, 145, 1);
+  static const REQUEST_BOTTOM = Color(0xFF2A2B40);
+  static const REQUEST_UPPER = Color(0xFF252C4A);
+  static const REQUEST_UPPER_O = Color.fromRGBO(37,44,74,.1);
+  static const REQUEST_TEXT = Color.fromRGBO(42,43,64,.35);
+  static const COUPON_TEXT = Color.fromRGBO(42,43,64,.10);
+  static const Invoice_APPBAR_TEXT = Color(0xFF23272A);
+  static const Invoice_APPBAR_TEXT_O = Color.fromRGBO(35,39,42,.5);
+  static const Invoice_BACKGROUND = Color(0xFFE5E5E5);
+  static const Invoice_TEXT1 = Color(0xFF777D82);
+  static const TEXT_FIELD = Color(0xFFF9F9F9);
+  static const CHECK_BOX = Color(0xFF1DD968);
+  static const COUPON_TEXT1 = Color(0xFF5EC401);
+  static const COUPON_TEXT2 = Color(0xFF502F8D);
+  static const COUPON_TEXT3 = Color(0xFF696969);
+  static const REPORT_TEXT1 = Color(0xFF242E42);
+  static const REPORT_TEXT2 = Color(0xFF8A8A8F);
+  static const BUSINESS_TEXT1 = Color(0xFF388AF7);
+  static const BUSINESS_TEXT2 = Color(0xFF141414);
+  static const BUSINESS_TEXT3 = Color(0xFFB4B4B4);
+  static const BUSINESS_TEXT4 = Color(0xFF6B6B6B);
+  static const BUSINESS_STAR1 = Color(0xFFFCAC4B);
+  static const BUSINESS_STAR2 = Color(0xFFD3D5E6);
 }

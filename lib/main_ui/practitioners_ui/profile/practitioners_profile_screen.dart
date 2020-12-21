@@ -18,7 +18,9 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:makhosi_app/secondMain.dart';
-
+import 'package:makhosi_app/main_ui/administration/admin.dart';
+import 'package:makhosi_app/Screens/account_screen.dart';
+import 'package:makhosi_app/Screens/notification_screen.dart';
 class PractitionersProfileScreen extends StatefulWidget {
   bool _isViewer;
   DocumentSnapshot _snapshot;
@@ -83,16 +85,31 @@ class _PractitionersProfileScreenState
                         fit: BoxFit.cover,
                       ),
                     ),
+
                     Column(
                       children: [
                         SizedBox(
                           width: 0,
                           height: ScreenDimensions.getScreenWidth(context) / 10,
                         ),
+
                         Expanded(
                           child: _getBody(),
                         ),
+
                       ],
+                    ),
+                    Container(
+                        height: 50,
+                        width: 50,
+                        margin: EdgeInsets.only(right: 290,top: 600),
+
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>new AccountsScreen()));
+                          },
+                          child: Image.asset('images/account.png'),
+                        )
                     ),
                   ],
                 ),
@@ -362,10 +379,8 @@ class _PractitionersProfileScreenState
                         size: 32,
                       ),
                       onTap: () {
-                        NavigationController.push(
-                          context,
-                          PractitionerInboxScreen(),
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
+
                       },
                     ),
                   ),
@@ -377,6 +392,7 @@ class _PractitionersProfileScreenState
       ),
     ),
          widget._isViewer ? Container() : PractitionerHomeButtons(),
+
 
       ],
     );

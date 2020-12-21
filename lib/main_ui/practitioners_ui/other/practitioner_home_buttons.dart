@@ -12,7 +12,8 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/secondMain.dart';
-
+import 'package:makhosi_app/main_ui/administration/admin.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 class PractitionerHomeButtons extends StatefulWidget {
   @override
   _PractitionerHomeButtonsState createState() =>
@@ -138,7 +139,12 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
             child: FlatButton(
               height: 45,
               //minWidth: 50,
-              onPressed: null,
+              onPressed: (){
+                NavigationController.push(
+                context,
+                  Admin(),
+                );
+              },
               child: Row(
                 children: [
                   Text('ADMINSTRATION', style: TextStyle(
@@ -170,7 +176,12 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
             child: FlatButton(
               height: 45,
               //minWidth: 50,
-              onPressed: null,
+              onPressed: (){
+                NavigationController.push(
+                  context,
+                  BusinessCard(),
+                );
+              },
               child: Row(
                 children: [
                   Text('BUSINESS INFO', style: TextStyle(

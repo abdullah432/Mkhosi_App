@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,9 +41,14 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
         IDialogueButtonClicked {
   bool _isLoading = false;
   String _uid;
-
+  var seen=0;
+  void finished() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     seen=prefs.getInt('count');
+  }
   @override
   Widget build(BuildContext context) {
+    finished();
     return Scaffold(
       body: Stack(
         children: [
@@ -194,7 +200,16 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                             ),
                             Column(
                               children: [
+                                seen!=null?
                                 Text(
+                                  '$seen',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 21,
+                                    color: Colors.black,
+                                    //fontWeight: FontWeight.bold,
+                                  ),
+                                ):Text(
                                   '0',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(

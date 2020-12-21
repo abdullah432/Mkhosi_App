@@ -13,10 +13,9 @@ import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class PatientsBookingScreen extends StatefulWidget {
   DocumentSnapshot _snapshot;
-
   PatientsBookingScreen(this._snapshot);
 
   @override
@@ -57,7 +56,11 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
       });
     }
   }
-
+  void finished() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final seen=prefs.getInt('count');
+    prefs.setInt('count',seen+1) ;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -443,6 +446,7 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
   void onPositiveClicked() async {
     Navigator.pop(context);
     try {
+      finished();
       var data = {
         'appointment_start_hour': _selectedHour,
         'appointment_date': _selectedDate,

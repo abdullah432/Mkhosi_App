@@ -103,7 +103,7 @@ class _PractitionerRegisterScreenSecondState
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppTextFields.getTextField(
             controller: _yearsInPracticeController,
-            label: 'Years in Practice',
+            label: 'Years in Operations',
             isPassword: false,
             isNumber: true,
           ),
