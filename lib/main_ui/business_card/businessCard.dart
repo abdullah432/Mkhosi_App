@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
-
+import 'package:linkedin_login/linkedin_login.dart';
 class BusinessCard extends StatefulWidget {
   @override
   _BusinessCardState createState() => _BusinessCardState();

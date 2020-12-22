@@ -5,6 +5,7 @@ import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class AppButtons {
   static Widget getRoundedButton({
@@ -35,7 +36,34 @@ class AppButtons {
       ),
     );
   }
-
+  static Widget getRoundedButton2({
+    @required BuildContext context,
+    @required IRoundedButtonClicked iRoundedButtonClicked,
+    @required String label,
+    @required ClickType clickType,
+  }) {
+    return Container(
+      width: ScreenDimensions.getScreenWidth(context),
+      height: 45,
+      child: RaisedButton(
+        color: Hexcolor("#252C4A"),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        onPressed: () {
+          iRoundedButtonClicked.onClick(clickType);
+        },
+      ),
+    );
+  }
   static Widget getOutlineButton({
     @required BuildContext context,
     @required IOutlinedButtonClicked iOutlinedButtonClicked,

@@ -6,7 +6,7 @@ import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dar
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
-
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/splashBoarding.dart';
 class TraditionalHealerRegisterSuccessScreen extends StatefulWidget {
   ClickType _clickType;
   TraditionalHealerRegisterSuccessScreen(this._clickType);
@@ -60,20 +60,8 @@ class _TraditionalHealerRegisterSuccessScreenState
 
   @override
   onClick(ClickType clickType) {
-    Object targetScreen;
-    switch (clickType) {
-      case ClickType.PATIENT:
-        targetScreen = PatientHome();
-        break;
-      case ClickType.PRACTITIONER:
-        targetScreen = PractitionersHome();
-        break;
-      case ClickType.LOGIN:
-        break;
-      case ClickType.DUMMY:
-        break;
-    }
 
-    NavigationController.pushReplacement(context, targetScreen);
-  }
+    NavigationController.pushReplacement(
+        context, SplashScreen());
+   }
 }

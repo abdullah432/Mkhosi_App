@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/traditional_healers_screenone.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class onBoardingOne extends StatefulWidget {
   @override
@@ -55,7 +56,7 @@ class _onBoardingOneState extends State<onBoardingOne> {
             width: 200.0,
               height: 55.0,
               decoration: new BoxDecoration(
-                color: Colors.blue,
+                color: Hexcolor("#252C4A"),
                 border: new Border.all(color: Colors.white, width: 2.0),
                 borderRadius: new BorderRadius.circular(10.0),
               ),

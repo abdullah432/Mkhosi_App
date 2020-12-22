@@ -130,7 +130,7 @@ class _TraditionalHealersScreenFirstState
             ),
           ),
           Others.getSizedBox(boxHeight: 32, boxWidth: 0),
-          AppButtons.getRoundedButton(
+          AppButtons.getRoundedButton2(
             context: context,
             iRoundedButtonClicked: this,
             label: 'NEXT',
