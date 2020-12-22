@@ -7,7 +7,7 @@ import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/traditional_healers_screenone.dart';
-
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/tradional_healer_register_screen_main.dart';
 class RegisterSuccessScreen extends StatefulWidget {
   ClickType _clickType;
   String serviceType;
@@ -83,7 +83,7 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
     }
     if (widget.serviceType != null && widget.serviceType == 'Abelaphi')
       NavigationController.pushReplacement(
-          context, TraditionalHealersScreenFirst());
+          context, onBoardingOne());
     else
       NavigationController.pushReplacement(context, targetScreen);
   }

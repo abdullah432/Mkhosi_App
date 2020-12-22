@@ -26,6 +26,7 @@ import 'package:makhosi_app/utils/string_constants.dart';
 class ServiceProviderRegisterScreenOne extends StatefulWidget {
   // Map<String, Object> _userData;
   // ServiceProviderRegisterScreenOne(this._userData);
+  static var checkservice;
 
   ClickType _userType;
   ServiceProviderRegisterScreenOne(this._userType);
@@ -193,6 +194,7 @@ class _PractitionerRegisterScreenSecondState
               onChanged: (item) {
                 setState(() {
                   _selectedServiceType = item;
+                  ServiceProviderRegisterScreenOne.checkservice=item;
                 });
               },
             ),

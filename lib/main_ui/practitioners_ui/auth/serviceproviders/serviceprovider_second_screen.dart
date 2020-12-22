@@ -15,6 +15,7 @@ import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/serviceproviders/serviceprovider_first_screen.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
 
 // ignore: must_be_immutable
@@ -243,6 +244,7 @@ class _PractitionerRegisterScreenSecondState
             mainAxisSize: MainAxisSize.min,
             children: [
               //first
+              ServiceProviderRegisterScreenOne.checkservice=='Abelaphi'?
               Flexible(
                 child: CheckboxListTile(
                   title: Text(
@@ -258,7 +260,7 @@ class _PractitionerRegisterScreenSecondState
                   controlAffinity:
                       ListTileControlAffinity.trailing, //  <-- leading Checkbox
                 ),
-              ),
+              ):Text(''),
               //second
               Flexible(
                 child: CheckboxListTile(
