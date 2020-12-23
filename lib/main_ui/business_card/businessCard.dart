@@ -1,12 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
-import 'package:linkedin_login/linkedin_login.dart';
+import 'package:flutter_linkedin/linkedloginflutter.dart';
+import 'dart:async';
+
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class BusinessCard extends StatefulWidget {
   @override
   _BusinessCardState createState() => _BusinessCardState();
 }
 
 class _BusinessCardState extends State<BusinessCard> {
+  static final FacebookLogin facebookSignIn = new FacebookLogin();
+  String _message = 'Log in/out by pressing the buttons below.';
+  Future<Null> _login() async {
+    final FacebookLoginResult result =
+    await facebookSignIn.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final FacebookAccessToken accessToken = result.accessToken;
+        _showMessage('''
+         Logged in!
+         
+         Token: ${accessToken.token}
+         User id: ${accessToken.userId}
+         Expires: ${accessToken.expires}
+         Permissions: ${accessToken.permissions}
+         Declined permissions: ${accessToken.declinedPermissions}
+         ''');
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        _showMessage('Login cancelled by the user.');
+        break;
+      case FacebookLoginStatus.error:
+        _showMessage('Something went wrong with the login process.\n'
+            'Here\'s the error Facebook gave us: ${result.errorMessage}');
+        break;
+    }
+  }
+
+  Future<Null> _logOut() async {
+    await facebookSignIn.logOut();
+    _showMessage('Logged out.');
+  }
+  void _showMessage(String message) {
+    setState(() {
+      _message = message;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    LinkedInLogin.initialize(context,
+        clientId: '77n9tzr490pebq',
+        clientSecret: 'eiDD6GEWOTeMqKIY',
+        redirectUri:'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=77n9tzr490pebq&scope=*&state=*&redirect_uri=https://api-university.com/'
+
+    );
+  }
+  void login(){
+    LinkedInLogin.loginForAccessToken(
+        destroySession: true,
+        appBar: AppBar(
+          title: Text('Demo Login Page'),
+        ))
+        .then((accessToken) => print(accessToken))
+        .catchError((error) {
+      print(error.errorDescription);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -142,11 +205,22 @@ class _BusinessCardState extends State<BusinessCard> {
                                 children: [
                                   Image.asset('images/administration_images/insta.png'),
                                   sizeBoxW(30),
-                                  Image.asset('images/administration_images/linkedIn.png'),
+                                  InkWell(
+                                    onTap: (){
+                                      login();
+                                    },
+                                    child:  Image.asset('images/administration_images/linkedIn.png'),
+                                  ),
                                   sizeBoxW(30),
                                   Image.asset('images/administration_images/whatsApp.png'),
                                   sizeBoxW(30),
-                                  Image.asset('images/administration_images/facebook.png'),
+                                  InkWell(
+                                    onTap: (){
+                                      _login();
+                                    },
+                                    child:  Image.asset('images/administration_images/facebook.png'),
+
+                                  )
                                 ],
                               ),
                               sizeBox(10),

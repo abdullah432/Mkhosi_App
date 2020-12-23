@@ -272,6 +272,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.6"
+  flutter_facebook_login:
+    dependency: "direct main"
+    description:
+      name: flutter_facebook_login
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   flutter_html:
     dependency: "direct main"
     description:
@@ -286,6 +293,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.1"
+  flutter_linkedin:
+    dependency: "direct main"
+    description:
+      name: flutter_linkedin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -455,13 +469,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0+1"
-  linkedin_login:
-    dependency: "direct main"
-    description:
-      name: linkedin_login
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.1"
   location:
     dependency: "direct main"
     description:

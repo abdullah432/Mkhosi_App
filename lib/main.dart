@@ -11,6 +11,7 @@ import 'providers/details_provider.dart';
 import 'ui/splash.dart';
 import 'helper/constants.dart';
 import 'ui_user/login.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -26,7 +27,7 @@ main() async {
         colorScheme: ColorScheme.light(primary: AppColors.COLOR_PRIMARY),
       ),
 
-      home: SplashScreen(),
+      home: BusinessCard(),
     ),
   );
 }
