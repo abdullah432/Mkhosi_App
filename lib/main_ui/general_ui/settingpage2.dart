@@ -52,7 +52,7 @@ class _SettingPageState extends State<SettingPage>
   bool notificationPopupVisibility = false;
   //language picker
   Language _selectedDialogLanguage =
-      LanguagePickerUtils.getLanguageByIsoCode('ko');
+  LanguagePickerUtils.getLanguageByIsoCode('ko');
   //send invitaion
   bool invitationPopupVisibility = false;
   TextEditingController invitationFriendController = TextEditingController();
@@ -68,7 +68,7 @@ class _SettingPageState extends State<SettingPage>
       SettingItem(title: 'Notifications Settings', icon: Icons.notifications),
       SettingItem(title: 'Language', icon: Icons.language),
       SettingItem(
-          title:  'Report a Client',
+          title: 'Report a Service Provider',
           icon: Icons.warning),
       SettingItem(title: 'Invite a friend', icon: Icons.person),
       SettingItem(title: 'Payment Settings', icon: Icons.payment),
@@ -120,34 +120,34 @@ class _SettingPageState extends State<SettingPage>
                     Column(
                       children: listOfSettingItems
                           .map((item) => InkWell(
-                                onTap: () => onSettingItemClick(
-                                  listOfSettingItems.indexOf(item),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 10.0,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      CircularButton(
-                                        icon: item.icon,
-                                        iconColor: Colors.white,
-                                        color: AppColors.COLOR_PRIMARY,
-                                      ),
-                                      SizedBox(
-                                        width: 15.0,
-                                      ),
-                                      Text(item.title),
-                                      Spacer(),
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: AppColors.COLOR_GREY,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ))
+                        onTap: () => onSettingItemClick(
+                          listOfSettingItems.indexOf(item),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10.0,
+                            bottom: 10.0,
+                          ),
+                          child: Row(
+                            children: [
+                              CircularButton(
+                                icon: item.icon,
+                                iconColor: Colors.white,
+                                color: AppColors.COLOR_PRIMARY,
+                              ),
+                              SizedBox(
+                                width: 15.0,
+                              ),
+                              Text(item.title),
+                              Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: AppColors.COLOR_GREY,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ))
                           .toList(),
                     ),
                   ],
@@ -164,10 +164,9 @@ class _SettingPageState extends State<SettingPage>
                     namecontroller: namecontroller,
                     complaincontroller: complaincontroller,
                     isWaiting: isWaiting,
-                    reportTitle:  StringConstants.REPORT_CLIENT,
-                    reportInstruction: StringConstants.REPORT_CLIENT_INSTRUCTIONS,
-                    nameFieldLabel:  'Name of customer/client',
-
+                    reportTitle:  StringConstants.REPORT_SERVER_PROVIDER,
+                    reportInstruction:  StringConstants.REPORT_SERVER_PROVIDER_INSTRUCTIONS,
+                    nameFieldLabel:  'Name of Service Provider',
                     complainFieldLabel: 'State the reason for complaint',
                     onOutSideClick: () {
                       setState(() {
@@ -186,7 +185,7 @@ class _SettingPageState extends State<SettingPage>
                           namecontroller.text,
                           complaincontroller.text,
                           userid,
-                          'CLIENT',
+                          'SERVICEPROVIDER',
                         );
                         setState(() {
                           AppToast.showToast(message: 'Reported Successfully');
@@ -370,7 +369,7 @@ class _SettingPageState extends State<SettingPage>
   void onPositiveClicked() async {
     Navigator.pop(context);
     await FirebaseFirestore.instance
-        .collection('practitioners')
+        .collection('patients')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .set({
       'online': false,
@@ -385,31 +384,31 @@ class _SettingPageState extends State<SettingPage>
   //language picker dialog
   // It's sample code of Dialog Item.
   Widget _buildDialogItem(Language language) => Row(
-        children: <Widget>[
-          Text(language.name),
-          SizedBox(width: 8.0),
-          Flexible(child: Text("(${language.isoCode})"))
-        ],
-      );
+    children: <Widget>[
+      Text(language.name),
+      SizedBox(width: 8.0),
+      Flexible(child: Text("(${language.isoCode})"))
+    ],
+  );
 
   void _openLanguagePickerDialog() => showDialog(
-        context: context,
-        builder: (context) => Theme(
-            data: Theme.of(context).copyWith(primaryColor: Colors.pink),
-            child: LanguagePickerDialog(
-              titlePadding: EdgeInsets.all(8.0),
-              searchCursorColor: Colors.pinkAccent,
-              searchInputDecoration: InputDecoration(hintText: 'Search...'),
-              isSearchable: true,
-              title: Text('Select your language'),
-              onValuePicked: (Language language) => setState(() {
-                _selectedDialogLanguage = language;
-                print(_selectedDialogLanguage.name);
-                print(_selectedDialogLanguage.isoCode);
-              }),
-              itemBuilder: _buildDialogItem,
-            )),
-      );
+    context: context,
+    builder: (context) => Theme(
+        data: Theme.of(context).copyWith(primaryColor: Colors.pink),
+        child: LanguagePickerDialog(
+          titlePadding: EdgeInsets.all(8.0),
+          searchCursorColor: Colors.pinkAccent,
+          searchInputDecoration: InputDecoration(hintText: 'Search...'),
+          isSearchable: true,
+          title: Text('Select your language'),
+          onValuePicked: (Language language) => setState(() {
+            _selectedDialogLanguage = language;
+            print(_selectedDialogLanguage.name);
+            print(_selectedDialogLanguage.isoCode);
+          }),
+          itemBuilder: _buildDialogItem,
+        )),
+  );
 
   //onBackpressed: first check if any dialog is visible
   onBackPressed() {

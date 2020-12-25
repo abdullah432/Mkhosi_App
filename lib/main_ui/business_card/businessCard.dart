@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
-import 'package:flutter_linkedin/linkedloginflutter.dart';
-import 'dart:async';
+//import 'package:flutter_linkedin/linkedloginflutter.dart';
+//import 'dart:async';
 
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+//import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class BusinessCard extends StatefulWidget {
   @override
   _BusinessCardState createState() => _BusinessCardState();
 }
 
 class _BusinessCardState extends State<BusinessCard> {
-  static final FacebookLogin facebookSignIn = new FacebookLogin();
+ /* static final FacebookLogin facebookSignIn = new FacebookLogin();
   String _message = 'Log in/out by pressing the buttons below.';
   Future<Null> _login() async {
     final FacebookLoginResult result =
@@ -69,7 +69,7 @@ class _BusinessCardState extends State<BusinessCard> {
         .catchError((error) {
       print(error.errorDescription);
     });
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -207,7 +207,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                   sizeBoxW(30),
                                   InkWell(
                                     onTap: (){
-                                      login();
+                                     // login();
                                     },
                                     child:  Image.asset('images/administration_images/linkedIn.png'),
                                   ),
@@ -216,7 +216,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                   sizeBoxW(30),
                                   InkWell(
                                     onTap: (){
-                                      _login();
+                                      //_login();
                                     },
                                     child:  Image.asset('images/administration_images/facebook.png'),
 

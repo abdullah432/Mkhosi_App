@@ -107,7 +107,7 @@ class Others {
   static Widget timingBox({@required String label}) {
     return Container(
       height: 20,
-      width: 60,
+      width: 65,
       decoration: BoxDecoration(
         border: Border.all(
           width: 1,
@@ -116,13 +116,24 @@ class Others {
         borderRadius: BorderRadius.circular(32),
       ),
       child: Center(
-        child: Text(
-          label,
-          style: TextStyle(
-            color: Colors.black54,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 7,
+            ),
+        Text(
+        label,
+        style: TextStyle(
+          color: Colors.black54,
         ),
+      ),
+            SizedBox(
+              width: 2,
+            ),
+            Icon(Icons.access_time, size: 15,)
+        ],
+      )
+
       ),
     );
   }

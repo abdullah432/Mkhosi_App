@@ -12,6 +12,8 @@ import '../ui/genre.dart';
 import '../widgets/book_list_item.dart';
 import '../widgets/book_card.dart';
 import '../widgets/spotlight.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/utils/navigation_controller.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -27,6 +29,15 @@ class Home extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
               ),
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+        onPressed:() {
+          NavigationController.push(
+            context,
+            PractitionersHome(),
+          );
+        }
             ),
           ),
           body: homeProvider.loading

@@ -17,10 +17,10 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:rating_bar/rating_bar.dart';
-import 'package:makhosi_app/secondMain.dart';
-import 'package:makhosi_app/main_ui/administration/admin.dart';
+
 import 'package:makhosi_app/Screens/account_screen.dart';
 import 'package:makhosi_app/Screens/notification_screen.dart';
+import 'package:makhosi_app/main_ui/general_ui/setting_page.dart';
 class PractitionersProfileScreen extends StatefulWidget {
   bool _isViewer;
   DocumentSnapshot _snapshot;
@@ -351,7 +351,7 @@ class _PractitionersProfileScreenState
                             onTap: () {
                               NavigationController.push(
                                 context,
-                                PractitionerInboxScreen(),
+                                SettingPage(),
                               );
                             },
                           ),

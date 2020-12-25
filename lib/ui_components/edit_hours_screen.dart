@@ -6,7 +6,7 @@ import 'package:makhosi_app/models/TimingModel.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/app_toolbars.dart';
 import 'package:makhosi_app/utils/others.dart';
-
+import 'package:hexcolor/hexcolor.dart';
 class EditHoursScreen extends StatefulWidget {
   EditHoursScreen({Key key}) : super(key: key);
 
@@ -85,21 +85,40 @@ class _EditHoursScreenState extends State<EditHoursScreen>
 
   Widget _getBody() {
     return Container(
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.only(left: 24,right: 24,bottom: 2,top: 5),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'Set your business hours below\nPress - icon to mark as closed',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-                color: Colors.black87,
-              ),
+            Container(
+                height: 160,
+                width: 350,
+                child: Image.asset("images/bgg.png", width: 330,)
+            ),
+            Center(
+              child: Text(
+                'BUSINESS OPERATING HOURS',
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.black45,
+                ),
+              )
             ),
             SizedBox(
-              height: 32,
+              height: 5,
+            ),
+            Center(
+                child: Text(
+                  'Configure availability',
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.black,
+                  ),
+                )
+            ),
+
+            SizedBox(
+              height: 24,
             ),
             _getRow(
               0,
@@ -164,6 +183,76 @@ class _EditHoursScreenState extends State<EditHoursScreen>
             SizedBox(
               height: 16,
             ),
+
+            Center(
+                child: Text(
+                  'Additional Information',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black45,
+                  ),
+                )
+            ),
+
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                        ),
+                        color:  Hexcolor('#78BEBD'),
+                        borderRadius: BorderRadius.all(Radius.circular(20))
+                    )
+                ),
+                SizedBox(
+                  width: 180,
+                ),
+                Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                        ),
+                        color:  Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(50))
+                    )
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+
+                Text(
+                    'Available on Public\n Holidays',
+                  style: TextStyle(
+                    color: Colors.black45,
+                    fontSize: 10
+                  ),
+                ),
+                SizedBox(
+                  width: 95,
+                ),
+                Text(
+                    'Available for emergency\n consultations ',
+                  style: TextStyle(
+                      color: Colors.black45,
+                      fontSize: 10
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -178,16 +267,31 @@ class _EditHoursScreenState extends State<EditHoursScreen>
   ) {
     return Row(
       children: <Widget>[
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: startTime.text == '00' || endTime.text == '00'
-                  ? Colors.red
-                  : Colors.black38,
-            ),
+        Container(
+          height: 25,
+          width: 85,
+          decoration: BoxDecoration(
+              border: Border.all(
+
+              ),
+    color: startTime.text == '00' || endTime.text == '00'
+        ?  Hexcolor('#78BEBD')
+        : Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20))
           ),
+          child: Center(
+            child:  Text(
+              label,
+              style: TextStyle(
+                color: startTime.text == '00' || endTime.text == '00'
+                    ? Colors.white
+                    : Colors.black,
+              ),
+            ),
+          )
+        ),
+        SizedBox(
+          width: 3,
         ),
         GestureDetector(
           onTap: () {
@@ -198,7 +302,7 @@ class _EditHoursScreenState extends State<EditHoursScreen>
           child: Icon(Icons.remove_circle),
         ),
         SizedBox(
-          width: 8,
+          width: 11,
         ),
         GestureDetector(
           onTap: () async {
@@ -223,7 +327,8 @@ class _EditHoursScreenState extends State<EditHoursScreen>
               });
             }
           },
-          child: Others.timingBox(label: startTime.text),
+          child:
+      Others.timingBox(label: startTime.text),
         ),
         SizedBox(
           width: 8,
@@ -265,6 +370,7 @@ class _EditHoursScreenState extends State<EditHoursScreen>
           },
           child: Others.timingBox(label: endTime.text),
         ),
+
       ],
     );
   }
