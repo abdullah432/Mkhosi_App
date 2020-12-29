@@ -6,13 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
+import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
+import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
-import 'package:makhosi_app/utils/app_toolbars.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/utils/notifications.dart';
 import 'package:makhosi_app/utils/others.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:makhosi_app/utils/permissions_handle.dart';
 
 class PatientChatScreen extends StatefulWidget {
   String _practitionerUid, _myUid;
@@ -30,7 +32,8 @@ class _PatientChatScreenState extends State<PatientChatScreen>
   var _messageController = TextEditingController();
   ScrollController _controller = ScrollController();
   int _selectedPosition;
-  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _muted = false;
 
   @override
   void initState() {
@@ -45,6 +48,19 @@ class _PatientChatScreenState extends State<PatientChatScreen>
       setState(() {});
     });
     super.initState();
+
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget._myUid)
+        .collection('inbox')
+        .doc(widget._practitionerUid)
+        .get()
+        .then((doc) async {
+      var mute = await doc.get('mute');
+      setState(() {
+        _muted = mute;
+      });
+    });
   }
 
   void _markAsRead() {
@@ -142,6 +158,28 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () async {
+                        await HandlePermission.handleMic();
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Voice call from ${user.get(AppKeys.FULL_NAME)}',
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'voice',
+                            });
+
+                        NavigationController.push(
+                            context,
+                            AudioCall(
+                                channelName: 'voice_call',
+                                role: ClientRole.Broadcaster));
+                      },
                     ),
                     ListTile(
                       leading: Icon(
@@ -154,6 +192,28 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () async {
+                        await HandlePermission.handleCamera();
+                        await HandlePermission.handleMic();
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Video call from ${user.get(AppKeys.FULL_NAME)}',
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'video'
+                            });
+                        NavigationController.push(
+                            context,
+                            CallPage(
+                                channelName: 'voice_call',
+                                role: ClientRole.Broadcaster));
+                      },
                     ),
                     ListTile(
                       leading: Icon(
@@ -169,15 +229,20 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                     ),
                     ListTile(
                       leading: Icon(
-                        Icons.notifications_none,
+                        _muted
+                            ? Icons.notification_important
+                            : Icons.notifications_off,
                         color: Colors.white,
                       ),
                       title: Text(
-                        'Mute notification',
+                        _muted ? 'Unmute notification' : 'Mute notification',
                         style: TextStyle(
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () {
+                        _notifyMe(!_muted);
+                      },
                     ),
                     ListTile(
                       leading: Icon(
@@ -318,11 +383,11 @@ class _PatientChatScreenState extends State<PatientChatScreen>
           ),
         ),
       ),
-      body: _getBody(),
+      body: _getBody(context),
     );
   }
 
-  Widget _getBody() {
+  Widget _getBody(BuildContext context) {
     return Container(
       color: Colors.white,
       child: Stack(
@@ -335,7 +400,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
           ),
           Align(
               alignment: Alignment.bottomRight,
-              child: _getSendMessageSection()),
+              child: _getSendMessageSection(context)),
         ],
       ),
     );
@@ -382,7 +447,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
     );
   }
 
-  Widget _getSendMessageSection() {
+  Widget _getSendMessageSection(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -424,9 +489,23 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
+                            message: message,
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'text'
+                            });
                         _sendMessage(message);
                       }
                     },
@@ -440,9 +519,23 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                     width: 8,
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
+                            message: message,
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'text',
+                            });
                         _sendMessage(message);
                       }
                     },
@@ -456,9 +549,23 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                     width: 8,
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
+                            message: message,
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'text',
+                            });
                         _sendMessage(message);
                       }
                     },
@@ -507,6 +614,27 @@ class _PatientChatScreenState extends State<PatientChatScreen>
         // ),
       ),
     );
+  }
+
+  void _notifyMe(bool mute) {
+    //First we will update inbox data for patient i.e last message, seen and timestamp
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget._myUid)
+        .collection('inbox')
+        .doc(widget._practitionerUid)
+        .set(
+      {
+        'mute': mute,
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+
+    setState(() {
+      _muted = mute;
+    });
   }
 
   Future<void> _sendMessage(String message) async {

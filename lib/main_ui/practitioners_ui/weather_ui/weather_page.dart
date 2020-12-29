@@ -95,7 +95,7 @@ class _WeatherPageState extends State<WeatherPage> {
               : 'Clear'
           : '',
       temprature: todaysWeather != null
-          ? todaysWeather.temperature.celsius.toString()
+          ? todaysWeather.temperature.celsius.toStringAsFixed(2).toString()
           : '',
       description:
           todaysWeather != null ? todaysWeather.weatherDescription : '',

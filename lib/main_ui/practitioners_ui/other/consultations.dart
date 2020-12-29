@@ -21,6 +21,7 @@ class _ConsultationsState extends State<Consultations>
   List<DocumentSnapshot> _newClientList = [];
 
   Sort _sortBy = Sort.onlineClient;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -33,6 +34,9 @@ class _ConsultationsState extends State<Consultations>
   }
 
   Future<void> _getConsultationsNewClientData() async {
+    setState(() {
+      isLoading = true;
+    });
     // _uid = FirebaseAuth.instance.currentUser.uid;
     var _newClientSnapshot = await FirebaseFirestore.instance
         .collection("consultations")
@@ -41,10 +45,14 @@ class _ConsultationsState extends State<Consultations>
 
     setState(() {
       _newClientList = _newClientSnapshot.docs;
+      isLoading = false;
     });
   }
 
   Future<void> _getConsultationsOldClientData() async {
+    setState(() {
+      isLoading = true;
+    });
     // _uid = FirebaseAuth.instance.currentUser.uid;
     var _oldClientSnapshot = await FirebaseFirestore.instance
         .collection("consultations")
@@ -53,10 +61,14 @@ class _ConsultationsState extends State<Consultations>
 
     setState(() {
       _newClientList = _oldClientSnapshot.docs;
+      isLoading = false;
     });
   }
 
   Future<void> _getConsultationsOnlineData() async {
+    setState(() {
+      isLoading = true;
+    });
     // _uid = FirebaseAuth.instance.currentUser.uid;
     var _onlineSnapshot = await FirebaseFirestore.instance
         .collection("consultations")
@@ -65,6 +77,7 @@ class _ConsultationsState extends State<Consultations>
 
     setState(() {
       _newClientList = _onlineSnapshot.docs;
+      isLoading = false;
     });
   }
 
@@ -89,6 +102,7 @@ class _ConsultationsState extends State<Consultations>
             );
           },
           child: Container(
+            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -232,14 +246,16 @@ class _ConsultationsState extends State<Consultations>
               ),
               SizedBox(height: 20),
               Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: _newClientList
-                      .map<Widget>(
-                        (client) => createbox(client),
-                      )
-                      .toList(),
-                ),
+                child: isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView(
+                        shrinkWrap: true,
+                        children: _newClientList
+                            .map<Widget>(
+                              (client) => createbox(client),
+                            )
+                            .toList(),
+                      ),
               ),
             ],
           ),

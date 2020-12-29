@@ -7,10 +7,12 @@ import 'package:makhosi_app/main_ui/general_ui/language_country_page.dart';
 import 'package:makhosi_app/main_ui/general_ui/user_types_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/home/patient_home.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -45,12 +47,16 @@ class _SplashScreenState extends State<SplashScreen> {
         switch (userType) {
           case AppKeys.PATIENT:
             {
-              targetScreen = PatientHome();
+              targetScreen = Provider<NotificationProvider>(
+                  create: (context) => NotificationProvider(),
+                  child: PatientHome());
               break;
             }
           case AppKeys.PRACTITIONER:
             {
-              targetScreen = PractitionersHome();
+              targetScreen = Provider<NotificationProvider>(
+                  create: (context) => NotificationProvider(),
+                  child: PractitionersHome());
               break;
             }
           case 'null':

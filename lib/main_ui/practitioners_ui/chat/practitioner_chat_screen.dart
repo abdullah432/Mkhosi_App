@@ -5,14 +5,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
+import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
+import 'package:makhosi_app/utils/app_dialogues.dart';
+import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
-import 'package:makhosi_app/utils/app_toolbars.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/utils/notifications.dart';
 import 'package:makhosi_app/utils/others.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:makhosi_app/utils/permissions_handle.dart';
 
 class PractitionerChatScreen extends StatefulWidget {
   String _patientUid, _myUid;
@@ -24,13 +28,14 @@ class PractitionerChatScreen extends StatefulWidget {
 }
 
 class _PractitionerChatScreenState extends State<PractitionerChatScreen>
-    implements IMessageDialogClicked {
+    implements IMessageDialogClicked, IDialogueButtonClicked {
   List<DocumentSnapshot> _chatList = [];
   StreamSubscription _subscription;
   var _messageController = TextEditingController();
   ScrollController _controller = ScrollController();
   int _selectedPosition;
-  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _muted = false;
 
   bool isAbelapi = false;
 
@@ -49,6 +54,19 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
       setState(() {});
     });
     super.initState();
+
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget._myUid)
+        .collection('inbox')
+        .doc(widget._patientUid)
+        .get()
+        .then((doc) async {
+      var mute = await doc.get('mute');
+      setState(() {
+        _muted = mute;
+      });
+    });
   }
 
   void _markAsRead() {
@@ -93,7 +111,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        leading: new IconButton(
+        leading: IconButton(
           iconSize: 41.0,
           icon: new Icon(Icons.keyboard_arrow_left,
               color: AppColors.REVERSE_ARROW),
@@ -166,6 +184,27 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () async {
+                        await HandlePermission.handleMic();
+                        var user = await FirebaseFirestore.instance
+                            .collection('practitioners')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._patientUid,
+                            title:
+                                'Voice call from ${user.get(AppKeys.FIRST_NAME)}',
+                            body: {
+                              'practitionerUid': widget._myUid,
+                              'type': 'voice',
+                            });
+                        NavigationController.push(
+                            context,
+                            AudioCall(
+                                channelName: 'voice_call',
+                                role: ClientRole.Broadcaster));
+                      },
                     ),
                     ListTile(
                       leading: Icon(
@@ -178,6 +217,29 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () async {
+                        await HandlePermission.handleCamera();
+                        await HandlePermission.handleMic();
+                        var user = await FirebaseFirestore.instance
+                            .collection('practitioners')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._patientUid,
+                            title:
+                                'Video call from ${user.get(AppKeys.FIRST_NAME)}',
+                            body: {
+                              'practitionerUid': widget._myUid,
+                              'type': 'video',
+                            });
+
+                        NavigationController.push(
+                            context,
+                            CallPage(
+                                channelName: 'voice_call',
+                                role: ClientRole.Broadcaster));
+                      },
                     ),
                     ListTile(
                       leading: Icon(
@@ -190,18 +252,32 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () {
+                        AppDialogues.showConfirmationDialogue(
+                            context: context,
+                            title: 'Are you sure?',
+                            label: 'Your chat history will be gone for good.',
+                            negativeButtonLabel: 'Cancel',
+                            positiveButtonLabel: 'Delete',
+                            iDialogueButtonClicked: this);
+                      },
                     ),
                     ListTile(
                       leading: Icon(
-                        Icons.notifications_none,
+                        _muted
+                            ? Icons.notification_important
+                            : Icons.notifications_off,
                         color: Colors.white,
                       ),
                       title: Text(
-                        'Mute notification',
+                        _muted ? 'Unmute notification' : 'Mute notification',
                         style: TextStyle(
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () {
+                        _notifyMe(!_muted);
+                      },
                     ),
                     ListTile(
                       leading: Icon(
@@ -448,9 +524,24 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('practitioners')
+                            .doc(widget._myUid)
+                            .get();
+
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._patientUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                            message: message,
+                            body: {
+                              'practitionerUid': widget._myUid,
+                              'type': 'text',
+                            });
                         _sendMessage(message);
                       }
                     },
@@ -464,9 +555,24 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                     width: 8,
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('practitioners')
+                            .doc(widget._myUid)
+                            .get();
+
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._patientUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                            message: message,
+                            body: {
+                              'practitionerUid': widget._myUid,
+                              'type': 'text',
+                            });
                         _sendMessage(message);
                       }
                     },
@@ -480,9 +586,24 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                     width: 8,
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('practitioners')
+                            .doc(widget._myUid)
+                            .get();
+
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._patientUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                            message: message,
+                            body: {
+                              'practitionerUid': widget._myUid,
+                              'type': 'text',
+                            });
                         _sendMessage(message);
                       }
                     },
@@ -557,6 +678,27 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
         //   ),
       ),
     );
+  }
+
+  void _notifyMe(bool mute) {
+    //First we will update inbox data for patient i.e last message, seen and timestamp
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget._myUid)
+        .collection('inbox')
+        .doc(widget._patientUid)
+        .set(
+      {
+        'mute': mute,
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+
+    setState(() {
+      _muted = mute;
+    });
   }
 
   Future<void> _sendMessage(String message) async {
@@ -659,7 +801,25 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
         .collection('inbox')
         .doc(widget._patientUid)
         .collection('messages')
-        .doc(_chatList[_selectedPosition].id)
-        .delete();
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  @override
+  void onNegativeClicked() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  @override
+  void onPositiveClicked() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+
+    this.onDeleteClicked();
   }
 }

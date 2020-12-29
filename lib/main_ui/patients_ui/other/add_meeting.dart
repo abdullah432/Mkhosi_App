@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
@@ -23,12 +24,14 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
     implements IRoundedButtonClicked {
   TextEditingController _noteText = TextEditingController(text: '');
   TextEditingController _invitesText = TextEditingController(text: '');
+  DateTime _dTime = DateTime.now();
+  TimeOfDay _time = TimeOfDay.now();
   List category = [
     TaskLabel(isSelected: false, text: 'Admin'),
     TaskLabel(isSelected: false, text: 'Orders'),
     TaskLabel(isSelected: false, text: 'Inventory'),
     TaskLabel(isSelected: false, text: 'Consultation'),
-    TaskLabel(isSelected: false, text: 'Bussiness Meeting'),
+    TaskLabel(isSelected: false, text: 'Business Meeting'),
   ];
 
   Widget _getHeadingText(label) {
@@ -55,23 +58,44 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
   }
 
   Widget _getDate() {
-    return Text(
-      DateFormat('EE d, MMMMM, YYYY').format(widget.dateTime),
-      style: TextStyle(
-        fontSize: 16,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
+    return InkWell(
+      onTap: () async {
+        var newDate = await showDatePicker(
+            context: context,
+            initialDate: _dTime,
+            firstDate: _dTime,
+            lastDate: DateTime.now().add(Duration(days: 90)));
+        setState(() {
+          _dTime = newDate;
+        });
+      },
+      child: Text(
+        DateFormat('EE d, MMMM, y').format(_dTime),
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.black,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
 
   Widget _getTime() {
-    return Text(
-      DateFormat('h:m a').format(widget.dateTime),
-      style: TextStyle(
-        fontSize: 16,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
+    return InkWell(
+      onTap: () async {
+        var newTime = await showTimePicker(
+            context: context, initialTime: TimeOfDay.now());
+        setState(() {
+          _time = newTime;
+        });
+      },
+      child: Text(
+        _time.format(context),
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.black,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
@@ -337,14 +361,15 @@ class _AddCalanderEventState extends State<AddCalanderEvent>
         'invites': _invitesText.text,
         'note': _noteText.text,
         'category': selectedCat[0].text,
-        'event_timestamp': widget.dateTime,
+        'event_timestamp': DateTime(
+            _dTime.year, _dTime.month, _dTime.day, _time.hour, _time.minute),
         'event_created_by': FirebaseAuth.instance.currentUser.uid,
       };
       await FirebaseFirestore.instance.collection('calendar_events').add(data);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => PractitionersHome()),
-          (route) => false);
+      Navigator.pop(context);
+      Navigator.pop(context);
+
+      NavigationController.push(context, PractitionerBookingsScreen());
 
       AppToast.showToast(message: 'Event successfully added');
     } catch (exc) {

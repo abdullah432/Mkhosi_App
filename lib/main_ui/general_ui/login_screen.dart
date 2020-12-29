@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
@@ -12,6 +13,7 @@ import 'package:makhosi_app/main_ui/patients_ui/home/patient_home.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/practitioner_register_screen_first.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/serviceproviders/serviceprovider_first_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/ui_components/app_labels.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
@@ -23,6 +25,7 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   ClickType _userType;
@@ -319,10 +322,28 @@ class _LoginScreenState extends State<LoginScreen>
         switch (widget._userType) {
           // ignore: missing_enum_constant_in_switch
           case ClickType.PATIENT:
-            targetScreen = PatientHome();
+            targetScreen = Provider<NotificationProvider>(
+                create: (context) {
+                  NotificationProvider notificationProvider =
+                      NotificationProvider();
+                  notificationProvider.firebaseMessaging.subscribeToTopic(
+                      'messages_${FirebaseAuth.instance.currentUser.uid}');
+                  return notificationProvider;
+                },
+                child: PatientHome());
+
             break;
           case ClickType.PRACTITIONER:
-            targetScreen = PractitionersHome();
+            targetScreen = Provider<NotificationProvider>(
+                create: (context) {
+                  NotificationProvider notificationProvider =
+                      NotificationProvider();
+                  notificationProvider.firebaseMessaging.subscribeToTopic(
+                      'messages_${FirebaseAuth.instance.currentUser.uid}');
+                  return notificationProvider;
+                },
+                child: PractitionersHome());
+
             break;
         }
         NavigationController.pushReplacement(context, targetScreen);
