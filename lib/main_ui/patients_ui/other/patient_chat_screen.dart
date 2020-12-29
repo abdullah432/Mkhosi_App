@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart' as rtc;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +34,8 @@ class _PatientChatScreenState extends State<PatientChatScreen>
   int _selectedPosition;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool _muted = false;
+  TextEditingController serviceProviderController = new TextEditingController();
+  TextEditingController complainController = new TextEditingController();
 
   @override
   void initState() {
@@ -61,6 +63,133 @@ class _PatientChatScreenState extends State<PatientChatScreen>
         _muted = mute;
       });
     });
+  }
+
+  Future<void> _sendReportServiceProvider(
+      String serviceProviderName, String complain) async {
+    //Now we will add message to patient section
+    FirebaseFirestore.instance.collection('reports').add(
+      {
+        'user_type': 'CLIENT',
+        'customer_name': serviceProviderName,
+        'complain': complain,
+        'timestamp': Timestamp.now(),
+        'reported_by': widget._myUid,
+        'reported_user': widget._practitionerUid,
+      },
+    );
+  }
+
+  Future<void> _popUpPatientDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.symmetric(vertical: 40),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          title: Center(
+            child: Text(
+              'Report a Service Provider',
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'To report a Service Provider, please make sure all fields are filled in',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Color(0xFF8A8A8F)),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: serviceProviderController,
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xffEFEFF4),
+                    contentPadding: EdgeInsets.all(14),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(10.0),
+                      ),
+                      borderSide: BorderSide(
+                        color: Colors.black12,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1.5,
+                      ),
+                    ),
+                    labelText: "name of service provider",
+                    labelStyle: TextStyle(
+                      color: Color(0xffC8C7CC),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: complainController,
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xffEFEFF4),
+                    contentPadding: EdgeInsets.all(40),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(10.0),
+                      ),
+                      borderSide: BorderSide(
+                        color: Colors.black12,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1.5,
+                      ),
+                    ),
+                    labelText: "state the reason for complaint",
+                    labelStyle: TextStyle(
+                      color: Color(0xffC8C7CC),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                FlatButton(
+                  color: AppColors.COLOR_PRIMARY,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
+                  onPressed: () async {
+                    _sendReportServiceProvider(serviceProviderController.text,
+                        complainController.text);
+                    Navigator.pop(context, false);
+                  },
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _markAsRead() {
@@ -178,7 +307,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                             context,
                             AudioCall(
                                 channelName: 'voice_call',
-                                role: ClientRole.Broadcaster));
+                                role: rtc.ClientRole.Broadcaster));
                       },
                     ),
                     ListTile(
@@ -212,7 +341,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                             context,
                             CallPage(
                                 channelName: 'voice_call',
-                                role: ClientRole.Broadcaster));
+                                role: rtc.ClientRole.Broadcaster));
                       },
                     ),
                     ListTile(
@@ -341,6 +470,9 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                     //   ),
                     // ),
                     ListTile(
+                      onTap: () {
+                        _popUpPatientDialog();
+                      },
                       leading: Icon(
                         Icons.report,
                         color: Colors.white,

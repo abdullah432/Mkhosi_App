@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart' as rtc;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +38,8 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   bool _muted = false;
 
   bool isAbelapi = false;
+  TextEditingController customerNameController = new TextEditingController();
+  TextEditingController complainController = new TextEditingController();
 
   @override
   void initState() {
@@ -67,6 +69,133 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
         _muted = mute;
       });
     });
+  }
+
+  Future<void> _sendReportCoustomer(
+      String customerName, String complain) async {
+    //Now we will add message to patient section
+    FirebaseFirestore.instance.collection('reports').add(
+      {
+        'user_type': 'SERVICE_PROVIDER',
+        'customer_name': customerName,
+        'complain': complain,
+        'timestamp': Timestamp.now(),
+        'reported_by': widget._myUid,
+        'reported_user': widget._patientUid,
+      },
+    );
+  }
+
+  Future<void> _popUpServiceProviderDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.symmetric(vertical: 40),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          title: Center(
+            child: Text(
+              'Report a Customer/Client',
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'To report a Customer/Client, please make sure all fields are filled in',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Color(0xFF8A8A8F)),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: customerNameController,
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xffEFEFF4),
+                    contentPadding: EdgeInsets.all(14),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(10.0),
+                      ),
+                      borderSide: BorderSide(
+                        color: Colors.black12,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1.5,
+                      ),
+                    ),
+                    labelText: "name of customer/client",
+                    labelStyle: TextStyle(
+                      color: Color(0xffC8C7CC),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: complainController,
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xffEFEFF4),
+                    contentPadding: EdgeInsets.all(40),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(10.0),
+                      ),
+                      borderSide: BorderSide(
+                        color: Colors.black12,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1.5,
+                      ),
+                    ),
+                    labelText: "state the reason for complaint",
+                    labelStyle: TextStyle(
+                      color: Color(0xffC8C7CC),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                FlatButton(
+                  color: AppColors.COLOR_PRIMARY,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
+                  onPressed: () async {
+                    _sendReportCoustomer(
+                        customerNameController.text, complainController.text);
+                    Navigator.pop(context, false);
+                  },
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _markAsRead() {
@@ -203,7 +332,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                             context,
                             AudioCall(
                                 channelName: 'voice_call',
-                                role: ClientRole.Broadcaster));
+                                role: rtc.ClientRole.Broadcaster));
                       },
                     ),
                     ListTile(
@@ -238,7 +367,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                             context,
                             CallPage(
                                 channelName: 'voice_call',
-                                role: ClientRole.Broadcaster));
+                                role: rtc.ClientRole.Broadcaster));
                       },
                     ),
                     ListTile(
@@ -378,6 +507,9 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                       ),
                     ),
                     ListTile(
+                      onTap: () {
+                        _popUpServiceProviderDialog();
+                      },
                       leading: Icon(
                         Icons.report,
                         color: Colors.white,
