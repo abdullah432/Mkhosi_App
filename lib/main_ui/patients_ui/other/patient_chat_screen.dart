@@ -112,7 +112,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
               color: AppColors.EDIT_PROFILE,
               child: ListView(
                 padding: EdgeInsets.symmetric(vertical: 20),
-                children: const <Widget>[
+                children: <Widget>[
                   // DrawerHeader(
                   //   decoration: BoxDecoration(
                   //     color: Colors.blue,
@@ -143,6 +143,10 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                         color: Colors.white,
                       ),
                     ),
+                    onTap: () {
+                      NavigationController.push(
+                          context, CallPage('Test', ClientRole.Broadcaster));
+                    },
                   ),
                   ListTile(
                     leading: Icon(

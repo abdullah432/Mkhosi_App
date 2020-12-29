@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/add_meeting.dart';
 import 'package:makhosi_app/main_ui/patients_ui/profile_screens/patient_profile_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/other/view_consulation_event.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/weather_ui/weather_page.dart';
 import 'package:makhosi_app/models/bookings_model.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
@@ -409,11 +410,13 @@ class _PractitionerBookingsScreenState
       _getPatientProfile(model);
     }
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (model.profileSnapshot != null) {
+          var date = await model.bookingSnapshot.get('appointment_date');
           NavigationController.push(
             context,
-            PatientProfileScreen(model.profileSnapshot, true),
+            ViewConsultationEvent(
+                bookingId: model.bookingSnapshot.documentID, date: date),
           );
         }
       },
