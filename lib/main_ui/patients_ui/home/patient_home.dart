@@ -1,17 +1,27 @@
+import 'dart:io';
+
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
+import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
+import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/profile_screens/patient_profile_screen.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 import 'package:makhosi_app/tabs/all_tab.dart';
 import 'package:makhosi_app/tabs/bookings_tab.dart';
 import 'package:makhosi_app/tabs/favorites_tab.dart';
 import 'package:makhosi_app/tabs/nearby_practitioners_tab.dart';
 import 'package:makhosi_app/tabs/patient_inbox_tab.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
+import 'package:makhosi_app/utils/app_dialogues.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
+import 'package:makhosi_app/utils/pickup_call_screen.dart';
+import 'package:provider/provider.dart';
 
 class PatientHome extends StatefulWidget {
   @override
@@ -27,6 +37,126 @@ class _PatientHomeState extends State<PatientHome> {
     Others.clearImageCache();
     _getUserProfileData();
     super.initState();
+
+    context.read<NotificationProvider>().firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        List msgArr = message['notification']['title'].split(" ");
+
+        if (Platform.isIOS) {
+        } else {
+          switch (message['data']['type']) {
+            case 'voice':
+              NavigationController.push(
+                  context,
+                  PickupCall(
+                      title: 'Incoming Voice Call',
+                      label: msgArr.last,
+                      type: 'voice'));
+
+              break;
+            case 'video':
+              NavigationController.push(
+                  context,
+                  PickupCall(
+                      title: 'Incoming Video Call',
+                      label: msgArr.last,
+                      type: 'video'));
+
+              break;
+            case 'text':
+              context.read<NotificationProvider>().showNotification(
+                  message['notification']['title'],
+                  message['notification']['body']);
+
+              break;
+            default:
+          }
+        }
+
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+
+        if (Platform.isIOS) {
+        } else {
+          switch (message['data']['type']) {
+            case 'voice':
+              NavigationController.push(
+                  context,
+                  AudioCall(
+                      channelName: 'voice_call', role: ClientRole.Broadcaster));
+              break;
+            case 'video':
+              NavigationController.push(
+                  context,
+                  CallPage(
+                    channelName: 'voice_call',
+                    role: ClientRole.Broadcaster,
+                  ));
+              break;
+            case 'text':
+              NavigationController.push(context,
+                  PatientChatScreen(message['data']['practitionerUid']));
+
+              break;
+            default:
+          }
+        }
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+
+        if (Platform.isIOS) {
+        } else {
+          switch (message['data']['type']) {
+            case 'voice':
+              NavigationController.push(
+                  context,
+                  AudioCall(
+                      channelName: 'voice_call', role: ClientRole.Broadcaster));
+              break;
+            case 'video':
+              NavigationController.push(
+                  context,
+                  CallPage(
+                    channelName: 'voice_call',
+                    role: ClientRole.Broadcaster,
+                  ));
+              break;
+            case 'text':
+              NavigationController.push(context,
+                  PatientChatScreen(message['data']['practitionerUid']));
+
+              break;
+            default:
+          }
+        }
+      },
+    );
+  }
+
+  onMessageDialog(
+      {BuildContext context, String title, String label, Function onAccept}) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(label),
+        actions: [
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Reject'),
+          ),
+          FlatButton(
+            onPressed: onAccept,
+            child: Text('Accept'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _getUserProfileData() async {

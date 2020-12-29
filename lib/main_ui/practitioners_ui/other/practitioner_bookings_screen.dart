@@ -241,7 +241,8 @@ class _PractitionerBookingsScreenState
                 child: Text(
                   'Bookings & Appoinments',
                   style: TextStyle(
-                      color: Colors.white,
+                      color:
+                          _isBookingTabSelected ? Colors.white : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 12),
                 ),
@@ -266,7 +267,8 @@ class _PractitionerBookingsScreenState
                 child: Text(
                   'Weather Forecast',
                   style: TextStyle(
-                      color: Colors.white,
+                      color:
+                          !_isBookingTabSelected ? Colors.white : Colors.black,
                       fontWeight: FontWeight.w500,
                       fontSize: 12),
                 ),

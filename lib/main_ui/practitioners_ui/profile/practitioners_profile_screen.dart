@@ -176,7 +176,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
             child: _getImageSection(),
           ),
           Positioned(
-            top: 340,
+            top: 348,
             left: 50,
             child: widget._isViewer ? Container() : PractitionerHomeButtons(),
           ),

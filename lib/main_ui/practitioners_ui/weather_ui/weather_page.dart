@@ -39,7 +39,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
   Widget getTime() {
     var time =
-        '${DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().timeZoneName}';
+        '${DateTime.now().hour}.${DateTime.now().minute} ${DateTime.now().timeZoneName}';
     return Container(
       margin: EdgeInsets.only(left: 60),
       child: Text(
@@ -95,7 +95,7 @@ class _WeatherPageState extends State<WeatherPage> {
               : 'Clear'
           : '',
       temprature: todaysWeather != null
-          ? todaysWeather.temperature.celsius.toString()
+          ? todaysWeather.temperature.celsius.toStringAsFixed(2).toString()
           : '',
       description:
           todaysWeather != null ? todaysWeather.weatherDescription : '',

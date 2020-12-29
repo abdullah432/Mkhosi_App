@@ -6,13 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
+import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
+import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
-import 'package:makhosi_app/utils/app_toolbars.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/utils/notifications.dart';
 import 'package:makhosi_app/utils/others.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:makhosi_app/utils/permissions_handle.dart';
 
 class PatientChatScreen extends StatefulWidget {
   String _practitionerUid, _myUid;
@@ -30,7 +32,8 @@ class _PatientChatScreenState extends State<PatientChatScreen>
   var _messageController = TextEditingController();
   ScrollController _controller = ScrollController();
   int _selectedPosition;
-  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _muted = false;
 
   @override
   void initState() {
@@ -45,6 +48,19 @@ class _PatientChatScreenState extends State<PatientChatScreen>
       setState(() {});
     });
     super.initState();
+
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget._myUid)
+        .collection('inbox')
+        .doc(widget._practitionerUid)
+        .get()
+        .then((doc) async {
+      var mute = await doc.get('mute');
+      setState(() {
+        _muted = mute;
+      });
+    });
   }
 
   void _markAsRead() {
@@ -90,6 +106,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
               icon: Icon(
                 Icons.more_vert,
                 color: AppColors.EDIT_PROFILE,
+                size: 32,
               ),
               onPressed: () {
                 scaffoldKey.currentState.openEndDrawer();
@@ -100,185 +117,277 @@ class _PatientChatScreenState extends State<PatientChatScreen>
         // isLeading: false,
         // targetScreen: null,
       ),
-      endDrawer: Container(
-        // padding: EdgeInsets.only(bottom: 30),
-        width: MediaQuery.of(context).size.width / 1.3,
-        height: MediaQuery.of(context).size.height / 1.3,
-        child: ClipRRect(
-          borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25.0), bottom: Radius.circular(25.0)),
-          child: Drawer(
-            child: Container(
-              color: AppColors.EDIT_PROFILE,
-              child: ListView(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                children: <Widget>[
-                  // DrawerHeader(
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.blue,
-                  //   ),
+      endDrawer: Align(
+        alignment: Alignment.topRight,
+        child: Container(
+          margin: EdgeInsets.only(top: 48),
+          // padding: EdgeInsets.only(bottom: 30),
+          width: MediaQuery.of(context).size.width / 1.3,
+          height: MediaQuery.of(context).size.height / 1.3,
+          child: ClipRRect(
+            borderRadius: BorderRadius.vertical(
+                top: Radius.circular(25.0), bottom: Radius.circular(25.0)),
+            child: Drawer(
+              child: Container(
+                color: AppColors.EDIT_PROFILE,
+                child: ListView(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ],
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.call_end,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Voice Call',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onTap: () async {
+                        await HandlePermission.handleMic();
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Voice call from ${user.get(AppKeys.FULL_NAME)}',
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'voice',
+                            });
 
-                  // )),
-
-                  ListTile(
-                    leading: Icon(
-                      Icons.call_end,
-                      color: Colors.white,
+                        NavigationController.push(
+                            context,
+                            AudioCall(
+                                channelName: 'voice_call',
+                                role: ClientRole.Broadcaster));
+                      },
                     ),
-                    title: Text(
-                      'Voice Call',
-                      style: TextStyle(
+                    ListTile(
+                      leading: Icon(
+                        Icons.videocam,
                         color: Colors.white,
                       ),
+                      title: Text(
+                        'Video Call',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onTap: () async {
+                        await HandlePermission.handleCamera();
+                        await HandlePermission.handleMic();
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Video call from ${user.get(AppKeys.FULL_NAME)}',
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'video'
+                            });
+                        NavigationController.push(
+                            context,
+                            CallPage(
+                                channelName: 'voice_call',
+                                role: ClientRole.Broadcaster));
+                      },
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.videocam,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Video Call',
-                      style: TextStyle(
+                    ListTile(
+                      leading: Icon(
+                        Icons.delete,
                         color: Colors.white,
                       ),
-                    ),
-                    onTap: () {
-                      NavigationController.push(
-                          context, CallPage('Test', ClientRole.Broadcaster));
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Delete chat history',
-                      style: TextStyle(
-                        color: Colors.white,
+                      title: Text(
+                        'Delete chat history',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.notifications_none,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Mute notification',
-                      style: TextStyle(
+                    ListTile(
+                      leading: Icon(
+                        _muted
+                            ? Icons.notification_important
+                            : Icons.notifications_off,
                         color: Colors.white,
                       ),
+                      title: Text(
+                        _muted ? 'Unmute notification' : 'Mute notification',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onTap: () {
+                        _notifyMe(!_muted);
+                      },
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Search',
-                      style: TextStyle(
+                    ListTile(
+                      leading: Icon(
+                        Icons.search,
                         color: Colors.white,
                       ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.save,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Save Data',
-                      style: TextStyle(
-                        color: Colors.white,
+                      title: Text(
+                        'Search',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.mode_comment,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Send Review',
-                      style: TextStyle(
+                    ListTile(
+                      leading: Icon(
+                        Icons.description,
                         color: Colors.white,
                       ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.keyboard_voice,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Voicenotes',
-                      style: TextStyle(
-                        color: Colors.white,
+                      title: Text(
+                        'Save Data',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.note_add,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Add Notes',
-                      style: TextStyle(
+                    ListTile(
+                      leading: Icon(
+                        Icons.mode_comment,
                         color: Colors.white,
                       ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.report,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Report Customer',
-                      style: TextStyle(
-                        color: Colors.white,
+                      title: Text(
+                        'Send Review',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.location_on,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Share Location',
-                      style: TextStyle(
+                    // ListTile(
+                    //   leading: Icon(
+                    //     Icons.confirmation_number,
+                    //     color: Colors.white,
+                    //   ),
+                    //   title: Text(
+                    //     'Send Invoice',
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
+                    // ListTile(
+                    //   leading: Icon(
+                    //     Icons.insert_drive_file,
+                    //     color: Colors.white,
+                    //   ),
+                    //   title: Text(
+                    //     'Send Sick Note',
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.keyboard_voice,
                         color: Colors.white,
                       ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.block,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      'Block Customer',
-                      style: TextStyle(
-                        color: Colors.white,
+                      title: Text(
+                        'Voicenotes',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    ListTile(
+                      leading: Icon(
+                        Icons.note_add,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Add Notes',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    // ListTile(
+                    //   leading: Icon(
+                    //     Icons.monetization_on,
+                    //     color: Colors.white,
+                    //   ),
+                    //   title: Text(
+                    //     'Payment Request',
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.report,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Report Bad Service',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Share Location',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.block,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Report as Spam',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-      body: _getBody(),
+      body: _getBody(context),
     );
   }
 
-  Widget _getBody() {
+  Widget _getBody(BuildContext context) {
     return Container(
       color: Colors.white,
       child: Stack(
@@ -291,7 +400,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
           ),
           Align(
               alignment: Alignment.bottomRight,
-              child: _getSendMessageSection()),
+              child: _getSendMessageSection(context)),
         ],
       ),
     );
@@ -338,132 +447,194 @@ class _PatientChatScreenState extends State<PatientChatScreen>
     );
   }
 
-  Widget _getSendMessageSection() {
-    return
-        // Align(
-        // alignment: Alignment.bottomRight,
-        // child:
-        Container(
-      // color: Colors.white,
-      padding: EdgeInsets.only(left: 12, right: 12, bottom: 12),
-      height: 80,
-      child: Stack(
-        children: [
-          Container(
-            child: TextField(
-              controller: _messageController,
-              decoration: InputDecoration(
-                hintText: 'Type your message...',
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                ),
-                contentPadding: EdgeInsets.all(12),
-                enabledBorder: OutlineInputBorder(
-                  // borderRadius: BorderRadius.circular(32),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Colors.black26),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  // borderRadius: BorderRadius.circular(32),
-                  borderSide: BorderSide(color: Colors.black38),
+  Widget _getSendMessageSection(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.only(left: 12, right: 12, bottom: 12),
+        height: 80,
+        child: Stack(
+          children: [
+            Container(
+              child: TextField(
+                controller: _messageController,
+                decoration: InputDecoration(
+                  hintText: 'Type your message...',
+                  hintStyle: TextStyle(
+                    fontSize: 13,
+                  ),
+                  contentPadding: EdgeInsets.all(12),
+                  enabledBorder: OutlineInputBorder(
+                    // borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    borderSide: BorderSide(color: Colors.black26),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    // borderRadius: BorderRadius.circular(32),
+                    borderSide: BorderSide(color: Colors.black38),
+                  ),
                 ),
               ),
             ),
-          ),
-          // SizedBox(
-          //   width: 8,
-          // ),
-          Positioned(
-            top: 9,
-            right: 15,
-            // alignment: Alignment.bottomRight,
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    String message = _messageController.text.trim();
-                    if (message.isNotEmpty) {
-                      _sendMessage(message);
-                    }
-                  },
-                  child: Icon(
-                    Icons.add,
-                    color: AppColors.EDIT_PROFILE,
-                    size: 30,
+            // SizedBox(
+            //   width: 8,
+            // ),
+            Positioned(
+              top: 9,
+              right: 15,
+              // alignment: Alignment.bottomRight,
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      String message = _messageController.text.trim();
+                      if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
+                            message: message,
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'text'
+                            });
+                        _sendMessage(message);
+                      }
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: AppColors.EDIT_PROFILE,
+                      size: 30,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    String message = _messageController.text.trim();
-                    if (message.isNotEmpty) {
-                      _sendMessage(message);
-                    }
-                  },
-                  child: Icon(
-                    Icons.mood,
-                    color: AppColors.EDIT_PROFILE,
-                    size: 30,
+                  SizedBox(
+                    width: 8,
                   ),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    String message = _messageController.text.trim();
-                    if (message.isNotEmpty) {
-                      _sendMessage(message);
-                    }
-                  },
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: AppColors.EDIT_PROFILE,
-                    size: 30,
+                  GestureDetector(
+                    onTap: () async {
+                      String message = _messageController.text.trim();
+                      if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
+                            message: message,
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'text',
+                            });
+                        _sendMessage(message);
+                      }
+                    },
+                    child: Icon(
+                      Icons.mood,
+                      color: AppColors.EDIT_PROFILE,
+                      size: 30,
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 8,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      String message = _messageController.text.trim();
+                      if (message.isNotEmpty) {
+                        var user = await FirebaseFirestore.instance
+                            .collection('patients')
+                            .doc(widget._myUid)
+                            .get();
+                        NotificationsUtills.sendMsgNotification(
+                            sender: widget._myUid,
+                            reciever: widget._practitionerUid,
+                            title:
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
+                            message: message,
+                            body: {
+                              'patientUid': widget._myUid,
+                              'type': 'text',
+                            });
+                        _sendMessage(message);
+                      }
+                    },
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: AppColors.EDIT_PROFILE,
+                      size: 30,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // GestureDetector(
-          //   onTap: () {
-          //     String message = _messageController.text.trim();
-          //     if (message.isNotEmpty) {
-          //       _sendMessage(message);
-          //     }
-          //   },
-          //   child: Icon(
-          //     Icons.send,
-          //     color: AppColors.COLOR_PRIMARY,
-          //     size: 40,
-          //   ),
-          // ),
-          // SizedBox(
-          //   width: 8,
-          // ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     await [Permission.camera, Permission.microphone].request();
-          //     NavigationController.push(
-          //       context,
-          //       CallPage(widget._practitionerUid, ClientRole.Broadcaster),
-          //     );
-          //   },
-          //   child: Icon(
-          //     Icons.video_call,
-          //     color: AppColors.COLOR_PRIMARY,
-          //     size: 40,
-          //   ),
-          // ),
-        ],
+            // GestureDetector(
+            //   onTap: () {
+            //     String message = _messageController.text.trim();
+            //     if (message.isNotEmpty) {
+            //       _sendMessage(message);
+            //     }
+            //   },
+            //   child: Icon(
+            //     Icons.send,
+            //     color: AppColors.COLOR_PRIMARY,
+            //     size: 40,
+            //   ),
+            // ),
+            // SizedBox(
+            //   width: 8,
+            // ),
+            // GestureDetector(
+            //   onTap: () async {
+            //     await [Permission.camera, Permission.microphone].request();
+            //     NavigationController.push(
+            //       context,
+            //       CallPage(widget._practitionerUid, ClientRole.Broadcaster),
+            //     );
+            //   },
+            //   child: Icon(
+            //     Icons.video_call,
+            //     color: AppColors.COLOR_PRIMARY,
+            //     size: 40,
+            //   ),
+            // ),
+          ],
+        ),
+        // ),
       ),
-      // ),
     );
+  }
+
+  void _notifyMe(bool mute) {
+    //First we will update inbox data for patient i.e last message, seen and timestamp
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget._myUid)
+        .collection('inbox')
+        .doc(widget._practitionerUid)
+        .set(
+      {
+        'mute': mute,
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+
+    setState(() {
+      _muted = mute;
+    });
   }
 
   Future<void> _sendMessage(String message) async {
