@@ -17,13 +17,19 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:rating_bar/rating_bar.dart';
+import 'package:makhosi_app/contracts/i_info_dialog_clicked.dart';
 
 import 'package:makhosi_app/Screens/account_screen.dart';
 import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/main_ui/general_ui/setting_page.dart';
+import 'package:makhosi_app/main_ui/general_ui/login_screen.dart';
+import 'package:makhosi_app/enums/click_type.dart';
+
+
+
 class PractitionersProfileScreen extends StatefulWidget {
   bool _isViewer;
-  DocumentSnapshot _snapshot;
+  dynamic _snapshot;
 
   PractitionersProfileScreen(this._isViewer, this._snapshot);
 
@@ -32,9 +38,9 @@ class PractitionersProfileScreen extends StatefulWidget {
       _PractitionersProfileScreenState();
 }
 
-class _PractitionersProfileScreenState
-    extends State<PractitionersProfileScreen> {
-  DocumentSnapshot _snapshot;
+class _PractitionersProfileScreenState extends State<PractitionersProfileScreen> {
+
+  dynamic _snapshot;
   bool _isLoading = false, _isFavorite = false;
   String _userId;
 
@@ -111,8 +117,65 @@ class _PractitionersProfileScreenState
                           child: Image.asset('images/account.png'),
                         )
                     ),
+                    Container(
+                        height: 50,
+                        width: 50,
+                        margin: EdgeInsets.only(left: 314,top: 600),
+
+                        child: GestureDetector(
+                          onTap: (){
+                            showAlertDialog(context);
+
+                          },
+                          child: Image.asset('images/logout.png'),
+                        )
+                    ),
                   ],
                 ),
+    );
+  }
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("CANCEL"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("LOG OUT"),
+      onPressed:  () async{
+        Navigator.pop(context);
+        await FirebaseFirestore.instance
+            .collection('practitioners')
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .set({
+          'online': false,
+        }, SetOptions(merge: true));
+        await Others.signOut();
+        NavigationController.pushReplacement(
+          context,
+          LoginScreen(ClickType.PRACTITIONER),
+        );
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Log Out?"),
+      content: Text("Are youn sure you want to log out of the app?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
@@ -130,7 +193,18 @@ class _PractitionersProfileScreenState
   }
 
   Widget _getContentSection() {
-    bool isOnline = _snapshot.get(AppKeys.ONLINE);
+   // bool isOnline = _snapshot.get(AppKeys.ONLINE);
+    String firstName=" ";
+    String secondName=" ";
+    String location= " ";
+
+    firstName=_snapshot[AppKeys.FIRST_NAME];
+    secondName=_snapshot[AppKeys.SECOND_NAME];
+    location=_snapshot[AppKeys.PRACTICE_LOCATION];
+
+    if(firstName==null){firstName=" ";};
+    if(secondName==null){secondName=" ";};
+    if(location==null){location=" ";};
     return Column(
       children: [
       Card(
@@ -157,7 +231,7 @@ class _PractitionersProfileScreenState
                       ),
 
                       Text(
-                        '${_snapshot.get(AppKeys.FIRST_NAME)} ${_snapshot.get(AppKeys.SECOND_NAME)}',
+                        '${firstName} ${secondName}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 21,
@@ -174,7 +248,7 @@ class _PractitionersProfileScreenState
 
                   ),
                   Text(
-                    _snapshot.get(AppKeys.PRACTICE_LOCATION),
+                    '${location}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12,
@@ -343,10 +417,8 @@ class _PractitionersProfileScreenState
                         Align(
                           alignment: Alignment.topRight,
                           child: GestureDetector(
-                            child: Icon(
-                              Icons.settings,
-                              color: AppColors.COLOR_PRIMARY,
-                              size: 32,
+                            child: Image.asset(
+                              'images/setting.png'
                             ),
                             onTap: () {
                               NavigationController.push(
@@ -373,10 +445,8 @@ class _PractitionersProfileScreenState
                   Align(
                     alignment: Alignment.topLeft,
                     child: GestureDetector(
-                      child: Icon(
-                        Icons.notifications,
-                        color: AppColors.COLOR_PRIMARY,
-                        size: 32,
+                      child: Image.asset(
+                        'images/notification.png'
                       ),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
@@ -453,6 +523,7 @@ class _PractitionersProfileScreenState
   }
 
   Widget _getBookingButton() {
+
     return Expanded(
       child: FlatButton(
         shape: RoundedRectangleBorder(
@@ -670,6 +741,10 @@ class _PractitionersProfileScreenState
   }
 
   Widget _getImageSection() {
+    String pic= " ";
+
+
+    pic=_snapshot[AppKeys.ID_PICTURE];
     return GestureDetector(
       onTap: !widget._isViewer
           ? () async {
@@ -716,12 +791,12 @@ class _PractitionersProfileScreenState
           ),
           child: _snapshot == null
               ? Others.getProfilePlaceHOlder()
-              : _snapshot.get('profile_image') == null
+              : pic == null
                   ? Others.getProfilePlaceHOlder()
                   : CircleAvatar(
                       radius: 18,
                       backgroundImage: NetworkImage(
-                        _snapshot.get('profile_image'),
+                        pic,
                       ),
                     ),
         ),

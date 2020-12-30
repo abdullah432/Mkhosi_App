@@ -1,10 +1,9 @@
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:makhosi_app/main_ui/patients_ui/all_practitioners_screen.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
+//import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
@@ -13,6 +12,7 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:rating_bar/rating_bar.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 
 class AllTab extends StatefulWidget {
   @override
@@ -20,42 +20,44 @@ class AllTab extends StatefulWidget {
 }
 
 class _AllTabState extends State<AllTab> {
-  List<DocumentSnapshot> _dataList = [];
+  List<dynamic> _dataList =null;
   bool _isLoading = true;
 
   @override
   void initState() {
+    _dataList=new List();
     _getData();
     super.initState();
   }
 
   Future<void> _getData() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('practitioners')
-          .limit(20)
-          .get();
-      querySnapshot.docs.forEach((doc) {
-        _dataList.add(doc);
-      });
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (exc) {
-      setState(() {
-        _isLoading = false;
-        AppToast.showToast(message: 'THere was an error fetching data');
+
+
+    await FirebaseFirestore.instance
+        .collection('practitioners')
+        .limit(20)
+        .get().then((QuerySnapshot querySnapshot)
+    {
+      querySnapshot.docs.forEach((data)
+      {
+        _dataList.add(data.data());
       });
     }
+    );
+
+    _isLoading=false;
+
   }
+
+  int index=0;
 
   @override
   Widget build(BuildContext context) {
     return _isLoading
         ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
         : _dataList.isEmpty
-            ? AppStatusComponents.errorBody(message: 'No practitioner found')
-            : _getBody();
+        ? AppStatusComponents.errorBody(message: 'No practitioner found')
+        : _getBody();
   }
 
   Widget _getBody() {
@@ -87,12 +89,25 @@ class _AllTabState extends State<AllTab> {
     );
   }
 
-  Widget _getRow(DocumentSnapshot snapshot) {
+  Widget _getRow(dynamic snapshot)
+  {
+    String firstName=" ";
+    String secondName=" ";
+    String location= " ";
+
+    firstName=snapshot[AppKeys.FIRST_NAME];
+    secondName=snapshot[AppKeys.SECOND_NAME];
+    location=snapshot[AppKeys.PRACTICE_LOCATION];
+
+    if(firstName==null){firstName=" ";};
+    if(secondName==null){secondName=" ";};
+    if(location==null){location=" ";};
+
     return GestureDetector(
       onTap: () {
         NavigationController.push(
           context,
-          PractitionersProfileScreen(true, snapshot),
+          BusinessCard(),
         );
       },
       child: Container(
@@ -108,17 +123,17 @@ class _AllTabState extends State<AllTab> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: snapshot.get(AppKeys.PROFILE_IMAGE) == null
+                  child: snapshot[(AppKeys.PROFILE_IMAGE)] == null
                       ? Image.asset(
-                          'images/profile_background.png',
-                          width: ScreenDimensions.getScreenWidth(context) / 3,
-                        )
+                    'images/profile_background.png',
+                    width: ScreenDimensions.getScreenWidth(context) / 3,
+                  )
                       : Image.network(
-                          snapshot.get(AppKeys.PROFILE_IMAGE),
-                          width: ScreenDimensions.getScreenWidth(context) / 3,
-                          height: ScreenDimensions.getScreenWidth(context) / 3,
-                          fit: BoxFit.cover,
-                        ),
+                    snapshot[(AppKeys.PROFILE_IMAGE)],
+                    width: ScreenDimensions.getScreenWidth(context) / 3,
+                    height: ScreenDimensions.getScreenWidth(context) / 3,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Others.getSizedBox(boxHeight: 0, boxWidth: 8),
                 Expanded(
@@ -129,7 +144,7 @@ class _AllTabState extends State<AllTab> {
                         children: [
                           Expanded(
                             child: Text(
-                              '${snapshot.get(AppKeys.FIRST_NAME)} ${snapshot.get(AppKeys.SECOND_NAME)}',
+                              '${firstName} ${secondName}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17,
@@ -162,7 +177,7 @@ class _AllTabState extends State<AllTab> {
                           Others.getSizedBox(boxHeight: 0, boxWidth: 4),
                           Expanded(
                             child: Text(
-                              snapshot.get(AppKeys.PRACTICE_LOCATION),
+                              location,
                               style: TextStyle(
                                 fontSize: 12,
                               ),

@@ -11,19 +11,21 @@ class PractitionersHome extends StatefulWidget {
 }
 
 class _PractitionersHomeState extends State<PractitionersHome> {
-  DocumentSnapshot _snapshot;
+  dynamic _snapshot;
   bool _isLoading = true;
   String _error;
 
   @override
   void initState() {
+    print('ggv');
     FirebaseFirestore.instance
         .collection('practitioners')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get()
         .then((value) {
       setState(() {
-        _snapshot = value;
+        print(value.data());
+        _snapshot = value.data();
         _isLoading = false;
       });
     }).catchError((error) {

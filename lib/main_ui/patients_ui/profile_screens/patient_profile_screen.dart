@@ -61,7 +61,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
             child: Image.asset(
               'images/Gradient.png',
               width: ScreenDimensions.getScreenWidth(context),
-              height: ScreenDimensions.getScreenWidth(context) / 1.25,
+              height: ScreenDimensions.getScreenWidth(context) / 1.39,
               fit: BoxFit.cover,
             ),
           ),
@@ -72,8 +72,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
             child: AppBar(
               title: Text(''),// You can add title here
               leading: new IconButton(
-                icon: new Icon(Icons.arrow_back_rounded, color: AppColors.COLOR_PRIMARY, size: 40,),
-                onPressed: () => Navigator.of(context).pop(),
+                icon: new Icon(Icons.arrow_back, color: AppColors.COLOR_PRIMARY, size: 40,),
+                onPressed: (){Navigator.of(context).pop();},
               ),
               backgroundColor: Colors.blue.withOpacity(0.1), //You can make this transparent
               elevation: 0.0, //No shadow
@@ -89,10 +89,67 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
               ],
             ),
           ),
+          Container(
+              height: 50,
+              width: 50,
+              margin: EdgeInsets.only(left: 314,top: 600),
+
+              child: GestureDetector(
+                onTap: (){
+                  showAlertDialog(context);
+                },
+                child: Image.asset('images/logout.png'),
+              )
+          ),
         ],
       ),
     );
   }
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("CANCEL"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("LOG OUT"),
+      onPressed:  () async{
+        Navigator.pop(context);
+        await FirebaseFirestore.instance
+            .collection('patients')
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .set({
+          'online': false,
+        }, SetOptions(merge: true));
+        await Others.signOut();
+        NavigationController.pushReplacement(
+          context,
+          LoginScreen(ClickType.PRACTITIONER),
+        );
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Log Out?"),
+      content: Text("Are youn sure you want to log out of the app?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 
   Widget _getContentSection() {
     return Container(
@@ -118,7 +175,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: 32,
+                          height: 26,
                         ),
                         Text(
                           widget._snapshot.get(AppKeys.FULL_NAME),
@@ -234,12 +291,12 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                           ],
                         ),
                         SizedBox(
-                          height: 16,
+                          height: 10,
                         ),
                         !widget._isViewer
                             ? FlatButton(
-                          height: 60,
-                          minWidth:210,
+                          height: 40,
+                          minWidth:170,
 
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32),
@@ -267,12 +324,12 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                   ),
               ),
               SizedBox(
-                height: 16,
+                height: 10,
               ),
               !widget._isViewer ? Column(
     children: [
     Container(
-    margin: EdgeInsets.only(left: 35, right: 35, top: 15),
+    margin: EdgeInsets.only(left: 35, right: 35, top: 5),
     child: FlatButton(
     height: 45,
     //minWidth: 50,
@@ -400,10 +457,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                   Align(
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
-                      child: Icon(
-                        Icons.settings,
-                        color: AppColors.COLOR_PRIMARY,
-                        size: 32,
+                      child: Image.asset(
+                          'images/setting.png'
                       ),
                       onTap: () {
                         NavigationController.push(
@@ -431,10 +486,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: GestureDetector(
-                      child: Icon(
-                        Icons.notifications,
-                        color: AppColors.COLOR_PRIMARY,
-                        size: 32,
+                      child: Image.asset(
+                     'images/notification.png'
                       ),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
@@ -594,7 +647,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     await Others.signOut();
     NavigationController.pushReplacement(
       context,
-      LoginScreen(ClickType.PATIENT),
+      LoginScreen(ClickType.PRACTITIONER),
     );
   }
 }

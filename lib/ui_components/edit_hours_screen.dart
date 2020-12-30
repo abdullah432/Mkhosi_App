@@ -10,12 +10,16 @@ import 'package:hexcolor/hexcolor.dart';
 class EditHoursScreen extends StatefulWidget {
   EditHoursScreen({Key key}) : super(key: key);
 
+
   @override
   _EditHoursScreenState createState() => _EditHoursScreenState();
 }
 
 class _EditHoursScreenState extends State<EditHoursScreen>
     implements ITrailingClicked {
+  var checkk=false;
+  var checkk2=false;
+  DateTime now = DateTime.now();
   var _list = <DayTimeModel>[];
   var _closedDaysList = <ClosedDaysModel>[];
   var _sundayStartTimingController = TextEditingController();
@@ -202,29 +206,65 @@ class _EditHoursScreenState extends State<EditHoursScreen>
                 SizedBox(
                   width: 20,
                 ),
+                GestureDetector(
+                  onTap:()
+                  {
+                    setState(() {
+                      checkk2=true;
+
+                    });
+                  },
+                  onDoubleTap: ()
+                  {
+                    setState(() {
+                      checkk2=false;
+                      print('bjhbhj');
+                    });
+                  },
+                  child:
                 Container(
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
                         border: Border.all(
+                          color: checkk2==true?Colors.red:Colors.black,
                         ),
                         color:  Hexcolor('#78BEBD'),
                         borderRadius: BorderRadius.all(Radius.circular(20))
                     )
                 ),
+                ),
                 SizedBox(
                   width: 180,
                 ),
+                GestureDetector(
+                  onTap:()
+                  {
+                    setState(() {
+                      checkk=true;
+
+                    });
+                  },
+                  onDoubleTap: ()
+                  {
+                    setState(() {
+                      checkk=false;
+                      print('bjhbhj');
+                    });
+                  },
+                  child:
                 Container(
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
                         border: Border.all(
+                          color: checkk==true?Colors.red:Colors.black,
                         ),
                         color:  Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(50))
                     )
                 ),
+                )
               ],
             ),
 
@@ -260,6 +300,7 @@ class _EditHoursScreenState extends State<EditHoursScreen>
   }
 
   Widget _getRow(
+
     int index,
     String label,
     TextEditingController startTime,
@@ -267,9 +308,22 @@ class _EditHoursScreenState extends State<EditHoursScreen>
   ) {
     return Row(
       children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            startTime.text = '00';
+            endTime.text = '00';
+            setState(() {});
+          },
+          onDoubleTap: () {
+          startTime.text = '01';
+          endTime.text = '02';
+          setState(() {});
+          }
+          ,
+          child:
         Container(
           height: 25,
-          width: 85,
+          width: 90,
           decoration: BoxDecoration(
               border: Border.all(
 
@@ -290,25 +344,20 @@ class _EditHoursScreenState extends State<EditHoursScreen>
             ),
           )
         ),
+        ),
         SizedBox(
           width: 3,
         ),
-        GestureDetector(
-          onTap: () {
-            startTime.text = '00';
-            endTime.text = '00';
-            setState(() {});
-          },
-          child: Icon(Icons.remove_circle),
-        ),
+
         SizedBox(
           width: 11,
         ),
         GestureDetector(
+
           onTap: () async {
             TimeOfDay startTimeOfDay = await showTimePicker(
               context: context,
-              initialTime: TimeOfDay(hour: 00, minute: 00),
+              initialTime: TimeOfDay(hour: now.hour, minute:now.minute),
             );
             _list[index].startHours = startTimeOfDay.hour;
             _list[index].startMinutes = startTimeOfDay.minute;

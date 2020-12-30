@@ -80,8 +80,8 @@ class _BusinessCardState extends State<BusinessCard> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.COLOR_PRIMARY,
-              Colors.white,
+              Colors.black87,
+              Colors.black,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -89,7 +89,7 @@ class _BusinessCardState extends State<BusinessCard> {
         ),
         child: Column(
           children: [
-            sizeBox(50),
+            sizeBox(30),
             Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
@@ -100,10 +100,9 @@ class _BusinessCardState extends State<BusinessCard> {
                       },
                       child: Icon(Icons.arrow_back,color: Colors.white,)),
                 )),
-            sizeBox(20),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal:20.0),
+                padding: EdgeInsets.symmetric(horizontal:15.0),
                 child: Stack(
                   alignment: Alignment.topCenter,
                   children: [
@@ -135,7 +134,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                   color: AppColors.REQUEST_UPPER_O,
                                 ),
                                 child: Center(
-                                  child: Text('Edit Business Information',style: TextStyle(
+                                  child: Text('Clinic',style: TextStyle(
                                     color: AppColors.BUSINESS_TEXT1,fontWeight: FontWeight.w600,fontSize: 9,
                                   ),),
                                 ),
@@ -165,6 +164,10 @@ class _BusinessCardState extends State<BusinessCard> {
                                     child: Image.asset('images/administration_images/check.png',height: 22,))
                               ],
                             ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset('images/Object.png')
                           ],
                         ),
                         sizeBox(10),
@@ -323,7 +326,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                       color: AppColors.COLOR_PRIMARY
                                   ),
                                   child: Center(
-                                    child:Text('Send Business Card',style: TextStyle(
+                                    child:Text('Book',style: TextStyle(
                                         color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16
                                     ),),
                                   ),

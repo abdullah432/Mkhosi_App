@@ -44,7 +44,7 @@ class _PractitionerRegisterScreenSecondState
   var _buisnessAddressController = TextEditingController();
   var _briefDescriptionController = TextEditingController();
   var _rulesController = TextEditingController();
-  var _seub_service=TextEditingController();
+  var _seub_service;
   //dropdown
   var _locationList = ['Home', 'Formal business premises'];
   String _selectedLocation;
@@ -135,7 +135,7 @@ class _PractitionerRegisterScreenSecondState
             controller: _registrationNumController,
             label: 'Company Registration No. (If available)',
             isPassword: false,
-            isNumber: true,
+            isNumber: false,
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           //location dropdown
@@ -200,13 +200,33 @@ class _PractitionerRegisterScreenSecondState
             ),
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-
-          AppTextFields.getTextField(
-            controller: _seub_service,
-            label: 'Sub Service',
-            isPassword: false,
-            isNumber: false,
+          Container(
+            padding: EdgeInsets.only(left: 12, right: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+            ),
+            child:
+          DropdownButton(
+            hint: Text('Select Sub Service'),
+            isExpanded: true,
+            underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
+            value: _seub_service,
+            items: _serviceTypeList
+                .map(
+                  (item) => DropdownMenuItem(
+                child: Text(item),
+                value: item,
+              ),
+            )
+                .toList(),
+            onChanged: (item) {
+              setState(() {
+                _seub_service = item;
+                //ServiceProviderRegisterScreenOne.checkservice=item;
+              });
+            },
           ),
+    ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppTextFields.getMultiLineRegisterField(
             controller: _briefDescriptionController,

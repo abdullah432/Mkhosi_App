@@ -76,14 +76,14 @@ class LoginHelper {
     userCredential =
         await FirebaseAuth.instance.signInWithCredential(googleAuthCredential);
     DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-        .collection(AppKeys.PATIENTS)
+        .collection('patients')
         .doc(userCredential.user.uid)
         .get();
     if (userSnapshot.exists) {
       return true;
     } else {
       await FirebaseFirestore.instance
-          .collection(AppKeys.PATIENTS)
+          .collection('patients')
           .doc(userCredential.user.uid)
           .set({
         AppKeys.FULL_NAME: googleUser.displayName,

@@ -22,34 +22,33 @@ class AllPractitionersScreen extends StatefulWidget {
 
 class _AllPractitionersScreenState extends State<AllPractitionersScreen>
     implements ITextChangedListener {
-  List<DocumentSnapshot> _dataList = [];
-  List<DocumentSnapshot> _filteredList = [];
+  List<dynamic> _dataList =null;
+  List<dynamic> _filteredList = [];
   bool _isLoading = true;
 
   @override
   void initState() {
+    _dataList=new List();
     _getData();
     super.initState();
   }
 
   Future<void> _getData() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('practitioners')
-          .limit(20)
-          .get();
-      querySnapshot.docs.forEach((doc) {
-        _dataList.add(doc);
-      });
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (exc) {
-      setState(() {
-        _isLoading = false;
-        AppToast.showToast(message: 'THere was an error fetching data');
+
+    await FirebaseFirestore.instance
+        .collection('practitioners')
+        .limit(20)
+        .get().then((QuerySnapshot querySnapshot)
+    {
+      querySnapshot.docs.forEach((data)
+      {
+        _dataList.add(data.data());
       });
     }
+    );
+
+    _isLoading=false;
+
   }
 
   @override
@@ -78,9 +77,7 @@ class _AllPractitionersScreenState extends State<AllPractitionersScreen>
           ),
           Expanded(
             child: ListView(
-              children: (_filteredList.isEmpty ? _dataList : _filteredList)
-                  .map((snapshot) => _getRow(snapshot))
-                  .toList(),
+                children: _dataList.map((snapshot) => _getRow(snapshot)).toList()
             ),
           ),
         ],
@@ -89,6 +86,17 @@ class _AllPractitionersScreenState extends State<AllPractitionersScreen>
   }
 
   Widget _getRow(DocumentSnapshot snapshot) {
+    String firstName=" ";
+    String secondName=" ";
+    String location= " ";
+
+    firstName=snapshot[AppKeys.FIRST_NAME];
+    secondName=snapshot[AppKeys.SECOND_NAME];
+    location=snapshot[AppKeys.PRACTICE_LOCATION];
+
+    if(firstName==null){firstName=" ";};
+    if(secondName==null){secondName=" ";};
+    if(location==null){location=" ";};
     return GestureDetector(
       onTap: () {
         NavigationController.push(
@@ -109,13 +117,13 @@ class _AllPractitionersScreenState extends State<AllPractitionersScreen>
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: snapshot.get(AppKeys.PROFILE_IMAGE) == null
+                  child: snapshot[(AppKeys.PROFILE_IMAGE)] == null
                       ? Image.asset(
                           'images/profile_background.png',
                           width: ScreenDimensions.getScreenWidth(context) / 3,
                         )
                       : Image.network(
-                          snapshot.get(AppKeys.PROFILE_IMAGE),
+                    snapshot[(AppKeys.PROFILE_IMAGE)],
                           width: ScreenDimensions.getScreenWidth(context) / 3,
                         ),
                 ),
@@ -128,7 +136,7 @@ class _AllPractitionersScreenState extends State<AllPractitionersScreen>
                         children: [
                           Expanded(
                             child: Text(
-                              '${snapshot.get(AppKeys.FIRST_NAME)} ${snapshot.get(AppKeys.SECOND_NAME)}',
+                              '${firstName} ${secondName}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17,

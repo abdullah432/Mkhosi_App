@@ -377,7 +377,7 @@ class _SettingPageState extends State<SettingPage>
     await Others.signOut();
     NavigationController.pushReplacement(
       context,
-      LoginScreen(ClickType.PRACTITIONER),
+      LoginScreen(ClickType.PATIENT),
     );
   }
 

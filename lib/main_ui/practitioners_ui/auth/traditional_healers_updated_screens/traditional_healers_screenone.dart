@@ -37,7 +37,7 @@ class _TraditionalHealersScreenFirstState
   var _healerTypeController = TextEditingController();
   var _particularSpecialityController = TextEditingController();
   //dropdown
-  var _consultancyTypeList = ['Physically', 'Virtually'];
+  var _consultancyTypeList = ['Physically', 'Virtually', 'Both'];
   String _selectedConsultancyType;
   //form
   final _formKey = GlobalKey<FormState>();

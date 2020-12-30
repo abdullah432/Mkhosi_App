@@ -13,6 +13,7 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 
 class PractitionerInboxScreen extends StatefulWidget {
+
   @override
   _PractitionerInboxScreenState createState() =>
       _PractitionerInboxScreenState();

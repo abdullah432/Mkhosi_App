@@ -138,7 +138,7 @@ class _PractitionerRegisterScreenFirstState
             controller: _idNumberController,
             label: 'ID Number/Passport Number',
             isPassword: false,
-            isNumber: true,
+            isNumber: false,
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppTextFields.getTextField(

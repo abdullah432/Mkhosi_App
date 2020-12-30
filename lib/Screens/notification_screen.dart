@@ -13,11 +13,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
       backgroundColor: AppColors.themecolor,
       appBar: AppBar(
         backgroundColor: AppColors.darkbrown,
-        toolbarHeight: 100,
+        toolbarHeight: 60,
         leading: InkWell(
-          child: Image(image: AssetImage('images/go_backbtn.png'),
-
-        ),
+          child: Icon(Icons.arrow_back),
         onTap: (){Navigator.of(context).pop();},
         ),
       ),
@@ -31,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
 
           ListTile(
-            leading: Icon(Icons.circle, color: Colors.yellow, size: 8,),
+            leading: Image.asset('images/circleavater.png',height: 50,width: 50,),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,7 +48,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: ListTile(
-              leading: Icon(Icons.circle, color: Colors.yellow, size: 8,),
+              leading: Image.asset('images/circleavater.png',height: 50,width: 50,),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,7 +128,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: ListTile(
-              leading: Icon(Icons.circle, color: Colors.yellow, size: 8,),
+              leading: Image.asset('images/circleavater.png',height: 50,width: 50,),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,7 +148,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: ListTile(
-              leading: Icon(Icons.circle, color: Colors.yellow, size: 8,),
+              leading: Image.asset('images/circleavater.png',height: 50,width: 50,),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -230,7 +228,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: ListTile(
-              leading: Icon(Icons.circle, color: Colors.yellow, size: 8,),
+              leading: Image.asset('images/circleavater.png',height: 50,width: 50,),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -250,7 +248,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: ListTile(
-              leading: Icon(Icons.circle, color: Colors.yellow, size: 8,),
+              leading: Image.asset('images/circleavater.png',height: 50,width: 50,),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
