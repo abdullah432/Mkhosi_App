@@ -199,7 +199,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
     String location= " ";
 
     firstName=_snapshot[AppKeys.FIRST_NAME];
-    secondName=_snapshot[AppKeys.SECOND_NAME];
+    secondName=_snapshot[AppKeys.LAST_NAME];
     location=_snapshot[AppKeys.PRACTICE_LOCATION];
 
     if(firstName==null){firstName=" ";};
@@ -231,7 +231,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                       ),
 
                       Text(
-                        '${firstName} ${secondName}',
+                        '${firstName}${secondName}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 21,

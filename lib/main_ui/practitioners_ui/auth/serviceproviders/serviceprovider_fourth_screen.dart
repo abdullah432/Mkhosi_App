@@ -44,6 +44,7 @@ class _PractiotnerRegisterScreenFourthState
 
   @override
   Widget build(BuildContext context) {
+    print(widget._userData);
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -233,10 +234,10 @@ class _PractiotnerRegisterScreenFourthState
       );
       if (registerStatus) {
         //upload id image first
-
-        bool firestoreResult = await helper.savePatientDataToFirestore(
+print(widget._userData);
+        bool firestoreResult = await helper.savePatientDataToFirestore2(
           userInfoMap: widget._userData,
-          userType: ClickType.PRACTITIONER,
+          //userType: ClickType.PRACTITIONER,
         );
         if (firestoreResult) {
           bool imageUploadResult = await helper.uploadImage(
@@ -250,6 +251,7 @@ class _PractiotnerRegisterScreenFourthState
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.pop(context);
+
             NavigationController.pushReplacement(
                 context,
                 RegisterSuccessScreen(

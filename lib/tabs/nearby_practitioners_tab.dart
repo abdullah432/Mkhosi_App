@@ -11,6 +11,7 @@ import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 
 class NearbyPractitionersTab extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class NearbyPractitionersTab extends StatefulWidget {
 }
 
 class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
-  List<DocumentSnapshot> _practitioners = [];
+  List<dynamic> _practitioners = null;
   String _userCity, _mapStyle;
   bool _isLoading = true;
   static CameraPosition _initialCameraPosition;
@@ -29,7 +30,10 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
   @override
   void initState() {
-    _getLocation();
+    _practitioners=new List();
+
+
+  _getLocation();
     super.initState();
   }
 
@@ -79,9 +83,10 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   }
 
   Future<void> _getPractitioners() async {
+
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('practitioners')
+          .collection(AppKeys.PRACTITIONERS)
           .where(AppKeys.PRACTICE_CITY, isEqualTo: _userCity)
           .get();
       if (snapshot.size == 0) {
@@ -91,16 +96,16 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
         });
       } else {
         snapshot.docs.forEach((doc) {
-          _practitioners.add(doc);
+          _practitioners.add(doc.data());
           Marker marker = Marker(
             markerId: MarkerId(doc.id),
             icon: _customMarker,
             infoWindow: InfoWindow(
                 title:
-                    '${doc.get(AppKeys.FIRST_NAME)} ${doc.get(AppKeys.SECOND_NAME)}'),
+                    '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.SECOND_NAME]}'),
             position: LatLng(
-              doc.get(AppKeys.COORDINATES)[AppKeys.LATITUDE],
-              doc.get(AppKeys.COORDINATES)[AppKeys.LONGITUDE],
+              doc[AppKeys.COORDINATES][AppKeys.LATITUDE],
+              doc[AppKeys.COORDINATES][AppKeys.LONGITUDE],
             ),
           );
           _markers.add(marker);
@@ -216,10 +221,13 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
     );
   }
 
-  Widget _getPractitionerRow(DocumentSnapshot snapshot) {
-    bool isOnline = snapshot.get(AppKeys.ONLINE);
+  Widget _getPractitionerRow(dynamic snapshot) {
+    bool isOnline=false;
+    if(snapshot[AppKeys.ONLINE]!=null) {
+      isOnline= snapshot[AppKeys.ONLINE];
+    }
     String name =
-        '${snapshot.get(AppKeys.FIRST_NAME)} ${snapshot.get(AppKeys.SECOND_NAME)}';
+        '${snapshot[AppKeys.FIRST_NAME]} ${snapshot[AppKeys.SECOND_NAME]}';
     if (name.length > 30) {
       name = '${name.substring(0, 27)}...';
     }
@@ -238,11 +246,11 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
             children: [
               Row(
                 children: [
-                  snapshot.get(AppKeys.PROFILE_IMAGE) != null
+                  snapshot[AppKeys.PROFILE_IMAGE] != null
                       ? CircleAvatar(
                           radius: 20,
                           backgroundImage:
-                              NetworkImage(snapshot.get(AppKeys.PROFILE_IMAGE)),
+                              NetworkImage(snapshot[AppKeys.PROFILE_IMAGE]),
                         )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(32),
@@ -292,7 +300,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                       onPressed: () {
                         NavigationController.push(
                           context,
-                          PractitionersProfileScreen(true, snapshot),
+                          BusinessCard(),
                         );
                       },
                       child: Text(

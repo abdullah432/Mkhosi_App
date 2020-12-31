@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
+import 'package:makhosi_app/utils/app_keys.dart';
 
 class PractitionersHome extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _PractitionersHomeState extends State<PractitionersHome> {
   void initState() {
     print('ggv');
     FirebaseFirestore.instance
-        .collection('practitioners')
+        .collection(AppKeys.PRACTITIONERS)
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get()
         .then((value) {

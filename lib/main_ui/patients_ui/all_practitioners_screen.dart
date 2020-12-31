@@ -36,7 +36,7 @@ class _AllPractitionersScreenState extends State<AllPractitionersScreen>
   Future<void> _getData() async {
 
     await FirebaseFirestore.instance
-        .collection('practitioners')
+        .collection(AppKeys.PRACTITIONERS)
         .limit(20)
         .get().then((QuerySnapshot querySnapshot)
     {

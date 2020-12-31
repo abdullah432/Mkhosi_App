@@ -53,7 +53,7 @@ class RegisterHelper {
   Future<bool> updateTraditionalHealerDataToFirestore({
     @required Map<String, Object> userInfoMap,
   }) async {
-    try {
+  /*  try {
       await FirebaseFirestore.instance
           .collection(AppKeys.PRACTITIONERS)
           .doc(_uid)
@@ -62,8 +62,9 @@ class RegisterHelper {
     } catch (exc) {
       AppToast.showToast(message: exc.toString());
       return false;
-    }
+    }*/
   }
+
 
   Future<bool> savePatientDataToFirestore({
     @required Map<String, Object> userInfoMap,
@@ -78,6 +79,22 @@ class RegisterHelper {
                     ? AppKeys.PRACTITIONERS
                     : AppKeys.SHOP_OWNERS,
           )
+          .doc(_uid)
+          .set(userInfoMap);
+      return true;
+    } catch (exc) {
+      AppToast.showToast(message: exc.toString());
+      return false;
+    }
+  }
+  Future<bool> savePatientDataToFirestore2({
+    @required Map<String, Object> userInfoMap,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(
+         AppKeys.PRACTITIONERS
+      )
           .doc(_uid)
           .set(userInfoMap);
       return true;
