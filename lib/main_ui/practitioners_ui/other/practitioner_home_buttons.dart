@@ -7,6 +7,7 @@ import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
 import 'package:makhosi_app/main_ui/general_ui/login_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_bookings_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/other/consultations.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
@@ -14,6 +15,7 @@ import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/secondMain.dart';
 import 'package:makhosi_app/main_ui/administration/admin.dart';
 import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
+import '../../../enums/click_type.dart';
 class PractitionerHomeButtons extends StatefulWidget {
   @override
   _PractitionerHomeButtonsState createState() =>
@@ -46,13 +48,9 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
                   SizedBox(
                     width: 20,
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    size: 20 ,
-
-
+                  Image.asset(
+                    'images/arrow.png',
                   )
-
                 ],
               ),
               textColor: Colors.white,
@@ -70,7 +68,12 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
             child: FlatButton(
               height: 45,
               //minWidth: 50,
-              onPressed: null,
+              onPressed: (){
+                NavigationController.push(
+                  context,
+                  Consultations(),
+                );
+            },
               child: Row(
                 children: [
                   Text('CONSULTATIONS', style: TextStyle(
@@ -105,7 +108,12 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
             child: FlatButton(
               height: 45,
               //minWidth: 50,
-              onPressed: null,
+              onPressed: (){
+                NavigationController.push(
+                  context,
+                  PractitionerBookingsScreen(),
+                );
+              },
               child: Row(
                 children: [
                   Text('APPOINTMENTS', style: TextStyle(
@@ -248,10 +256,15 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
 
   @override
   void onOutlineButtonClicked(ClickType clickType) {
-    if (clickType == ClickType.DUMMY) {
+    if (clickType == ClickType.APPOINTMENTS) {
       NavigationController.push(
         context,
         PractitionerBookingsScreen(),
+      );
+    } else if (clickType == ClickType.CONSULTATIONS) {
+      NavigationController.push(
+        context,
+        Consultations(),
       );
     } else if (clickType == ClickType.LOGOUT) {
       Others.showInfoDialog(

@@ -102,7 +102,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
             icon: _customMarker,
             infoWindow: InfoWindow(
                 title:
-                    '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.SECOND_NAME]}'),
+                    '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.LAST_NAME]}'),
             position: LatLng(
               doc[AppKeys.COORDINATES][AppKeys.LATITUDE],
               doc[AppKeys.COORDINATES][AppKeys.LONGITUDE],

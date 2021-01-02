@@ -214,13 +214,6 @@ class _EditHoursScreenState extends State<EditHoursScreen>
 
                     });
                   },
-                  onDoubleTap: ()
-                  {
-                    setState(() {
-                      checkk2=false;
-                      print('bjhbhj');
-                    });
-                  },
                   child:
                 Container(
                     height: 40,
@@ -245,13 +238,8 @@ class _EditHoursScreenState extends State<EditHoursScreen>
 
                     });
                   },
-                  onDoubleTap: ()
-                  {
-                    setState(() {
-                      checkk=false;
-                      print('bjhbhj');
-                    });
-                  },
+
+
                   child:
                 Container(
                     height: 40,
@@ -310,16 +298,9 @@ class _EditHoursScreenState extends State<EditHoursScreen>
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            startTime.text = '00';
-            endTime.text = '00';
+            endTime.text == '11';
             setState(() {});
           },
-          onDoubleTap: () {
-          startTime.text = '01';
-          endTime.text = '02';
-          setState(() {});
-          }
-          ,
           child:
         Container(
           height: 25,
@@ -328,18 +309,18 @@ class _EditHoursScreenState extends State<EditHoursScreen>
               border: Border.all(
 
               ),
-    color: startTime.text == '00' || endTime.text == '00'
-        ?  Hexcolor('#78BEBD')
-        : Colors.white,
+         color: startTime.text != '00' || endTime.text == '00'
+        ?   Colors.white
+        : Hexcolor('#78BEBD'),
               borderRadius: BorderRadius.all(Radius.circular(20))
           ),
           child: Center(
             child:  Text(
               label,
               style: TextStyle(
-                color: startTime.text == '00' || endTime.text == '00'
-                    ? Colors.white
-                    : Colors.black,
+                color: startTime.text != '00' || endTime.text == '00'
+                    ? Colors.black
+                    :  Colors.white,
               ),
             ),
           )
@@ -361,18 +342,23 @@ class _EditHoursScreenState extends State<EditHoursScreen>
             );
             _list[index].startHours = startTimeOfDay.hour;
             _list[index].startMinutes = startTimeOfDay.minute;
-            var hours;
+            var hours, minutes;
             if (startTimeOfDay.hour < 10) {
               hours = '0${startTimeOfDay.hour}';
             } else {
               hours = startTimeOfDay.hour;
+            }
+            if (startTimeOfDay.minute < 10) {
+            minutes = '0${startTimeOfDay.minute}';
+            } else {
+            minutes = startTimeOfDay.minute;
             }
             if (_list[index].startHours < _list[index].endHours) {
               AppToast.showToast(
                   message: 'Start time must be earlier than end time');
             } else {
               setState(() {
-                startTime.text = '$hours';
+                startTime.text = '$hours:$minutes';
               });
             }
           },

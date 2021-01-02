@@ -8,6 +8,7 @@ import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
+import 'package:makhosi_app/utils/app_keys.dart';
 
 class BookingsTab extends StatefulWidget {
   @override
@@ -158,7 +159,7 @@ class _BookingsTabState extends State<BookingsTab> {
                             child: Text(
                               model.profileSnapshot == null
                                   ? ''
-                                  : 'Appointment with ${model.profileSnapshot.get('first_name')} ${model.profileSnapshot.get('second_name')}',
+                                  : 'Appointment with ${model.profileSnapshot.get('first_name')} ${model.profileSnapshot.get('last_name')}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -195,7 +196,7 @@ class _BookingsTabState extends State<BookingsTab> {
   Future<void> _getPractitionerProfile(BookingsModel model) async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('practitioners')
+          .collection(AppKeys.PRACTITIONERS)
           .doc(model.practitionerUid)
           .get();
       model.profileSnapshot = snapshot;

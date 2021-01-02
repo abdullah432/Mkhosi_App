@@ -35,12 +35,12 @@ class LoginHelper {
           .signInWithEmailAndPassword(email: email, password: password);
       String uid = FirebaseAuth.instance.currentUser.uid;
       DocumentSnapshot snapshot = await (userType == ClickType.PRACTITIONER
-              ? FirebaseFirestore.instance.collection('practitioners').doc(uid)
+              ? FirebaseFirestore.instance.collection(AppKeys.PRACTITIONERS).doc(uid)
               : FirebaseFirestore.instance.collection('patients').doc(uid))
           .get();
       if (userType == ClickType.PRACTITIONER) {
         await FirebaseFirestore.instance
-            .collection('practitioners')
+            .collection(AppKeys.PRACTITIONERS)
             .doc(FirebaseAuth.instance.currentUser.uid)
             .set({
           'online': true,
@@ -63,7 +63,7 @@ class LoginHelper {
   }
 
   Future<bool> loginUsingGoogle() async {
-    // try {
+     try {
     UserCredential userCredential;
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication googleAuth =
@@ -96,9 +96,9 @@ class LoginHelper {
       });
       return true;
     }
-    // } catch (e) {
-    //   print(e);
-    //   return false;
-    // }
+    } catch (e) {
+       print(e);
+       return false;
+     }
   }
 }

@@ -143,9 +143,4 @@ class _SubscriptionsState extends State<Subscriptions> {
         nonce: clientNonce, amount:price.toString(), nameRequired:true);
     print("Response of the payment $data");
   }
-
-
-
-
-
 }

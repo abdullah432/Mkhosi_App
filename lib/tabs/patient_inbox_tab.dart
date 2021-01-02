@@ -10,6 +10,8 @@ import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
+import 'package:makhosi_app/utils/app_keys.dart';
+
 
 class PatientInboxTab extends StatefulWidget {
   @override
@@ -108,7 +110,7 @@ class _PatientInboxTabState extends State<PatientInboxTab> {
                             child: Text(
                               model.senderProfileSnapshot == null
                                   ? ''
-                                  : '${model.senderProfileSnapshot.get('first_name')} ${model.senderProfileSnapshot.get('second_name')}',
+                                  : '${model.senderProfileSnapshot.get('first_name')} ${model.senderProfileSnapshot.get('last_name')}',
                             ),
                           ),
                           SizedBox(
@@ -169,7 +171,7 @@ class _PatientInboxTabState extends State<PatientInboxTab> {
   Future<void> _getSenderProfile(int position) async {
     _inboxList[position].senderProfileSnapshot = await FirebaseFirestore
         .instance
-        .collection('practitioners')
+        .collection(AppKeys.PRACTITIONERS)
         .doc(_inboxList[position].inBoxSnapshot.id)
         .get();
     setState(() {});

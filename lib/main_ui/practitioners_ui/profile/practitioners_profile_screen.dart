@@ -18,7 +18,6 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:makhosi_app/contracts/i_info_dialog_clicked.dart';
-
 import 'package:makhosi_app/Screens/account_screen.dart';
 import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/main_ui/general_ui/setting_page.dart';
@@ -147,7 +146,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
       onPressed:  () async{
         Navigator.pop(context);
         await FirebaseFirestore.instance
-            .collection('practitioners')
+            .collection(AppKeys.PRACTITIONERS)
             .doc(FirebaseAuth.instance.currentUser.uid)
             .set({
           'online': false,
@@ -182,7 +181,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
   Widget _getBody() {
     return SingleChildScrollView(
 
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.only(left: 12, right: 12, bottom: 13, top: 25),
       child: Stack(
         children: [
           _getContentSection(),
@@ -200,7 +199,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
 
     firstName=_snapshot[AppKeys.FIRST_NAME];
     secondName=_snapshot[AppKeys.LAST_NAME];
-    location=_snapshot[AppKeys.PRACTICE_LOCATION];
+    location=_snapshot[AppKeys.ADDRESS];
 
     if(firstName==null){firstName=" ";};
     if(secondName==null){secondName=" ";};
@@ -227,10 +226,9 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                   Row(
                     children: [
                       SizedBox(
-                        width: 74,
+                        width: 89,
                       ),
-
-                      Text(
+                    Text(
                         '${firstName}${secondName}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -238,7 +236,9 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
+
+                    ),
+
                       Container(
                         height: 15,
                         width: 18,
@@ -273,10 +273,10 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                             ),
                           ),
                           Text(
-                            'CLIENTS',
+                            'N0. OF CLIENTS',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               color: Colors.black45,
                               fontWeight: FontWeight.bold,
                             ),
@@ -284,7 +284,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                         ],
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 16, right: 16),
+                        margin: EdgeInsets.only(left: 10, right: 10),
                         height: 45,
                         width: 2,
                         color: Colors.black38,
@@ -301,10 +301,10 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                             ),
                           ),
                           Text(
-                            'RATINGS',
+                            'NO. OF RATINGS',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               color: Colors.black45,
                               fontWeight: FontWeight.bold,
                             ),
@@ -312,7 +312,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                         ],
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 16, right: 16),
+                        margin: EdgeInsets.only(left: 10, right: 10),
                         height: 45,
                         width: 2,
                         color: Colors.black38,
@@ -329,10 +329,10 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                             ),
                           ),
                           Text(
-                            'EARNINGS (ZAR)',
+                            'TOTAL EARNINGS (ZAR)',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               color: Colors.black45,
                               fontWeight: FontWeight.bold,
                             ),

@@ -15,4 +15,8 @@
     <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
         <item name="android:windowBackground">@android:color/white</item>
     </style>
+
+    <string name="notification_channel_id" translatable="false">fcm_message</string>
+    <string name="notification_channel_name">Message</string>
+    <string name="notification_channel_desc">Tap to see message.</string>
 </resources>

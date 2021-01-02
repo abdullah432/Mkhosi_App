@@ -118,7 +118,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    '${model.snapshot.get(AppKeys.FIRST_NAME)} ${model.snapshot.get(AppKeys.SECOND_NAME)}',
+                                    '${model.snapshot.get(AppKeys.FIRST_NAME)} ${model.snapshot.get(AppKeys.LAST_NAME)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 17,
@@ -174,7 +174,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
 
   Future<void> _fetchPractitionerData(int index) async {
     var snapshot = await FirebaseFirestore.instance
-        .collection('practitioners')
+        .collection(AppKeys.PRACTITIONERS)
         .doc(_dataList[index].healerUid)
         .get();
     _dataList[index].snapshot = snapshot;

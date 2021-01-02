@@ -158,7 +158,7 @@ class _PractiotnerRegisterScreenFourthState
             controller: _additionalServiceController,
             label: 'Choose additional service...',
             isPassword: false,
-            isNumber: true,
+            isNumber: false,
           ),
         ),
 

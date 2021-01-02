@@ -21,7 +21,7 @@ import 'package:makhosi_app/utils/firestore_service.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
-
+import 'package:makhosi_app/utils/app_keys.dart';
 import 'login_screen.dart';
 class SettingPage extends StatefulWidget {
   @override
@@ -370,7 +370,7 @@ class _SettingPageState extends State<SettingPage>
   void onPositiveClicked() async {
     Navigator.pop(context);
     await FirebaseFirestore.instance
-        .collection('practitioners')
+        .collection(AppKeys.PRACTITIONERS)
         .doc(FirebaseAuth.instance.currentUser.uid)
         .set({
       'online': false,
